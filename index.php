@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Landing Page</title>
+    <style>
+      body {
+        background-color: rgb(127, 47, 164);
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+
+      .topic {
+        background-color: #ec97ec;
+        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+        font-size: 230%;
+        text-decoration: none;
+        color: #5e1b5e;
+        text-align: center;
+        height: 400px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+
+      .topic img {
+        width: 245px;
+        height: auto;
+        margin-bottom: 5px;
+        margin-top: 5px;
+      }
+
+      .content {
+        background-color: white;
+        padding: 40px 20px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .title {
+        display: flex;
+        max-width: 1000px;
+        background-color: white;
+        border-radius: 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .title-box {
+        background-color: #f7d7f7;
+        color: #660066;
+        padding: 30px;
+        width: 35%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .title-box span {
+        color: #3d0d3d;
+      }
+
+      .features {
+        padding: 30px;
+        width: 65%;
+      }
+
+      .features strong {
+        display: block;
+        margin-top: 20px;
+        font-size: 18px;
+        color: #660066;
+      }
+
+      .features p {
+        font-size: 16px;
+        color: #333;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+
+  <body>
+    <?php
+    include("head.php");
+    ?>
+    <div></div>
+    <main>
+      <section>
+        <div class="topic">
+          <image src="images/whiteLogo.png" alt="logo" class="logo"></image>
+          <h2>WELCOME TO STUDY HIVE</h2>
+        </div>
+      </section>
+      <section class="content">
+        <div class="title">
+          <div class="title-box">
+            <h2>What is<br /><span>Study Hive?</span></h2>
+          </div>
+          <div class="features">
+            <strong>❇ Sharing, accessing and organizing study materials</strong>
+            <p>
+              StudyHive is a web-based platform designed to serve Malaysian
+              university students by providing a centralized space for sharing,
+              accessing and organizing study materials.
+            </p>
+
+            <strong>☺ Download notes, rate and review content</strong>
+            <p>
+              Download the study materials for sharing with other friends in the
+              system and download the materials from other users.
+            </p>
+
+            <strong>✓ Reduce paper waste</strong>
+            <p>
+              With academic note-sharing systems, StudyHive aims to reduce paper
+              waste, preserve valuable notes and foster collaborative learning
+              among students.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
