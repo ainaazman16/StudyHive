@@ -9,7 +9,7 @@
 <section>
 <div class="container">
 <div class="login-container">
-<form id="form1" name="form1" method="post" action="member.php" enctype="multipart/form-data">
+<form id="form1" name="form1" method="post" action="user.php" enctype="multipart/form-data">
   <table width="51%" border="0" align="center" cellpadding="0" cellspacing="0">
     <tr>
       <td colspan="3">PLEASE FILL THE FORM BELOW</td>

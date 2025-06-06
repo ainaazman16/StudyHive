@@ -27,7 +27,7 @@
         </tr>
       </table>
     </form>
-	<p class="center"><b>New user? <a href="signup.php">Sign-up now..</a></b></p>
+	<p class="center"><b>New user? <a href="signupPage.php">Sign-up now..</a></b></p>
   </div>
   </div>
 </section>

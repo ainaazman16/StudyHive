@@ -131,7 +131,7 @@
           <li><a href="#namafile">Help</a></li>
           <li><a href="#namafile">Contact Us</a></li>
           <li><a href="#loginPage.php">Login</a></li>
-          <li><a href="#signup.php">Sign Up</a></li>
+          <li><a href="#signupPage.php">Sign Up</a></li>
         </ul>
         </div>
         <div class="topic">
