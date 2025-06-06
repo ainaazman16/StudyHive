@@ -21,7 +21,7 @@
     <tr>
       <td>Name:</td>
       <td colspan="2"><label>
-        <input type="text" name="name" id="name" />
+        <input type="text" name="user_Fname" id="user_Fname" />
       </label></td>
     </tr>
     <tr>
@@ -33,7 +33,7 @@
     <tr>
       <td>Username:</td>
       <td colspan="2"><label>
-        <input type="text" name="username" id="username" />
+        <input type="text" name="user_Name" id="user_Name" />
       </label></td>
     </tr>
      <tr>

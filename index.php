@@ -1,3 +1,15 @@
+<?php
+
+session_start();
+
+if (isset($_SESSION['user_Name'])) {
+
+    $_SESSION = array();
+    session_destroy();
+    echo "<meta http-equiv=\"refresh\" content=\"3;URL=index.php\">";
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -130,8 +142,8 @@
           <li><a href="#namafile">Features</a></li>
           <li><a href="#namafile">Help</a></li>
           <li><a href="#namafile">Contact Us</a></li>
-          <li><a href="#loginPage.php">Login</a></li>
-          <li><a href="#signupPage.php">Sign Up</a></li>
+          <li><a href="loginPage.php">Login</a></li>
+          <li><a href="signupPage.php">Sign Up</a></li>
         </ul>
         </div>
         <div class="topic">
