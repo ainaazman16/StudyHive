@@ -112,6 +112,20 @@
       </label></td>
     </tr>
     <tr>
+      <td>Phone Number:</td>
+      <td colspan="2"><label>
+        <input type="number" name="phone" id="phone" />
+      </label></td>
+    </tr>
+    <tr>
+      <td>Gender:</td>
+      <td colspan="2"><label>
+        <input type="radio" name="gender" id="radio" value="female" />
+      FEMALE 
+      <input type="radio" name="gender" id="radio2" value="male" />
+      MALE</label></td>
+    </tr>
+    <tr>
       <td>Username:</td>
       <td colspan="2"><label>
         <input type="text" name="user_Name" id="user_Name" />
