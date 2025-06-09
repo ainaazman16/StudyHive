@@ -6,9 +6,19 @@
     <title>Document</title>
 
 </head>
+<style>
+    .footer {
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color:;
+        color: white;
+        text-align: center;
+}
+</style>
 <body>
-    <footer>
-        <h4 class="right">&copy; amaisarah160@gmail.com 2020 - <?php echo Date("Y"); ?>
+    <footer class = "footer">
+        <h4>&copy; StudyHive - <?php echo Date("Y"); ?>
     </footer>
 </body>
 </html>

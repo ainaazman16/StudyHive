@@ -18,13 +18,15 @@ if (isset($_SESSION['user_Name'])) {
     <title>Landing Page</title>
     <style>
       body {
-        background-color: rgb(127, 47, 164);
+        background-color: #660066;
         margin: 0;
         font-family: Arial, Helvetica, sans-serif;
       }
 
       .navbar {
         background-color: #660066;
+        position: sticky;
+        top: 0;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -181,5 +183,8 @@ if (isset($_SESSION['user_Name'])) {
         </div>
       </section>
     </main>
+    <?php
+    include('footer.php');
+    ?>
   </body>
 </html>
