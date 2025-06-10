@@ -1,7 +1,7 @@
 <?php
     $servername = "localhost:3301";
-    $username = "root";
-    $password = "1234";
+    $username = "studyhive";
+    $password = "010203";
     $dbname = "studyhive";
 
     //create connection
