@@ -34,7 +34,7 @@
       margin-top: 5px;
     }
 
-    .search-container {
+   .search-container {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -65,7 +65,6 @@
       height: 20px;
     }
 
-    /* === Bottom Navigation Bar === */
     .bottom-nav {
       display: flex;
       align-items: center;
