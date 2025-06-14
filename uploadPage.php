@@ -1,4 +1,33 @@
 <?php
+$uploadSuccess = false;
+$errorMsg = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $targetDir = "uploads/";
+
+    if (!is_dir($targetDir)) {
+        mkdir($targetDir, 0777, true);
+    }
+
+    if (isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
+        $fileName = basename($_FILES["file"]["name"]);
+        $targetFile = $targetDir . $fileName;
+        $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+        $allowedTypes = ["pdf", "jpg", "jpeg", "png"];
+
+        if (in_array($fileType, $allowedTypes)) {
+            if (move_uploaded_file($_FILES["file"]["tmp_name"], $targetFile)) {
+                $uploadSuccess = true;
+            } else {
+                $errorMsg = "Failed to upload file.";
+            }
+        } else {
+            $errorMsg = "Invalid file type. Only PDF, JPG, JPEG, PNG allowed.";
+        }
+    } else {
+        $errorMsg = "No file uploaded or an error occurred.";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -6,7 +35,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HOME</title>
+  <title>UPLOAD NOTES</title>
   <style>
     body {
       background-color: #ffffff;
@@ -34,7 +63,7 @@
       margin-top: 5px;
     }
 
-   .search-container {
+    .search-container {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -65,6 +94,7 @@
       height: 20px;
     }
 
+    /* === Bottom Navigation Bar === */
     .bottom-nav {
       display: flex;
       align-items: center;
@@ -108,14 +138,26 @@
       color: #ffffff;
     }
 
-    h1 {
-      font-size: 40px;
-      color: #4b004b;
-      text-align: center;
-      margin-top: 30px;
-      font-family: 'Times New Roman', serif;
+    h1{
+        font-size: 60px;
+        text-align: center;
+        color: #4b004b;
+        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
     }
 
+    .message {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+      color: green;
+    }
+
+    .error {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+      color: red;
+    }
 
     .upload-container {
       background-color: #f4caff;
@@ -131,17 +173,24 @@
       border: 2px dashed #aaa;
       background-color: #fff;
       padding: 20px;
-      text-align: center;
       margin-bottom: 20px;
     }
 
-    input[type="text"], input[type="file"] {
-      width: 50%;
-      padding: 10px;
-      margin: 8px 0 20px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 14px;
+    .form-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      flex: 0 0 150px;
+      margin-right: 10px;
+      font-weight: bold;
+      color: #4b004b;
+    }
+
+    .form-group input {
+      flex: 1;
     }
 
     button[type="submit"],
@@ -156,41 +205,33 @@
     }
 
     button[type="reset"] {
-      background-color:rgb(153, 137, 153);
+      background-color: rgb(153, 137, 153);
     }
 
-    .form-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
+    input[type="text"], input[type="file"] {
+      width: 50%;
+      padding: 10px;
+      margin: 8px 0 20px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
 
-.form-group label {
-  flex: 0 0 150px; /* Tetapkan lebar tetap label */
-  margin-right: 10px;
-  font-weight: bold;
-  color: #4b004b;
-}
-
-.form-group input {
-  flex: 1;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-</style>
+  </style>
 </head>
 <body>
+
   <div class="topic">
     <img src="images/whiteLogo.png" alt="logo" class="logo" />
 
+    <!-- Search Bar -->
     <div class="search-container">
-      <input type="text" placeholder="Search notes by title, tag or keyword..." />
+      <input type="text1" placeholder="Search notes by title, tag or keyword..." />
       <button>🔍</button>
     </div>
   </div>
 
+  <!-- Bottom Navigation Bar -->
   <div class="bottom-nav">
     <img src="images/whiteLogo.png" alt="Logo" class="logo" />
     <div class="nav-links">
@@ -202,41 +243,50 @@
     </div>
   </div>
 
-  <h1 style = "font-family:Times New Roman; font-size:40px;">UPLOAD YOUR NOTES</h1>
+  <h1>Upload Your Notes</h1>
+
   <div class="upload-container">
-  <form action="uploadPage.php" method="POST" enctype="multipart/form-data">
-        <div class="upload-box">
+    <?php if ($uploadSuccess): ?>
+      <div class="message">File uploaded successfully!</div>
+    <?php elseif (!empty($errorMsg)): ?>
+      <div class="error"><?= $errorMsg ?></div>
+    <?php endif; ?>
+
+    <form action="uploadPage.php" method="POST" enctype="multipart/form-data">
+      <div class="upload-box">
         <p>Drop files here</p>
         <p><small>Supported: PNG, JPG, PDF</small></p>
-        <input type="file" name="file" required/>
-        </div>
+        <input type="file" name="file" required />
+      </div>
 
-        <div class="form-group">
-            <label for="fileName">File Name : </label>
-            <input type="text" placeholder="file name..." required><br>
-        </div>  
-        <div class="form-group">
-            <label for="chapterName">Chapter Name : </label>
-            <input type="text" placeholder="chapter name..." required><br>
-        </div>
-        <div class="form-group">
-            <label for="author">Author : </label>
-            <input type="text" placeholder="author name..." required><br>
-        </div>
-        <div class="form-group">
-            <label for="courseName">Course Name : </label>
-            <input type="text" placeholder="course name..." required><br>
-        </div>
-        <div class="form-group">
-            <label for="University">University :</label>
-            <input type="text" placeholder="university name..." required>
-        </div>
+      <div class="form-group">
+        <label for="fileName">File Name : </label>
+        <input type="text" name="fileName" placeholder="file name..." required />
+      </div>
+      <div class="form-group">
+        <label for="chapterName">Chapter Name : </label>
+        <input type="text" name="chapterName" placeholder="chapter name..." required />
+      </div>
+      <div class="form-group">
+        <label for="author">Author : </label>
+        <input type="text" name="author" placeholder="author name..." required />
+      </div>
+      <div class="form-group">
+        <label for="courseName">Course Name : </label>
+        <input type="text" name="courseName" placeholder="course name..." required />
+      </div>
+      <div class="form-group">
+        <label for="University">University :</label>
+        <input type="text" name="University" placeholder="university name..." required />
+      </div>
 
-        <div class="btn-group">
+      <div class="btn-group">
         <button type="reset">Cancel</button>
         <button type="submit">Upload</button>
-        </div>
-    </div>
-  </form>
+      </div>
+    </form>
+  </div>
+
+
 </body>
 </html>
