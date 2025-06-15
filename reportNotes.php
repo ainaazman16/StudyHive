@@ -1,0 +1,188 @@
+<?php
+  $reportType = isset($_POST['report_type']) ? htmlspecialchars($_POST['report_type']) : 'No report type selected';
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HOME</title>
+  <style>
+    body {
+      background-color: #ffffff;
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .topic {
+      background-color: #ec97ec;
+      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+      font-size: 230%;
+      text-decoration: none;
+      color: #5e1b5e;
+      text-align: center;
+      height: 500px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      position: relative;
+    }
+
+    .topic img {
+      width: 350px;
+      height: auto;
+      margin-bottom: 10px;
+      margin-top: 5px;
+    }
+
+    .search-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .search-container input {
+      width: 50%;
+      max-width: 600px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 30px 0 0 30px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .search-container button {
+      background-color: white;
+      border: none;
+      border-left: 1px solid #ccc;
+      padding: 12px 20px;
+      border-radius: 0 30px 30px 0;
+      cursor: pointer;
+    }
+
+    .search-container button img {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* === Bottom Navigation Bar === */
+    .bottom-nav {
+      display: flex;
+      align-items: center;
+      background-color: #4b004b;
+      padding: 20 20px;
+      height: 60px;
+    }
+
+    .bottom-nav img.logo {
+      height: 40px;
+    }
+
+    .nav-links {
+      display: flex;
+      margin-left: auto;
+    }
+
+    .nav-btn {
+      background-color: #4b004b;
+      color: white;
+      padding: 23px 30px;
+      text-align: center;
+      text-decoration: none;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 12px;
+      border-right: 2px solid #ffffff;
+      transition: background-color 0.3s;
+    }
+
+    .nav-btn:last-child {
+      border-right: none;
+    }
+
+    .nav-btn:hover {
+      background-color: #e696ec;
+    }
+
+    .nav-btn.active {
+      background-color: #e696ec;
+      color: #ffffff;
+    }
+
+    h1{
+        font-size: 60px;
+        text-align: center;
+        color: #4b004b;
+        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+    }
+
+    .list-report {
+        list-style: none;
+        padding: 0;
+        max-width: 500px;
+        margin: 20px auto;
+    }
+
+    .list-report li {
+        background: #f2edf9;
+        padding: 15px 20px;
+        margin: 10px 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px #ddd;
+        font-weight: 500;
+        transition: background 0.2s;
+    }
+
+    .list-report li:hover {
+        background: #e0d4f5;
+    }
+
+    .list-report li a {
+        text-decoration: none;
+        color: #333;
+        display: block;
+    }
+
+    .title-reason {
+        text-align: center;
+        margin-top: 40px;
+        font-size: 1.2em;
+        color: #222;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topic">
+    <img src="images/whiteLogo.png" alt="logo" class="logo" />
+
+    <!-- Search Bar -->
+    <div class="search-container">
+      <input type="text" placeholder="Search notes by title, tag or keyword..." />
+      <button>🔍</button>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <div class="bottom-nav">
+    <img src="images/whiteLogo.png" alt="Logo" class="logo" />
+    <div class="nav-links">
+      <a href="#" class="nav-btn active">Home</a>
+      <a href="#" class="nav-btn">My Notes</a>
+      <a href="#" class="nav-btn">Upload</a>
+      <a href="#" class="nav-btn">Connection</a>
+      <a href="#" class="nav-btn">Profile</a>
+    </div>
+  </div>
+
+  <h1>Report Notes</h1>
+   <h3 class="title-reason">Select a reason</h3>
+    <ul class="list-report">
+      <li><a href="reportDone.php?report_type=Inappropriate Language">1. Inappropriate Language</a></li>
+      <li><a href="reportDone.php?report_type=Harassment or Bullying">2. Harassment or Bullying</a></li>
+      <li><a href="reportDone.php?report_type=Irrelevant or Spam Content">3. Irrelevant or Spam Content</a></li>
+      <li><a href="reportDone.php?report_type=Plagiarized or Copyrighted Material">4. Plagiarized or Copyrighted Material</a></li>
+    </ul>
+</body>
+</html>
