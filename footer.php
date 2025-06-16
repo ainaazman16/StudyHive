@@ -17,7 +17,7 @@
 </style>
 <body>
     <footer class = "footer">
-        <h4>&copy; StudyHive - <?php echo Date("Y"); ?>
+        <h4>&copy; StudyHive - <?php echo Date("Y"); ?></h4>
     </footer>
 </body>
 </html>
