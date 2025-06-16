@@ -1,117 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Page</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Study Hive</title>
   <style>
     body {
-      background-color: #660066;
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+    }
+
+    .header {
+      background-color: #cc66cc;
+      padding: 30px;
+      text-align: center;
+      color: white;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 32px;
     }
 
     .container {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      padding: 50px 0;
     }
 
-    .login-container {
-      background-color: #ec97ec;
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-      text-align: center;
+    .login-box {
+      background-color: #ffe0ff;
       width: 400px;
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
 
-    .login-container label {
+    .login-box h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #330033;
+    }
+
+    .login-box label {
       display: block;
-      margin-top: 15px;
-      text-align: left;
+      margin-bottom: 8px;
       font-weight: bold;
-      color: #3d0d3d;
-      margin-left: 10%;
+      color: #660066;
     }
 
-    input[type="text"],
-    input[type="password"] {
-      width: 80%;
+    .login-box input[type="text"],
+    .login-box input[type="password"] {
+      width: 100%;
       padding: 10px;
-      margin-top: 5px;
-      border: none;
-      border-radius: 5px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f7f7f7;
     }
 
-    input[type="submit"] {
-      width: 80%;
-      padding: 12px;
-      background-color: #a000a0;
-      color: white;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-      border: none;
-      transition: 0.3s ease;
-      margin: 20px auto 10px auto;
-      display: block;
-    }
-
-    input[type="submit"]:hover {
-      background-color: #d147d1;
-    }
-
-    .center a {
-      color: rgb(127, 61, 127);
-      text-decoration: none;
-    }
-
-    .center a:hover {
-      text-decoration: underline;
-    }
-
-    .navbar {
-      background-color: #660066;
-      position: sticky;
-      top: 0;
+    .login-box .remember-forgot {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 0 10px;
-      height: 60px;
+      align-items: center;
+      font-size: 14px;
+      color: #660066;
+      margin-bottom: 20px;
     }
 
-    .navbar .logo {
-      height: 60px;
+    .login-box input[type="checkbox"] {
+      margin-right: 5px;
+    }
+
+    .login-box input[type="submit"] {
+      width: 100%;
+      padding: 12px;
+      background-color: #cc66cc;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .login-box input[type="submit"]:hover {
+      background-color: #b94cb9;
+    }
+
+    .login-box .signup-link {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .login-box .signup-link a {
+      color: #660066;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .login-box .or {
+      text-align: center;
+      margin: 20px 0;
+      color: #999;
+    }
+
+    .login-box .social-icons {
+      text-align: center;
+    }
+
+    .social-icons img {
+      width: 30px;
+      margin: 0 10px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <div class="navbar">
-    <img src="images/whiteLogo.png" alt="Logo" class="logo">
+
+  <div class="header">
+    <h1>WELCOME TO STUDY HIVE</h1>
   </div>
 
-  <section>
-    <div class="container">
-      <div class="login-container">
-        <h2>Welcome Back! Please enter your username and password.</h2>
-        <form action="login.php" method="POST">
-          <label for="username">Username :</label>
-          <input type="text" name="user_Name" id="username">
+  <div class="container">
+    <div class="login-box">
+      <h2>Log in</h2>
+      <form action="login.php" method="POST">
+        <label for="email">Email</label>
+        <input type="text" id="email" name="user_Name" placeholder="Enter your email">
 
-          <label for="password">Password :</label>
-          <input type="password" name="password" id="password">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password">
 
-          <input type="submit" value="Submit" name="submit">
-        </form>
-        <p class="center"><b>New user? <a href="signupPage.php">Sign-up now.</a></b></p>
+        <div class="remember-forgot">
+          <label><input type="checkbox"> Remember me</label>
+          <a href="#">Forgot password?</a>
+        </div>
+
+        <input type="submit" value="Sign in" name="submit">
+      </form>
+
+      <div class="signup-link">
+        Don’t have an account? <a href="signupPage.php">Sign up</a>
+      </div>
+
+      <div class="or">— OR —</div>
+
+      <div class="social-icons">
+        <img src="https://img.icons8.com/color/48/google-logo.png" alt="Google">
+        <img src="https://img.icons8.com/color/48/facebook-new.png" alt="Facebook">
+        <img src="https://img.icons8.com/ios-filled/50/github.png" alt="GitHub">
       </div>
     </div>
-  </section>
+  </div>
+
 </body>
 </html>
