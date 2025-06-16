@@ -198,7 +198,15 @@ if(isset($_SESSION['username']))
         margin-top: 5px;
       }
 
-      
+      .back-btn {
+        display: inline-block;
+        margin-top: 20px; /* Adjust the value as needed */
+        margin-left: 20px;
+        font-size: 16px;
+        color: #660066;
+        text-decoration: none;
+        font-weight: bold;
+      } 
   </style>
 </head>
 <body>
@@ -214,6 +222,7 @@ if(isset($_SESSION['username']))
         </ul>
         </div>
         <div class="topic">
+          <image src="images/whiteLogo.png" alt="logo" class="logo"></image>
           <h2>WELCOME TO STUDY HIVE</h2>
         </div>
         <a class="back-btn" href="index.php">← Back</a>
