@@ -208,59 +208,66 @@ if(isset($_SESSION['username']))
         font-weight: bold;
       } 
       
-
-      
+      .footer {
+      background-color: #660066;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      margin-top: 40px;
+    }
   </style>
 </head>
 <body>
-  <section>
-    <div class="navbar">
-          <img src="images/whiteLogo.png" alt="Logo" class="logo">
-          <ul>
-          <li><a href="#namafile">Features</a></li>
-          <li><a href="#namafile">Help</a></li>
-          <li><a href="#namafile">Contact Us</a></li>
-          <li><a href="loginPage.php">Login</a></li>
-          <li><a href="signupPage.php">Sign Up</a></li>
-        </ul>
+  <main>
+    <section>
+      <div class="navbar">
+            <img src="images/whiteLogo.png" alt="Logo" class="logo">
+            <ul>
+            <li><a href="#namafile">Features</a></li>
+            <li><a href="#namafile">Help</a></li>
+            <li><a href="#namafile">Contact Us</a></li>
+            <li><a href="loginPage.php">Login</a></li>
+            <li><a href="signupPage.php">Sign Up</a></li>
+          </ul>
+          </div>
+          <div class="topic">
+            <image src="images/whiteLogo.png" alt="logo" class="logo"></image>
+            <h2>WELCOME TO STUDY HIVE</h2>
+          </div>
+          <a class="back-btn" href="index.php">← Back</a>
+    <div class="container">
+      <div class="login-box">
+        <h2>Log in</h2>
+        <form action="login.php" method="POST">
+          <label for="email">Email</label>
+          <input type="text" id="email" name="user_Name" placeholder="Enter your email">
+
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter your password">
+
+          <div class="remember-forgot">
+            <label><input type="checkbox"> Remember me</label>
+            <a href="#">Forgot password?</a>
+          </div>
+
+          <input type="submit" value="Sign in" name="submit">
+        </form>
+
+        <div class="signup-link">
+          Don’t have an account? <a href="signupPage.php">Sign up</a>
         </div>
-        <div class="topic">
-          <image src="images/whiteLogo.png" alt="logo" class="logo"></image>
-          <h2>WELCOME TO STUDY HIVE</h2>
+
+        <div class="or">— OR —</div>
+
+        <div class="social-icons">
+          <img src="https://img.icons8.com/color/48/google-logo.png" alt="Google">
+          <img src="https://img.icons8.com/color/48/facebook-new.png" alt="Facebook">
+          <img src="https://img.icons8.com/ios-filled/50/github.png" alt="GitHub">
         </div>
-        <a class="back-btn" href="index.php">← Back</a>
-  <div class="container">
-    <div class="login-box">
-      <h2>Log in</h2>
-      <form action="login.php" method="POST">
-        <label for="email">Email</label>
-        <input type="text" id="email" name="user_Name" placeholder="Enter your email">
-
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Enter your password">
-
-        <div class="remember-forgot">
-          <label><input type="checkbox"> Remember me</label>
-          <a href="#">Forgot password?</a>
-        </div>
-
-        <input type="submit" value="Sign in" name="submit">
-      </form>
-
-      <div class="signup-link">
-        Don’t have an account? <a href="signupPage.php">Sign up</a>
-      </div>
-
-      <div class="or">— OR —</div>
-
-      <div class="social-icons">
-        <img src="https://img.icons8.com/color/48/google-logo.png" alt="Google">
-        <img src="https://img.icons8.com/color/48/facebook-new.png" alt="Facebook">
-        <img src="https://img.icons8.com/ios-filled/50/github.png" alt="GitHub">
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</main>
   <?php
     include('footer.php');
     ?>
