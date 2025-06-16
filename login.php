@@ -1,5 +1,4 @@
 <?php
-//initialize the session
 
 session_start();
 include('connect.php');
