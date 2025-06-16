@@ -1,3 +1,11 @@
+<?php
+session_start();
+if(isset($_SESSION['username']))
+{
+  $_SESSION = array();
+  session_destroy();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -157,6 +165,40 @@
       .navbar a:hover {
         background-color: #990099;
       }
+
+      .title-box {
+        background-color: #f7d7f7;
+        color: #660066;
+        padding: 30px;
+        width: 35%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .topic {
+        background-color: #ec97ec;
+        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+        font-size: 230%;
+        text-decoration: none;
+        color: #5e1b5e;
+        text-align: center;
+        height: 400px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+
+      .topic img {
+        width: 245px;
+        height: auto;
+        margin-bottom: 5px;
+        margin-top: 5px;
+      }
+
+      
   </style>
 </head>
 <body>
@@ -173,8 +215,8 @@
         </div>
         <div class="topic">
           <h2>WELCOME TO STUDY HIVE</h2>
-          
         </div>
+        <a class="back-btn" href="index.php">← Back</a>
   <div class="container">
     <div class="login-box">
       <h2>Log in</h2>
@@ -207,5 +249,8 @@
     </div>
   </div>
 </section>
+  <?php
+    include('footer.php');
+    ?>
 </body>
 </html>

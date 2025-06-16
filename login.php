@@ -37,3 +37,4 @@ if (isset($_SESSION['user_Name'], $_SESSION['password'])) {
         echo "<meta http-equiv='refresh' content='3;URL=index.php'>";
     }
 }
+?>
