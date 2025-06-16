@@ -138,7 +138,7 @@
       </label></td>
     </tr>
     <tr>
-      <td colspan="3"><label>
+      <td colspan="3" style="text-align: center;"><label>
         <input type="submit" name="submit" id="submit" value="REGISTER" />
         <input type="reset" name="reset" id="reset" value="CLEAR FORM" />
       </label></td>
