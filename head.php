@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Head</title>
     <style>
-         body {
-        background-color: rgb(127, 47, 164);
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-      }
 
       .navbar {
         background-color: #660066;
@@ -70,17 +65,26 @@
     </style>
 </head>
 <body>
-     <header>
-      <div class="navbar">
-        <img src="images/whiteLogo.png" alt="Logo" class="logo" />
-        <ul>
-          <li><a href="#namafile">Features</a></li>
-          <li><a href="#namafile">Help</a></li>
-          <li><a href="#namafile">Contact Us</a></li>
-          <li><a href="#loginPage.php">Login</a></li>
-          <li><a href="#signup.php">Sign Up</a></li>
-        </ul>
-      </div>
-    </header>
+     <div class="topic">
+    <img src="images/whiteLogo.png" alt="logo" class="logo" />
+
+    <!-- Search Bar -->
+    <div class="search-container">
+      <input type="text" placeholder="Search notes by title, tag or keyword..." />
+      <button>🔍</button>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <div class="bottom-nav">
+    <img src="images/whiteLogo.png" alt="Logo" class="logo" />
+    <div class="nav-links">
+      <a href="homePage.php" class="nav-btn active">Home</a>
+      <a href="mynotesPage.php" class="nav-btn">My Notes</a>
+      <a href="uploadPage.php" class="nav-btn">Upload</a>
+      <a href="connectionPage.php" class="nav-btn">Connection</a>
+      <a href="profilePage.php" class="nav-btn">Profile</a>
+    </div>
+  </div>
 </body>
 </html>
