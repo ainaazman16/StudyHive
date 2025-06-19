@@ -23,11 +23,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $uploadDate = date("Y-m-d H:i:s");
                 $userID = $_SESSION['user_ID'] ?? null;
 
-                $sql = "INSERT INTO notes (note_Name, file_type, file_size, upload_date, download_count, user_ID)
-                        VALUES (?, ?, ?, ?, 0, ?)";
-
+                $sql = "INSERT INTO notes (note_Name, file_type, file_size, upload_date, download_count, user_ID, file_path)
+                VALUES (?, ?, ?, ?, 0, ?, ?)";
                 $stmt = $conn->prepare($sql);
-                $stmt->bind_param("ssisi", $noteName, $fileType, $fileSize, $uploadDate, $userID);
+                $stmt->bind_param("ssisis", $noteName, $fileType, $fileSize, $uploadDate, $userID, $fileName);
+
 
                 if ($stmt->execute()) {
                     $uploadSuccess = true;

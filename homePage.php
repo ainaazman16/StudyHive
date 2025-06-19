@@ -117,28 +117,9 @@
   </style>
 </head>
 <body>
-
-  <div class="topic">
-    <img src="images/whiteLogo.png" alt="logo" class="logo" />
-
-    <!-- Search Bar -->
-    <div class="search-container">
-      <input type="text" placeholder="Search notes by title, tag or keyword..." />
-      <button>🔍</button>
-    </div>
-  </div>
-
-  <!-- Bottom Navigation Bar -->
-  <div class="bottom-nav">
-    <img src="images/whiteLogo.png" alt="Logo" class="logo" />
-    <div class="nav-links">
-      <a href="homePage.php" class="nav-btn active">Home</a>
-      <a href="mynotesPage.php" class="nav-btn">My Notes</a>
-      <a href="uploadPage.php" class="nav-btn">Upload</a>
-      <a href="connectionPage.php" class="nav-btn">Connection</a>
-      <a href="profilePage.php" class="nav-btn">Profile</a>
-    </div>
-  </div>
+    <?php
+    include('head.php');
+    ?>
 
   <h1>User's Dashboard</h1>
 
