@@ -67,15 +67,48 @@
 </head>
 
 <body>
+  <?php
+    include("connect.php");
+
+    // Fetch options from DB
+    $subjectList = $conn->query("SELECT subject_ID, subject_Name FROM subject");
+    $courseList = $conn->query("SELECT course_ID, course_Name FROM course");
+    $uniList = $conn->query("SELECT uni_ID, uni_Name FROM university");
+?>
   <div class="topic">
     <img src="images/whiteLogo.png" alt="logo" class="logo" />
 
     <!-- Search Bar -->
     <div class="search-container">
       <form action="viewNotes.php" method="get" class="search-container">
-        <input type="text" name="search" placeholder="Search notes by title, tag or keyword..." />
-        <button type="submit"><i class="fa fa-search"></i></button>
-      </form>
+  <input type="text" name="search" placeholder="Search notes by keyword..." />
+
+  <!-- Subject Filter -->
+  <select name="subject">
+    <option value="">All Subjects</option>
+    <?php while ($s = $subjectList->fetch_assoc()): ?>
+      <option value="<?= $s['subject_ID'] ?>"><?= $s['subject_Name'] ?></option>
+    <?php endwhile; ?>
+  </select>
+
+  <!-- Course Filter -->
+  <select name="course">
+    <option value="">All Courses</option>
+    <?php while ($c = $courseList->fetch_assoc()): ?>
+      <option value="<?= $c['course_ID'] ?>"><?= $c['course_Name'] ?></option>
+    <?php endwhile; ?>
+  </select>
+
+  <!-- University Filter -->
+  <select name="university">
+    <option value="">All Universities</option>
+    <?php while ($u = $uniList->fetch_assoc()): ?>
+      <option value="<?= $u['uni_ID'] ?>"><?= $u['uni_Name'] ?></option>
+    <?php endwhile; ?>
+  </select>
+
+  <button type="submit"><i class="fa fa-search"></i></button>
+</form>
       
     </div>
   </div>
