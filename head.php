@@ -1,77 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Head</title>
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>Head</title>
+  <style>
+    .navbar {
+      background-color: #660066;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      height: 60px;
+    }
 
-      .navbar {
-        background-color: #660066;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 10px;
-        height: 60px;
-      }
+    .navbar .logo {
+      height: 60px;
+    }
 
-      .navbar .logo {
-        height: 60px;
-      }
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
 
-      .navbar ul {
-        list-style: none;
-        display: flex;
-        margin: 0;
-        padding: 0;
-      }
+    .navbar li {
+      margin-left: 10px;
+    }
 
-      .navbar li {
-        margin-left: 10px;
-      }
+    .navbar a {
+      text-decoration: none;
+      color: white;
+      padding: 14px 16px;
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
 
-      .navbar a {
-        text-decoration: none;
-        color: white;
-        padding: 14px 16px;
-        display: block;
-        font-size: 14px;
-        font-weight: bold;
-        text-transform: uppercase;
-      }
+    .navbar a:hover {
+      background-color: #990099;
+    }
 
-      .navbar a:hover {
-        background-color: #990099;
-      }
+    .topic {
+      background-color: #ec97ec;
+      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+      font-size: 230%;
+      text-decoration: none;
+      color: #5e1b5e;
+      text-align: center;
+      height: 400px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
 
-      .topic {
-        background-color: #ec97ec;
-        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-        font-size: 230%;
-        text-decoration: none;
-        color: #5e1b5e;
-        text-align: center;
-        height: 400px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-      }
-
-      .topic img {
-        width: 245px;
-        height: auto;
-        margin-bottom: 5px;
-        margin-top: 5px;
-      }
-    </style>
+    .topic img {
+      width: 245px;
+      height: auto;
+      margin-bottom: 5px;
+      margin-top: 5px;
+    }
+  </style>
 </head>
+
 <body>
-     <div class="topic">
+  <div class="topic">
     <img src="images/whiteLogo.png" alt="logo" class="logo" />
 
     <!-- Search Bar -->
     <div class="search-container">
-      <input type="text" placeholder="Search notes by title, tag or keyword..." />
-      <button>🔍</button>
+      <form action="viewNotes.php" method="get" class="search-container">
+        <input type="text" name="search" placeholder="Search notes by title, tag or keyword..." />
+        <button type="submit"><i class="fa fa-search"></i></button>
+      </form>
+      
     </div>
   </div>
 
@@ -85,7 +90,7 @@
       <a href="connectionPage.php" class="nav-btn">Connection</a>
       <a href="profilePage.php" class="nav-btn">Profile</a>
       <a href="logout.php" class="nav-btn">Log Out</a>
-      
+
     </div>
   </div>
 </body>

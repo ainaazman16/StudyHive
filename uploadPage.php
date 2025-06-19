@@ -48,12 +48,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
   <title>UPLOAD NOTES</title>
   <style>
     body {
@@ -80,37 +80,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       height: auto;
       margin-bottom: 10px;
       margin-top: 5px;
-    }
-
-    .search-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 20px;
-    }
-
-    .search-container input {
-      width: 50%;
-      max-width: 600px;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 30px 0 0 30px;
-      font-size: 16px;
-      outline: none;
-    }
-
-    .search-container button {
-      background-color: white;
-      border: none;
-      border-left: 1px solid #ccc;
-      padding: 12px 20px;
-      border-radius: 0 30px 30px 0;
-      cursor: pointer;
-    }
-
-    .search-container button img {
-      width: 20px;
-      height: 20px;
     }
 
     /* === Bottom Navigation Bar === */
