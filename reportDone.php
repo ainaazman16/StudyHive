@@ -154,27 +154,9 @@
 </head>
 <body>
 
-  <div class="topic">
-    <img src="images/whiteLogo.png" alt="logo" class="logo" />
-
-    <!-- Search Bar -->
-    <div class="search-container">
-      <input type="text" placeholder="Search notes by title, tag or keyword..." />
-      <button>🔍</button>
-    </div>
-  </div>
-
-  <!-- Bottom Navigation Bar -->
-  <div class="bottom-nav">
-    <img src="images/whiteLogo.png" alt="Logo" class="logo" />
-    <div class="nav-links">
-      <a href="#" class="nav-btn active">Home</a>
-      <a href="#" class="nav-btn">My Notes</a>
-      <a href="#" class="nav-btn">Upload</a>
-      <a href="#" class="nav-btn">Connection</a>
-      <a href="#" class="nav-btn">Profile</a>
-    </div>
-  </div>
+<?php
+  include('head.php');
+  ?>
 
   <h1>Report Notes</h1>
 
