@@ -1,23 +1,41 @@
 <?php
+session_start();
+include("connect.php");
+
 $uploadSuccess = false;
 $errorMsg = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $targetDir = "uploads/";
-
-    if (!is_dir($targetDir)) {
-        mkdir($targetDir, 0777, true);
-    }
+    if (!is_dir($targetDir)) mkdir($targetDir, 0777, true);
 
     if (isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
         $fileName = basename($_FILES["file"]["name"]);
         $targetFile = $targetDir . $fileName;
+
         $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
         $allowedTypes = ["pdf", "jpg", "jpeg", "png"];
 
         if (in_array($fileType, $allowedTypes)) {
             if (move_uploaded_file($_FILES["file"]["tmp_name"], $targetFile)) {
-                $uploadSuccess = true;
+                $fileSize = $_FILES["file"]["size"];
+                $noteName = $_POST['fileName'];
+                $uploadDate = date("Y-m-d H:i:s");
+                $userID = $_SESSION['user_ID'] ?? null;
+
+                $sql = "INSERT INTO notes (note_Name, file_type, file_size, upload_date, download_count, user_ID)
+                        VALUES (?, ?, ?, ?, 0, ?)";
+
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ssisi", $noteName, $fileType, $fileSize, $uploadDate, $userID);
+
+                if ($stmt->execute()) {
+                    $uploadSuccess = true;
+                } else {
+                    $errorMsg = "Database error: " . $stmt->error;
+                }
+
+                $stmt->close();
             } else {
                 $errorMsg = "Failed to upload file.";
             }
@@ -29,6 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

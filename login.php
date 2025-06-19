@@ -7,6 +7,7 @@ include('connect.php');
 if (!isset($_SESSION['user_Name']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['user_Name'] = $_POST['user_Name'];
     $_SESSION['password'] = $_POST['password'];
+
 }
 
 //Pastikan ada username dan password dalam session
@@ -24,7 +25,17 @@ if (isset($_SESSION['user_Name'], $_SESSION['password'])) {
 
         //Guna password_verify untuk semak kata laluan
         if (password_verify($input_password, $user['password'])) {
-            include("homePage.php");
+            //  Store user ID in session
+            $_SESSION['user_ID'] = $user['user_ID'];
+            $_SESSION['user_Fname'] = $user['user_Fname']; // Optional if you want to use name elsewhere
+            $_SESSION['email'] = $user['email']; // Optional
+            $_SESSION['user_Name'] = $user['user_Name']; // Already used
+
+            //  Redirect to homepage or include it
+            header("Location: homePage.php");
+            exit();
+}
+
         } else {
             echo "Login Fail: Password salah";
             session_unset();
@@ -35,5 +46,5 @@ if (isset($_SESSION['user_Name'], $_SESSION['password'])) {
         session_unset();
         echo "<meta http-equiv='refresh' content='3;URL=index.php'>";
     }
-}
+
 ?>
