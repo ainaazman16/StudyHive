@@ -1,91 +1,214 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Sign Up</title>
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SignUp - Study Hive</title>
+  <style>
     body {
-      justify-content: center;
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #ea8dde; 
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+    }
+
+    .header {
+      background-color: #cc66cc;
+      padding: 30px;
+      text-align: center;
       color: white;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 32px;
     }
 
     .container {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      padding: 50px 0;
     }
 
-    .login-container {
-      background-color: #4b004b;
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-      text-align: center;
+    .login-box {
+      background-color: #ffe0ff;
       width: 400px;
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
 
-    .login-container h2 {
-      margin-bottom: 20px;
-      color: white;
+    .login-box h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #330033;
     }
 
-    form {
-      display: flex;
-      flex-direction: column;
-      align-items: center; 
+    .login-box label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #660066;
     }
 
-    input[type="text"],
-    input[type="password"] {
+    .login-box input[type="text"],
+    .login-box input[type="password"] {
       width: 100%;
       padding: 10px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 5px;
-      margin: 10px auto;
-      display: block;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f7f7f7;
     }
 
-    input[type="submit"] {
-      width: 80%;
+    .login-box .remember-forgot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      color: #660066;
+      margin-bottom: 20px;
+    }
+
+    .login-box input[type="checkbox"] {
+      margin-right: 5px;
+    }
+
+    .login-box input[type="submit"] {
+      width: 100%;
       padding: 12px;
-      background-color: #a000a0; 
+      background-color: #cc66cc;
       color: white;
-      border-radius: 5px;
       font-weight: bold;
-      cursor: pointer;
       border: none;
-      transition: 0.3s ease;
-      margin: 10px auto;
-      display: block;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
     }
 
-    input[type="submit"]:hover {
-      background-color: #d147d1;
+    .login-box input[type="submit"]:hover {
+      background-color: #b94cb9;
     }
 
-    .center a {
-      color: #ffccff;
+    .login-box .signup-link {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .login-box .signup-link a {
+      color: #660066;
       text-decoration: none;
+      font-weight: bold;
     }
 
-    .center a:hover {
-      text-decoration: underline;
+    .login-box .or {
+      text-align: center;
+      margin: 20px 0;
+      color: #999;
     }
 
-    @media (max-width: 500px) {
-      .login-container {
-        width: 90%;
-        padding: 25px;
+    .login-box .social-icons {
+      text-align: center;
+    }
+
+    .social-icons img {
+      width: 30px;
+      margin: 0 10px;
+      cursor: pointer;
+    }
+
+    .navbar {
+        background-color: #660066;
+        position: sticky;
+        top: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+        height: 60px;
       }
+
+      .navbar .logo {
+        height: 60px;
+      }
+
+      .navbar ul {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
+      }
+
+      .navbar li {
+        margin-left: 10px;
+      }
+
+      .navbar a {
+        text-decoration: none;
+        color: white;
+        padding: 14px 16px;
+        display: block;
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      .navbar a:hover {
+        background-color: #990099;
+      }
+
+      .title-box {
+        background-color: #f7d7f7;
+        color: #660066;
+        padding: 30px;
+        width: 35%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .topic {
+        background-color: #ec97ec;
+        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+        font-size: 230%;
+        text-decoration: none;
+        color: #5e1b5e;
+        text-align: center;
+        height: 400px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+
+      .topic img {
+        width: 245px;
+        height: auto;
+        margin-bottom: 5px;
+        margin-top: 5px;
+      }
+
+      .back-btn {
+        display: inline-block;
+        margin-top: 20px; /* Adjust the value as needed */
+        margin-left: 20px;
+        font-size: 16px;
+        color: #660066;
+        text-decoration: none;
+        font-weight: bold;
+      } 
+      
+      .footer {
+      background-color: #660066;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      margin-top: 40px;
     }
   </style>
 </head>
-
 <body>
 <section>
 <div class="container">

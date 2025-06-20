@@ -256,14 +256,6 @@ if(isset($_SESSION['username']))
         <div class="signup-link">
           Don’t have an account? <a href="signupPage.php">Sign up</a>
         </div>
-
-        <div class="or">— OR —</div>
-
-        <div class="social-icons">
-          <img src="https://img.icons8.com/color/48/google-logo.png" alt="Google">
-          <img src="https://img.icons8.com/color/48/facebook-new.png" alt="Facebook">
-          <img src="https://img.icons8.com/ios-filled/50/github.png" alt="GitHub">
-        </div>
       </div>
     </div>
   </section>
