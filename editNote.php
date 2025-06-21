@@ -51,10 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       }
         $update->bind_param("siii", $noteName, $subjectID, $noteID, $userID);
     if ($update->execute()) {
-      $_SESSION['success_message'] = "Note updated successfully!";
-      header("Location: myNotesPage.php");
-      exit();
-
+        header("Location: myNotesPage.php");
+        exit();
     } else {
         $error = "Update failed: " . $conn->error;
     }

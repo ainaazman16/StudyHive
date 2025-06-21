@@ -2,6 +2,7 @@
 session_start();
 include("connect.php");
 
+
 if (!isset($_GET['note_ID'])) {
     die("Invalid request.");
 }

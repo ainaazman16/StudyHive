@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 include("connect.php");
 
 $courseID = $_GET['id'] ?? 0;
