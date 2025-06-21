@@ -11,196 +11,154 @@
       background-color: #f2f2f2;
     }
 
-    .header {
-      background-color: #cc66cc;
-      padding: 30px;
-      text-align: center;
-      color: white;
+    .navbar {
+      background-color: #660066;
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      height: 60px;
     }
 
-    .header h1 {
+    .navbar .logo {
+      height: 60px;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
       margin: 0;
-      font-size: 32px;
+      padding: 0;
+    }
+
+    .navbar li {
+      margin-left: 10px;
+    }
+
+    .navbar a {
+      text-decoration: none;
+      color: white;
+      padding: 14px 16px;
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .navbar a:hover {
+      background-color: #990099;
+    }
+
+    .topic {
+      background-color: #ec97ec;
+      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+      font-size: 230%;
+      text-decoration: none;
+      color: #5e1b5e;
+      text-align: center;
+      height: 400px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+
+    .topic img {
+      width: 245px;
+      height: auto;
+      margin-bottom: 5px;
+      margin-top: 5px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 20px;
+      margin-left: 20px;
+      font-size: 16px;
+      color: #660066;
+      text-decoration: none;
+      font-weight: bold;
     }
 
     .container {
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 50px 0;
+      padding: 50px 20px;
     }
 
-    .login-box {
+    .signup-box {
       background-color: #ffe0ff;
-      width: 400px;
+      width: 100%;
+      max-width: 450px;
       padding: 40px 30px;
       border-radius: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
 
-    .login-box h2 {
+    .signup-box h2 {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       color: #330033;
     }
 
-    .login-box label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-      color: #660066;
+    .form-group {
+      margin-bottom: 20px;
     }
 
-    .login-box input[type="text"],
-    .login-box input[type="password"] {
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      color: #660066;
+      margin-bottom: 6px;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="number"],
+    .form-group input[type="password"] {
       width: 100%;
       padding: 10px;
-      margin-bottom: 20px;
       border: 1px solid #ccc;
       border-radius: 8px;
       background-color: #f7f7f7;
     }
 
-    .login-box .remember-forgot {
+    .gender-options {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-      color: #660066;
-      margin-bottom: 20px;
+      gap: 15px;
+      margin-top: 5px;
     }
 
-    .login-box input[type="checkbox"] {
-      margin-right: 5px;
+    .gender-options label {
+      font-weight: normal;
+      color: #330033;
     }
 
-    .login-box input[type="submit"] {
-      width: 100%;
-      padding: 12px;
+    .form-actions {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .form-actions input[type="submit"],
+    .form-actions input[type="reset"] {
+      padding: 10px 20px;
+      margin: 5px;
       background-color: #cc66cc;
       color: white;
       font-weight: bold;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s ease;
     }
 
-    .login-box input[type="submit"]:hover {
+    .form-actions input[type="submit"]:hover,
+    .form-actions input[type="reset"]:hover {
       background-color: #b94cb9;
     }
 
-    .login-box .signup-link {
-      text-align: center;
-      margin-top: 15px;
-      font-size: 14px;
-    }
-
-    .login-box .signup-link a {
-      color: #660066;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .login-box .or {
-      text-align: center;
-      margin: 20px 0;
-      color: #999;
-    }
-
-    .login-box .social-icons {
-      text-align: center;
-    }
-
-    .social-icons img {
-      width: 30px;
-      margin: 0 10px;
-      cursor: pointer;
-    }
-
-    .navbar {
-        background-color: #660066;
-        position: sticky;
-        top: 0;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 10px;
-        height: 60px;
-      }
-
-      .navbar .logo {
-        height: 60px;
-      }
-
-      .navbar ul {
-        list-style: none;
-        display: flex;
-        margin: 0;
-        padding: 0;
-      }
-
-      .navbar li {
-        margin-left: 10px;
-      }
-
-      .navbar a {
-        text-decoration: none;
-        color: white;
-        padding: 14px 16px;
-        display: block;
-        font-size: 14px;
-        font-weight: bold;
-        text-transform: uppercase;
-      }
-
-      .navbar a:hover {
-        background-color: #990099;
-      }
-
-      .title-box {
-        background-color: #f7d7f7;
-        color: #660066;
-        padding: 30px;
-        width: 35%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
-      }
-
-      .topic {
-        background-color: #ec97ec;
-        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-        font-size: 230%;
-        text-decoration: none;
-        color: #5e1b5e;
-        text-align: center;
-        height: 400px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-      }
-
-      .topic img {
-        width: 245px;
-        height: auto;
-        margin-bottom: 5px;
-        margin-top: 5px;
-      }
-
-      .back-btn {
-        display: inline-block;
-        margin-top: 20px; /* Adjust the value as needed */
-        margin-left: 20px;
-        font-size: 16px;
-        color: #660066;
-        text-decoration: none;
-        font-weight: bold;
-      } 
-      
-      .footer {
+    .footer {
       background-color: #660066;
       color: white;
       text-align: center;
@@ -211,78 +169,66 @@
 </head>
 <body>
 <section>
+  <section>
+      <div class="navbar">
+            <img src="images/whiteLogo.png" alt="Logo" class="logo">
+            <ul>
+            <li><a href="#namafile">Features</a></li>
+            <li><a href="#namafile">Help</a></li>
+            <li><a href="#namafile">Contact Us</a></li>
+            <li><a href="loginPage.php">Login</a></li>
+            <li><a href="signupPage.php">Sign Up</a></li>
+          </ul>
+          </div>
+          <div class="topic">
+            <image src="images/whiteLogo.png" alt="logo" class="logo"></image>
+            <h2>WELCOME TO STUDY HIVE</h2>
+          </div>
+          <a class="back-btn" href="index.php">← Back</a>
 <div class="container">
-<div class="login-container">
+<div class="signup-container">
 <form id="form1" name="form1" method="post" action="user.php" enctype="multipart/form-data">
-  <table width="51%" border="0" align="center" cellpadding="0" cellspacing="0">
-    <tr>
-      <td colspan="3">PLEASE FILL THE FORM BELOW</td>
-    </tr>
-    <tr>
-      <td width="30%">&nbsp;</td>
-      <td colspan="2">&nbsp;</td>
-    </tr>
-    <tr>
-      <td>Name:</td>
-      <td colspan="2"><label>
-        <input type="text" name="user_Fname" id="user_Fname" />
-      </label></td>
-    </tr>
-    <tr>
-      <td>Email</td>
-      <td colspan="2"><label>
-        <input type="email" name="email" id="email" />
-      </label></td>
-    </tr>
-    <tr>
-      <td>Phone Number:</td>
-      <td colspan="2"><label>
-        <input type="number" name="phone" id="phone" />
-      </label></td>
-    </tr>
-    <tr>
-      <td>Gender:</td>
-      <td colspan="2"><label>
-        <input type="radio" name="gender" id="radio" value="female" />
-      FEMALE 
-      <input type="radio" name="gender" id="radio2" value="male" />
-      MALE</label></td>
-    </tr>
-    <tr>
-      <td>Username:</td>
-      <td colspan="2"><label>
-        <input type="text" name="user_Name" id="user_Name" />
-      </label></td>
-    </tr>
-     <tr>
-      <td>Password:</td>
-      <td colspan="2"><label>
-        <input type="password" name="password" id="password" />
-      </label></td>
-    </tr>
-    <tr>
-      <td colspan="3" style="text-align: center;"><label>
-        <input type="submit" name="submit" id="submit" value="REGISTER" />
-        <input type="reset" name="reset" id="reset" value="CLEAR FORM" />
-      </label></td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td colspan="2">&nbsp;</td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td colspan="2">&nbsp;</td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td colspan="2">&nbsp;</td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td colspan="2">&nbsp;</td>
-    </tr>
-  </table>
+  <div class="signup-box">
+    <h2>Create Your Account</h2>
+
+    <div class="form-group">
+      <label for="user_Fname">Full Name:</label>
+      <input type="text" name="user_Fname" id="user_Fname" required />
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email Address:</label>
+      <input type="email" name="email" id="email" required />
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Phone Number:</label>
+      <input type="number" name="phone" id="phone" required />
+    </div>
+
+    <div class="form-group">
+      <label>Gender:</label>
+      <div class="gender-options">
+        <label><input type="radio" name="gender" value="female" required /> Female</label>
+        <label><input type="radio" name="gender" value="male" /> Male</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="user_Name">Username:</label>
+      <input type="text" name="user_Name" id="user_Name" required />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" name="password" id="password" required />
+    </div>
+
+    <div class="form-actions">
+      <input type="submit" name="submit" value="REGISTER" />
+      <input type="reset" name="reset" value="CLEAR FORM" />
+    </div>
+  </div>
 </form>
 </div>
 </div>
