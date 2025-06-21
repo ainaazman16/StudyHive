@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_ID'])) {
 }
 $userID = $_SESSION['user_ID'];
 
-// Handle actions: send request, accept, decline, remove
+// Handle actions: send request, accept, decline, remove, cancel
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'], $_POST['target_ID'])) {
         $targetID = intval($_POST['target_ID']);
@@ -36,6 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($_POST['action'] === 'remove') {
             $stmt = $conn->prepare("DELETE FROM user_friends WHERE (user_ID=? AND friend_ID=?) OR (user_ID=? AND friend_ID=?)");
             $stmt->bind_param('iiii', $userID, $targetID, $targetID, $userID);
+            $stmt->execute();
+            $stmt->close();
+        } elseif ($_POST['action'] === 'cancel') {
+            $stmt = $conn->prepare("DELETE FROM user_friends WHERE user_ID=? AND friend_ID=? AND status='pending'");
+            $stmt->bind_param('ii', $userID, $targetID);
             $stmt->execute();
             $stmt->close();
         }
@@ -157,6 +162,32 @@ $potential->execute(); $potentialResult = $potential->get_result(); $potential->
       </li>
     <?php endwhile; ?>
     <?php if ($potentialResult->num_rows === 0) echo '<li>No users found.</li>'; ?>
+  </ul>
+</div>
+
+<div class="section">
+  <h2>Pending Requests You've Sent</h2>
+  <ul>
+    <?php
+    $pending = $conn->prepare("SELECT u.user_ID, u.user_Fname, u.user_Name FROM user u
+        JOIN user_friends uf ON u.user_ID = uf.friend_ID
+        WHERE uf.user_ID = ? AND uf.status = 'pending'");
+    $pending->bind_param('i', $userID);
+    $pending->execute();
+    $pendingResult = $pending->get_result();
+    $pending->close();
+    ?>
+    <?php while($p = $pendingResult->fetch_assoc()): ?>
+      <li>
+        <?= htmlspecialchars($p['user_Fname']) ?> (<?= htmlspecialchars($p['user_Name']) ?>)
+        <form method="post">
+          <input type="hidden" name="action" value="cancel">
+          <input type="hidden" name="target_ID" value="<?= $p['user_ID'] ?>">
+          <button type="submit" class="remove">Cancel Request</button>
+        </form>
+      </li>
+    <?php endwhile; ?>
+    <?php if ($pendingResult->num_rows === 0) echo '<li>No pending requests.</li>'; ?>
   </ul>
 </div>
 </body>
