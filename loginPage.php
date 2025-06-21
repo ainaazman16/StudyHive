@@ -223,9 +223,7 @@ if(isset($_SESSION['username']))
       <div class="navbar">
             <img src="images/whiteLogo.png" alt="Logo" class="logo">
             <ul>
-            <li><a href="#namafile">Features</a></li>
-            <li><a href="#namafile">Help</a></li>
-            <li><a href="#namafile">Contact Us</a></li>
+          
             <li><a href="loginPage.php">Login</a></li>
             <li><a href="signupPage.php">Sign Up</a></li>
           </ul>

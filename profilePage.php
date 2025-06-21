@@ -1,88 +1,126 @@
 <?php
-// profilePage.php
 session_start();
-include("connect.php");
+include('connect.php');
 
-// Fetch last 3 uploaded notes by this user (if needed in future)
-// $userID = $_SESSION['user_ID'];
-// $myNotes = $conn->prepare(...);
+// Check if user is logged in
+if (!isset($_SESSION['user_ID'])) {
+    die("Please log in first.");
+}
+
+$userID = $_SESSION['user_ID'];
+
+// Get user details from 'user' table
+$sql = "SELECT * FROM user WHERE user_ID = ?";
+$stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+    die("SQL error: " . $conn->error);
+}
+
+$stmt->bind_param("i", $userID);
+$stmt->execute();
+$result = $stmt->get_result();
+
+include("head.php");
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Profile - StudyHive</title>
-  <link rel="stylesheet" href="style.css">
+    <title>Your Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
 
-  <style>
-    body {
-      background-color: #ffffff;
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-    }
+        h3 {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 36px;
+            color: #4b004b;
+        }
 
-    h1 {
-      font-size: 60px;
-      text-align: center;
-      color: #4b004b;
-      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-      margin-top: 30px;
-    }
+        table {
+            border-collapse: collapse;
+            width: 60%;
+            margin: 20px auto;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-    .center-container {
-      display: flex;
-      justify-content: center;
-      padding: 40px 20px;
-    }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            text-align: left;
+        }
 
-    .card {
-      width: 500px;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      padding: 20px 25px;
-      text-align: left;
-    }
+        th {
+            background-color: #f0c3f0;
+            color: #333;
+            width: 30%;
+        }
 
-    .card h3 {
-      margin-top: 0;
-      font-size: 22px;
-      color: #4b004b;
-    }
+        td {
+            background-color: #fff;
+        }
 
-    .card p {
-      font-size: 15px;
-      color: #333;
-      margin: 12px 0;
-    }
+        .imgcenter {
+            display: block;
+            margin: 15px auto 10px auto;
+            max-width: 200px;
+            height: auto;
+            border-radius: 10px;
+            border: 2px solid #ccc;
+        }
 
-    .card a {
-      color: #660066;
-      text-decoration: underline;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    .card a:hover {
-      text-decoration: none;
-    }
-  </style>
+        .no-picture {
+            text-align: center;
+            color: #777;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
 
-<?php include('head.php'); ?>
+<section>
+<?php
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
 
-<h1>User's Profile</h1>
+    echo "<h3>YOUR PROFILE</h3>";
 
-<div class="center-container">
-  <div class="card">
-    <h3>Connections</h3>
+    // ✅ Display profile picture above the table
+    $imageName = $row["profile_picture"];
+    $imagePath = "uploads/" . $imageName;
 
-  </div>
-</div>
+    if (!empty($imageName) && file_exists($imagePath)) {
+        echo "<img class='imgcenter' src='$imagePath' alt='User Picture'>";
+    } else {
+        echo "<div class='no-picture'>No file chosen</div>";
+    }
 
-<?php include('footer.php'); ?>
+    // ✅ Display user details in table
+    echo "<table>";
+    echo "<tr><th>Full Name:</th><td>" . htmlspecialchars($row["user_Fname"]) . "</td></tr>";
+    echo "<tr><th>Email:</th><td>" . htmlspecialchars($row["email"]) . "</td></tr>";
+    echo "<tr><th>Phone Number:</th><td>" . htmlspecialchars($row["phone"]) . "</td></tr>";
+    echo "<tr><th>Gender:</th><td>" . htmlspecialchars($row["gender"]) . "</td></tr>";
+    echo "<tr><th>Username:</th><td>" . htmlspecialchars($row["user_Name"]) . "</td></tr>";
+    echo "<tr><th>Password:</th><td>******</td></tr>";
+    echo "</table>";
+} else {
+    echo "<p style='text-align:center; color:red;'>User not found.</p>";
+}
+?>
+</section>
+
+<?php include("footer.php"); ?>
+
 </body>
 </html>
