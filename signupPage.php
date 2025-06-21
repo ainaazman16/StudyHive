@@ -1,126 +1,219 @@
-<?php
-session_start();
-include('connect.php');
-
-// Check if user is logged in
-if (!isset($_SESSION['user_ID'])) {
-    die("Please log in first.");
-}
-
-$userID = $_SESSION['user_ID'];
-
-// Get user details from 'user' table
-$sql = "SELECT * FROM user WHERE user_ID = ?";
-$stmt = $conn->prepare($sql);
-
-if (!$stmt) {
-    die("SQL Prepare Error: " . $conn->error);
-}
-
-if (!$stmt) {
-    die("SQL error: " . $conn->error);
-}
-
-$stmt->bind_param("i", $userID);
-$stmt->execute();
-$result = $stmt->get_result();
-
-include("head.php");
-?>
-
+<?php session_start(); ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Your Profile</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up - Study Hive</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+    }
 
-        h3 {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 36px;
-            color: #4b004b;
-        }
+    .navbar {
+      background-color: #660066;
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      height: 60px;
+    }
 
-        table {
-            border-collapse: collapse;
-            width: 60%;
-            margin: 20px auto;
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+    .navbar .logo {
+      height: 60px;
+    }
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px 15px;
-            text-align: left;
-        }
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
 
-        th {
-            background-color: #f0c3f0;
-            color: #333;
-            width: 30%;
-        }
+    .navbar li {
+      margin-left: 10px;
+    }
 
-        td {
-            background-color: #fff;
-        }
+    .navbar a {
+      text-decoration: none;
+      color: white;
+      padding: 14px 16px;
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
 
-        .imgcenter {
-            display: block;
-            margin: 15px auto;
-            max-width: 200px;
-            height: auto;
-            border-radius: 10px;
-            border: 2px solid #ccc;
-        }
+    .navbar a:hover {
+      background-color: #990099;
+    }
 
-        .no-picture {
-            text-align: center;
-            color: #777;
-            font-style: italic;
-        }
-    </style>
+    .topic {
+      background-color: #ec97ec;
+      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+      font-size: 230%;
+      text-decoration: none;
+      color: #5e1b5e;
+      text-align: center;
+      height: 400px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+
+    .topic img {
+      width: 245px;
+      height: auto;
+      margin-bottom: 5px;
+      margin-top: 5px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 20px;
+      margin-left: 20px;
+      font-size: 16px;
+      color: #660066;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      padding: 50px;
+    }
+
+    .signup-box {
+      background-color: #ffe0ff;
+      padding: 40px;
+      border-radius: 10px;
+      width: 400px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #4b004b;
+      margin-bottom: 30px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="password"],
+    input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .gender-options {
+      margin-top: 5px;
+    }
+
+    .gender-options label {
+      font-weight: normal;
+      margin-right: 15px;
+    }
+
+    .form-actions {
+      text-align: center;
+      margin-top: 25px;
+    }
+
+    input[type="submit"],
+    input[type="reset"] {
+      background-color: #cc66cc;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    input[type="submit"]:hover,
+    input[type="reset"]:hover {
+      background-color: #b94cb9;
+    }
+
+    .footer {
+      background-color: #660066;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      margin-top: 40px;
+    }
+  </style>
 </head>
 <body>
 
-<section>
-<?php
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
+<!-- ✅ Header (same as loginPage) -->
+<div class="navbar">
+  <img src="images/whiteLogo.png" alt="Logo" class="logo">
+  <ul>
+    <li><a href="loginPage.php">Login</a></li>
+    <li><a href="signupPage.php">Sign Up</a></li>
+  </ul>
+</div>
 
-    echo "<h3>YOUR PROFILE</h3>";
-    echo "<table>";
-    echo "<tr><th>Full Name:</th><td>" . htmlspecialchars($row["user_Fname"]) . "</td></tr>";
-    echo "<tr><th>Email:</th><td>" . htmlspecialchars($row["email"]) . "</td></tr>";
-    echo "<tr><th>Phone Number:</th><td>" . htmlspecialchars($row["phone"]) . "</td></tr>";
-    echo "<tr><th>Gender:</th><td>" . htmlspecialchars($row["gender"]) . "</td></tr>";
-    echo "<tr><th>Username:</th><td>" . htmlspecialchars($row["user_Name"]) . "</td></tr>";
-    echo "<tr><th>Password:</th><td>******</td></tr>";
-    echo "</table>";
+<div class="topic">
+  <img src="images/whiteLogo.png" alt="logo" class="logo">
+  <h2>WELCOME TO STUDY HIVE</h2>
+</div>
 
-    $imageName = $row["profile_picture"];
-    $imagePath = "uploads/" . $imageName;
+<a class="back-btn" href="index.php">← Back</a>
 
-    if (!empty($imageName) && file_exists($imagePath)) {
-        echo "<img class='imgcenter' src='$imagePath' alt='User Picture'>";
-    } else {
-        echo "<div class='no-picture'>No file chosen</div>";
-    }
+<!-- ✅ Registration Form -->
+<div class="container">
+  <form action="user.php" method="post" enctype="multipart/form-data" class="signup-box">
+    <h2>Create Your Account</h2>
 
-} else {
-    echo "<p style='text-align:center;'>User not found.</p>";
-}
-?>
-</section>
+    <label for="user_Fname">Full Name:</label>
+    <input type="text" name="user_Fname" id="user_Fname" required>
 
+    <label for="email">Email Address:</label>
+    <input type="email" name="email" id="email" required>
+
+    <label for="phone">Phone Number:</label>
+    <input type="number" name="phone" id="phone" required>
+
+    <label>Gender:</label>
+    <div class="gender-options">
+      <label><input type="radio" name="gender" value="female" required> Female</label>
+      <label><input type="radio" name="gender" value="male"> Male</label>
+    </div>
+
+    <label for="user_Name">Username:</label>
+    <input type="text" name="user_Name" id="user_Name" required>
+
+    <label for="password">Password:</label>
+    <input type="password" name="password" id="password" required>
+
+    <label for="profile_picture">Profile Picture:</label>
+    <input type="file" name="profile_picture" id="profile_picture" required>
+
+    <div class="form-actions">
+      <input type="submit" name="submit" value="REGISTER">
+      <input type="reset" value="CLEAR FORM">
+    </div>
+  </form>
+</div>
+
+<!-- ✅ Footer -->
 <?php include("footer.php"); ?>
 
 </body>

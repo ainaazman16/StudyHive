@@ -27,7 +27,7 @@ include("head.php");
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Your Profile</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -87,15 +87,15 @@ include("head.php");
     </style>
 </head>
 <body>
-
+<h3>YOUR PROFILE</h3>
 <section>
 <?php
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
 
-    echo "<h3>YOUR PROFILE</h3>";
+    
 
-    // ✅ Display profile picture above the table
+    
     $imageName = $row["profile_picture"];
     $imagePath = "uploads/" . $imageName;
 
@@ -105,7 +105,7 @@ if ($result->num_rows > 0) {
         echo "<div class='no-picture'>No file chosen</div>";
     }
 
-    // ✅ Display user details in table
+    
     echo "<table>";
     echo "<tr><th>Full Name:</th><td>" . htmlspecialchars($row["user_Fname"]) . "</td></tr>";
     echo "<tr><th>Email:</th><td>" . htmlspecialchars($row["email"]) . "</td></tr>";
