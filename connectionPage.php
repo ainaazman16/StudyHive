@@ -3,6 +3,7 @@
 session_start();
 include('connect.php');
 
+
 // Ensure user is logged in
 
 // Handle actions: send request, accept, decline, remove, cancel
@@ -97,6 +98,7 @@ $potential->execute(); $potentialResult = $potential->get_result(); $potential->
 <body>
 <?php include('head.php'); ?>
 <div class="section">
+  <h1>Connections</h1>
   <h2>Incoming Friend Requests</h2>
   <ul>
     <?php while($r = $incomingResult->fetch_assoc()): ?>
