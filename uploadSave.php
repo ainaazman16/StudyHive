@@ -38,14 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["file"])) {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sssis", $noteName, $storedFileName, $fileType, $userID, $uploadDate);
 
-        echo "<pre>";
-        echo "userID = $userID\n";
-        echo "noteName = $noteName\n";
-        echo "file = $storedFileName\n";
-        echo "type = $fileType\n";
-        echo "uploadDate = $uploadDate\n";
-        echo "</pre>";
-        exit();
 
 
     if ($stmt->execute()) {

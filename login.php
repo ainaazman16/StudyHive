@@ -3,6 +3,12 @@ session_start();
 require("connect.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+     if (empty($_POST['user_Name']) || empty($_POST['password'])) {
+        echo "<script>alert('Please enter both username and password.'); window.location='loginPage.php';</script>";
+        exit();
+    }
+    
     $username = $_POST['user_Name'];
     $password = $_POST['password'];
 
@@ -28,14 +34,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 setcookie("remember_username", "", time() - 3600, "/");
             }
 
-            // ✅ Redirect to homepage
-            header("Location: homePage.php");
+            // ✅ Redirect based on role
+            if ($user['role'] === 'admin') {
+                header("Location: adminPanel.php");
+            } else {
+                header("Location: homePage.php");
+            }
             exit();
+
         } else {
             echo "<script>alert('Invalid password'); window.location='loginPage.php';</script>";
         }
     } else {
-        echo "<script>alert('User not found'); window.location='loginPage.php';</script>";
+        echo "<script>alert('User does not exist, please sign up first'); window.location='loginPage.php';</script>";
     }
 
     $stmt->close();
