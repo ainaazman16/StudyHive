@@ -28,14 +28,24 @@ if ($result->num_rows == 1) {
         $updateStmt->execute();
         $updateStmt->close();
 
-        // Log this download for user
+        // Log this download for user only if not already logged
         if (isset($_SESSION['user_ID'])) {
             $userID = $_SESSION['user_ID'];
-            $logSql = "INSERT INTO note_downloads (user_ID, note_ID, download_date) VALUES (?, ?, NOW())";
-            $logStmt = $conn->prepare($logSql);
-            $logStmt->bind_param("ii", $userID, $noteID);
-            $logStmt->execute();
-            $logStmt->close();
+
+            $checkSql = "SELECT 1 FROM note_downloads WHERE user_ID = ? AND note_ID = ?";
+            $checkStmt = $conn->prepare($checkSql);
+            $checkStmt->bind_param("ii", $userID, $noteID);
+            $checkStmt->execute();
+            $checkStmt->store_result();
+
+            if ($checkStmt->num_rows == 0) {
+                $logSql = "INSERT INTO note_downloads (user_ID, note_ID, download_date) VALUES (?, ?, NOW())";
+                $logStmt = $conn->prepare($logSql);
+                $logStmt->bind_param("ii", $userID, $noteID);
+                $logStmt->execute();
+                $logStmt->close();
+            }
+            $checkStmt->close();
         }
 
         // Force download

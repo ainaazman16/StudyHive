@@ -246,8 +246,8 @@ if(isset($_SESSION['username']))
           <input type="password" id="password" name="password" placeholder="Enter your password">
 
           <div class="remember-forgot">
-            <label><input type="checkbox"> Remember me</label>
-            <a href="#">Forgot password?</a>
+            <label><input type="checkbox" name="remember" <?php if (!empty($savedUsername)) echo 'checked'; ?>> Remember me</label>
+            <a href="forgotPassword.php">Forgot password?</a>
           </div>
 
           <input type="submit" value="Sign in" name="submit">

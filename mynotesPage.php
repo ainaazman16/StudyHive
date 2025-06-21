@@ -16,14 +16,11 @@ $uploaded->execute();
 $uploadedNotes = $uploaded->get_result();
 $uploaded->close();
 
-// Fetch downloaded notes (assumes 'note_downloads' table exists)
-$downloaded = $conn->prepare("SELECT n.* FROM notes n
+// Fetch downloaded notes with download date
+$downloaded = $conn->prepare("SELECT n.*, d.download_date FROM notes n
     JOIN note_downloads d ON n.note_ID = d.note_ID
     WHERE d.user_ID = ?
     ORDER BY d.download_date DESC");
-    if (!$downloaded) {
-    die("Download query failed: " . $conn->error);
-}
 $downloaded->bind_param("i", $userID);
 $downloaded->execute();
 $downloadedNotes = $downloaded->get_result();
@@ -33,6 +30,14 @@ $downloaded->close();
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Notes</title>
+</head>
+<body>
+    
+</body>
+</html>
   <meta charset="UTF-8">
   <title>My Notes - StudyHive</title>
   <link rel="stylesheet" href="style.css">
@@ -58,7 +63,10 @@ $downloaded->close();
         <h3><?= htmlspecialchars($note['note_Name']) ?></h3>
         <p><strong>Type:</strong> <?= strtoupper($note['file_type']) ?></p>
         <p><strong>Uploaded:</strong> <?= $note['upload_date'] ?></p>
+        <p><strong>Downloads:</strong> <?= $note['download_count'] ?></p>
         <a class="btn" href="download.php?note_ID=<?= $note['note_ID'] ?>">Download</a>
+        <a class="btn" href="editNote.php?note_ID=<?= $note['note_ID'] ?>" style="background:#007bff;">Edit</a>
+        <a class="btn" href="deleteNote.php?note_ID=<?= $note['note_ID'] ?>" style="background:#dc3545;" onclick="return confirm('Are you sure you want to delete this note?');">Delete</a>
       </div>
     <?php endwhile; ?>
   <?php else: ?>
@@ -73,7 +81,7 @@ $downloaded->close();
       <div class="note-card">
         <h3><?= htmlspecialchars($note['note_Name']) ?></h3>
         <p><strong>Type:</strong> <?= strtoupper($note['file_type']) ?></p>
-        <p><strong>Uploaded:</strong> <?= $note['upload_date'] ?></p>
+        <p><strong>Downloaded:</strong> <?= $note['download_date'] ?></p>
         <a class="btn" href="download.php?note_ID=<?= $note['note_ID'] ?>">Download Again</a>
       </div>
     <?php endwhile; ?>
