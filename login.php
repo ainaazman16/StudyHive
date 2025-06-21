@@ -17,14 +17,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $user['password'])) {
             $_SESSION['username'] = $user['user_Name'];
 
-            // ✅ Remember Me
+           
             if (isset($_POST['remember'])) {
                 setcookie("remember_username", $user['user_Name'], time() + (7 * 24 * 60 * 60), "/");
             } else {
                 setcookie("remember_username", "", time() - 3600, "/");
             }
 
-            // ✅ Redirect
+            
             header("Location: homePage.php");
             exit();
         } else {

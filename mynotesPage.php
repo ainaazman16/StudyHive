@@ -1,7 +1,4 @@
 <?php
-<<<<<<< HEAD
-include("head.php")
-=======
 session_start();
 include("connect.php");
 
@@ -31,13 +28,11 @@ $downloaded->bind_param("i", $userID);
 $downloaded->execute();
 $downloadedNotes = $downloaded->get_result();
 $downloaded->close();
->>>>>>> 7f4a1b645b7028744eb797ec180667cd640e7e9a
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<<<<<<< HEAD
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Notes</title>
@@ -46,7 +41,6 @@ $downloaded->close();
     
 </body>
 </html>
-=======
   <meta charset="UTF-8">
   <title>My Notes - StudyHive</title>
   <link rel="stylesheet" href="style.css">
@@ -97,4 +91,3 @@ $downloaded->close();
 </div>
 </body>
 </html>
->>>>>>> 7f4a1b645b7028744eb797ec180667cd640e7e9a
