@@ -122,6 +122,7 @@
       <a href="uploadPage.php" class="nav-btn">Upload</a>
       <a href="connectionPage.php" class="nav-btn">Connection</a>
       <a href="profilePage.php" class="nav-btn">Profile</a>
+      <a href="adminPanel.php" class="nav-btn">Admin</a>
       <a href="logout.php" class="nav-btn">Log Out</a>
 
     </div>
