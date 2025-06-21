@@ -50,9 +50,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           die("SQL prepare failed: " . $conn->error);
       }
         $update->bind_param("siii", $noteName, $subjectID, $noteID, $userID);
-    if ($update->execute()) {
+      if ($update->execute()) {
+        $_SESSION['success_message'] = "Note updated successfully!";
         header("Location: myNotesPage.php");
         exit();
+
+
     } else {
         $error = "Update failed: " . $conn->error;
     }
@@ -120,6 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <body>
 <?php include("head.php"); ?>
+
 
 <div class="container">
   <h2>Edit Note</h2>
