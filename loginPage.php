@@ -239,8 +239,8 @@ if(isset($_SESSION['username']))
       <div class="login-box">
         <h2>Log in</h2>
         <form action="login.php" method="POST">
-          <label for="email">Email</label>
-          <input type="text" id="email" name="user_Name" placeholder="Enter your email">
+          <label for="username">Email</label>
+          <input type="text" id="username" name="user_Name" placeholder="Enter your username">
 
           <label for="password">Password</label>
           <input type="password" id="password" name="password" placeholder="Enter your password">
