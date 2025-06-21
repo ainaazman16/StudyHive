@@ -1,3 +1,5 @@
+
+
 <footer class="footer">
   <h4>&copy; StudyHive - <?php echo date("Y"); ?></h4>
 </footer>

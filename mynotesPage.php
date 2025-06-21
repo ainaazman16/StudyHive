@@ -49,6 +49,13 @@ $downloaded->close();
 <body>
 <?php include("head.php"); ?>
 
+<?php if (isset($_SESSION['success_message'])): ?>
+  <div style="background: #d4edda; color: #155724; padding: 12px; margin: 20px auto; max-width: 800px; text-align: center; border: 1px solid #c3e6cb; border-radius: 5px;">
+    <?= $_SESSION['success_message'] ?>
+  </div>
+  <?php unset($_SESSION['success_message']); ?>
+<?php endif; ?>
+
 <div class="section">
   <h2>Notes You've Uploaded</h2>
   <?php if ($uploadedNotes->num_rows > 0): ?>

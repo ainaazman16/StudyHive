@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require("connect.php");
 
 // Capture and sanitize user input
