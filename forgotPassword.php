@@ -4,37 +4,42 @@ require("connect.php");
 $msg = "";
 $showResetForm = false;
 
-if (isset($_POST['check_email'])) {
-    $email = $_POST['email'];
+if (isset($_POST['check_username'])) {
+    $username = $_POST['username'];
 
-    $sql = "SELECT * FROM user WHERE email=?";
+    $sql = "SELECT * FROM user WHERE user_Name = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $email);
+    $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $msg = "Email found. Please enter your new password.";
+        $msg = "Username found. Please reset your password.";
         $showResetForm = true;
     } else {
-        $msg = "❌ Email not found in the system.";
+        $msg = "❌ Username not found.";
     }
 }
 
 if (isset($_POST['reset_password'])) {
-    $email = $_POST['email'];
+    $username = $_POST['username'];
     $newpass = $_POST['new_password'];
+    $confirmpass = $_POST['confirm_password'];
 
-    $hashedPassword = password_hash($newpass, PASSWORD_DEFAULT);
-    $sql = "UPDATE user SET password=? WHERE email=?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $hashedPassword, $email);
-
-    if ($stmt->execute()) {
-        $msg = "✅ Password has been updated successfully.";
-        $showResetForm = false;
+    if ($newpass !== $confirmpass) {
+        $msg = "❌ Passwords do not match.";
     } else {
-        $msg = "❌ Error updating password.";
+        $hashed = password_hash($newpass, PASSWORD_DEFAULT);
+        $sql = "UPDATE user SET password = ? WHERE user_Name = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $hashed, $username);
+
+        if ($stmt->execute()) {
+            $msg = "✅ Password has been updated successfully.";
+            $showResetForm = false;
+        } else {
+            $msg = "❌ Error updating password.";
+        }
     }
 }
 ?>
@@ -198,43 +203,24 @@ if (isset($_POST['reset_password'])) {
   </style>
 </head>
 <body>
-    <section>
-        <section>
-      <div class="navbar">
-            <img src="images/whiteLogo.png" alt="Logo" class="logo">
-            <ul>
-            <li><a href="#namafile">Features</a></li>
-            <li><a href="#namafile">Help</a></li>
-            <li><a href="#namafile">Contact Us</a></li>
-            <li><a href="loginPage.php">Login</a></li>
-            <li><a href="signupPage.php">Sign Up</a></li>
-          </ul>
-          </div>
-          <div class="topic">
-            <image src="images/whiteLogo.png" alt="logo" class="logo"></image>
-            <h2>WELCOME TO STUDY HIVE</h2>
-          </div>
-          <a class="back-btn" href="loginPage.php">← Back</a>
-  <div class="box">
-    <h2>Reset Your Password</h2>
+  <h2>Reset Password</h2>
 
-    <?php if (!$showResetForm): ?>
-      <form method="POST">
-        <input type="email" name="email" placeholder="Enter your registered email" required>
-        <input type="submit" name="check_email" value="Check Email">
-      </form>
-    <?php endif; ?>
+  <div class="msg"><?= $msg ?></div>
 
-    <?php if ($showResetForm): ?>
-      <form method="POST">
-        <input type="hidden" name="email" value="<?= htmlspecialchars($_POST['email']) ?>">
-        <input type="password" name="new_password" placeholder="Enter new password" required>
-        <input type="submit" name="reset_password" value="Reset Password">
-      </form>
-    <?php endif; ?>
+  <?php if (!$showResetForm): ?>
+    <form method="POST">
+      <input type="text" name="username" required placeholder="Enter your username">
+      <input type="submit" name="check_username" value="Check Username">
+    </form>
+  <?php endif; ?>
 
-    <div class="msg"><?= $msg ?></div>
-  </div>
-  </section>
+  <?php if ($showResetForm): ?>
+    <form method="POST">
+      <input type="hidden" name="username" value="<?= htmlspecialchars($_POST['username']) ?>">
+      <input type="password" name="new_password" required placeholder="New Password">
+      <input type="password" name="confirm_password" required placeholder="Confirm Password">
+      <input type="submit" name="reset_password" value="Reset Password">
+    </form>
+  <?php endif; ?>
 </body>
 </html>
