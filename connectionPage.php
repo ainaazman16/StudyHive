@@ -8,7 +8,8 @@ if (!isset($_SESSION['user_ID'])) {
     exit();
 }
 
-// Ensure user is logged in
+
+$userID = $_SESSION['user_ID'];
 
 // Handle actions: send request, accept, decline, remove, cancel
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
