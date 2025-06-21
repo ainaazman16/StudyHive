@@ -16,6 +16,13 @@ $stmt->bind_param("i", $noteID);
 $stmt->execute();
 $result = $stmt->get_result();
 
+// Track view
+$viewStmt = $conn->prepare("INSERT INTO note_views (user_ID, note_ID, view_date) VALUES (?, ?, NOW())");
+$viewStmt->bind_param("ii", $_SESSION['user_ID'], $noteID);
+$viewStmt->execute();
+$viewStmt->close();
+
+
 if ($result->num_rows == 1) {
     $note = $result->fetch_assoc();
     $fileName = $note['file_path'];

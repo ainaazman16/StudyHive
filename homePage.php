@@ -18,6 +18,110 @@ $myNotes = $conn->prepare("SELECT note_ID, note_Name, upload_date, download_coun
 $myNotes->bind_param("i", $userID);
 $myNotes->execute();
 $myNotesResult = $myNotes->get_result();
+
+// Get user's recent subject interests (from uploads and downloads)
+$subjectSQL = "
+  SELECT DISTINCT s.subject_ID
+  FROM notes n
+  LEFT JOIN subject s ON n.subject_ID = s.subject_ID
+  LEFT JOIN note_downloads d ON n.note_ID = d.note_ID
+  WHERE n.user_ID = ? OR d.user_ID = ?
+";
+$subjectStmt = $conn->prepare($subjectSQL);
+$subjectStmt->bind_param("ii", $userID, $userID);
+$subjectStmt->execute();
+$subjectResult = $subjectStmt->get_result();
+
+$subjectIDs = [];
+while ($row = $subjectResult->fetch_assoc()) {
+    $subjectIDs[] = $row['subject_ID'];
+}
+$subjectStmt->close();
+
+if (count($subjectIDs) > 0) {
+    // Recommend based on subjects
+    $inClause = implode(',', array_fill(0, count($subjectIDs), '?'));
+    $types = str_repeat('i', count($subjectIDs));
+    $sql = "SELECT note_Name, note_ID FROM notes WHERE subject_ID IN ($inClause) AND user_ID != ? ORDER BY upload_date DESC LIMIT 3";
+    $recStmt = $conn->prepare($sql);
+    $params = array_merge($subjectIDs, [$userID]);
+    $recStmt->bind_param($types . "i", ...$params);
+} else {
+    // Recommend top downloads as fallback
+    $sql = "SELECT note_Name, note_ID FROM notes ORDER BY download_count DESC LIMIT 3";
+    $recStmt = $conn->prepare($sql);
+}
+$recStmt->execute();
+$recommendations = $recStmt->get_result();
+
+// Fetch recent friends (accepted connections)
+$friendQuery = $conn->prepare("
+  SELECT u.user_Fname, u.user_Name 
+  FROM user_friends f
+  JOIN user u ON u.user_ID = f.friend_ID
+  WHERE f.user_ID = ? AND f.status = 'accepted'
+  ORDER BY f.friend_date DESC LIMIT 3
+");
+$friendQuery->bind_param("i", $userID);
+$friendQuery->execute();
+$friendsResult = $friendQuery->get_result();
+
+// Fetch recent uploads
+$userID = $_SESSION['user_ID'];
+$recentUploads = $conn->prepare("SELECT note_Name, upload_date FROM notes WHERE user_ID = ? ORDER BY upload_date DESC LIMIT 3");
+$recentUploads->bind_param("i", $userID);
+$recentUploads->execute();
+$uploadResult = $recentUploads->get_result();
+// Get user's recent subject interests (from uploads and downloads)
+$subjectSQL = "
+  SELECT DISTINCT s.subject_ID
+  FROM notes n
+  LEFT JOIN subject s ON n.subject_ID = s.subject_ID
+  LEFT JOIN note_downloads d ON n.note_ID = d.note_ID
+  WHERE n.user_ID = ? OR d.user_ID = ?
+";
+$subjectStmt = $conn->prepare($subjectSQL);
+$subjectStmt->bind_param("ii", $userID, $userID);
+$subjectStmt->execute();
+$subjectResult = $subjectStmt->get_result();
+
+$subjectIDs = [];
+while ($row = $subjectResult->fetch_assoc()) {
+    $subjectIDs[] = $row['subject_ID'];
+}
+$subjectStmt->close();
+
+if (count($subjectIDs) > 0) {
+    // Recommend based on subjects
+    $inClause = implode(',', array_fill(0, count($subjectIDs), '?'));
+    $types = str_repeat('i', count($subjectIDs));
+    $sql = "SELECT note_Name, note_ID FROM notes WHERE subject_ID IN ($inClause) AND user_ID != ? ORDER BY upload_date DESC LIMIT 3";
+    $recStmt = $conn->prepare($sql);
+    $params = array_merge($subjectIDs, [$userID]);
+    $recStmt->bind_param($types . "i", ...$params);
+} else {
+    // Recommend top downloads as fallback
+    $sql = "SELECT note_Name, note_ID FROM notes ORDER BY download_count DESC LIMIT 3";
+    $recStmt = $conn->prepare($sql);
+}
+$recStmt->execute();
+$recommendations = $recStmt->get_result();
+
+// Get user's recently viewed notes
+$viewQuery = $conn->prepare("
+  SELECT n.note_Name, n.note_ID, MAX(v.view_date) as last_view
+  FROM note_views v
+  JOIN notes n ON v.note_ID = n.note_ID
+  WHERE v.user_ID = ?
+  GROUP BY n.note_ID
+  ORDER BY last_view DESC
+  LIMIT 3
+");
+$viewQuery->bind_param("i", $userID);
+$viewQuery->execute();
+$viewedResult = $viewQuery->get_result();
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -146,23 +250,69 @@ $myNotesResult = $myNotes->get_result();
     <?php endif; ?>
   </div>
 
-  <!-- Recommendations -->
-  <div class="card">
-    <h3>Recommendations</h3>
-    <p>Coming soon: Smart recommendations based on your downloads and friends.</p>
-  </div>
+    <!-- Recommendations Card -->
+    <div class="card">
+      <div class="container">
+        <div>
+          <h3><b>Recommendations</b></h3>
+          <ul style="margin-top: 10px; padding-left: 15px;">
+            <?php if ($recommendations->num_rows > 0): ?>
+              <?php while ($rec = $recommendations->fetch_assoc()): ?>
+                <li style="font-size: 13px;">
+                  <?= htmlspecialchars($rec['note_Name']) ?>
+                  <a href="download.php?note_ID=<?= $rec['note_ID'] ?>" style="font-size:12px; color:#660066;">[Download]</a>
+                </li>
+              <?php endwhile; ?>
+            <?php else: ?>
+              <li>No recommendations available.</li>
+            <?php endif; ?>
+          </ul>
+        </div>
+      </div>
+    </div>
 
-  <!-- Connection -->
-  <div class="card">
-    <h3>Connections</h3>
-    <p>Check your friend list, pending requests, or find new users.</p>
-    <a href="connectionPage.php">Manage Connections →</a>
-  </div>
 
-  <!-- Recently Viewed -->
-  <div class="card recently-viewed">
-    <h3>Recently Viewed</h3>
-    <p>Coming soon: View your most recent note visits with quick access links.</p>
+ <!-- Connection Card -->
+<div class="card">
+  <div class="container">
+    <div>
+      <h3><b>Connection</b></h3>
+      <ul style="margin-top: 10px; padding-left: 15px;">
+        <?php if ($friendsResult->num_rows > 0): ?>
+          <?php while ($friend = $friendsResult->fetch_assoc()): ?>
+            <li style="font-size: 13px;">
+              <?= htmlspecialchars($friend['user_Fname']) ?>
+              <br><small>@<?= htmlspecialchars($friend['user_Name']) ?></small>
+            </li>
+          <?php endwhile; ?>
+        <?php else: ?>
+          <li>No friends yet.</li>
+        <?php endif; ?>
+      </ul>
+      <a href="connectionPage.php" class="btn" style="margin-top: 10px;">Manage</a>
+    </div>
+  </div>
+</div>
+
+
+ <!-- Recently Viewed Card -->
+<div class="card recently-viewed">
+  <div class="container">
+    <div>
+      <h3><b>Recently Viewed</b></h3>
+      <ul style="margin-top: 10px; padding-left: 15px;">
+        <?php if ($viewedResult->num_rows > 0): ?>
+          <?php while ($view = $viewedResult->fetch_assoc()): ?>
+            <li style="font-size: 13px;">
+              <?= htmlspecialchars($view['note_Name']) ?>
+              <a href="download.php?note_ID=<?= $view['note_ID'] ?>" style="font-size:12px; color:#660066;">[Open]</a>
+            </li>
+          <?php endwhile; ?>
+        <?php else: ?>
+          <li>You haven't viewed any notes yet.</li>
+        <?php endif; ?>
+      </ul>
+    </div>
   </div>
 </div>
 
