@@ -95,13 +95,16 @@ include("connect.php");
       color: #4b004b;
       margin-bottom: 5px;
     }
-    .form-group select,
-    .form-group input[type="text"] {
-      width: 100%;
-      padding: 8px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
+   .form-group select,
+  .form-group input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 14px;
     }
+
     input[type="file"] {
       padding: 10px;
     }
@@ -121,7 +124,7 @@ include("connect.php");
       cursor: pointer;
     }
     button[type="reset"] {
-      background-color: rgb(153, 137, 153);
+      background-color: rgb(183, 41, 86);
     }
     .success-message {
       text-align: center;
@@ -134,6 +137,10 @@ include("connect.php");
       color: red;
       font-weight: bold;
       margin-bottom: 20px;
+    }
+
+    input[id^="new_"] {
+      margin-top: 3px;
     }
   </style>
 </head>
