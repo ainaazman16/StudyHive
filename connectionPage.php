@@ -3,6 +3,10 @@
 session_start();
 include('connect.php');
 
+if (!isset($_SESSION['user_ID'])) {
+    header("Location: loginPage.php");
+    exit();
+}
 
 // Ensure user is logged in
 

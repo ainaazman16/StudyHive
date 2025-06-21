@@ -1,7 +1,12 @@
 <?php
 session_start();
 include("connect.php");
+if (!isset($_SESSION['user_ID'])) {
+    header("Location: loginPage.php");
+    exit();
+}
 
+$userID = $_SESSION['user_ID'];
 
 // Fetch uploaded notes
 $uploaded = $conn->prepare("SELECT * FROM notes WHERE user_ID = ? ORDER BY upload_date DESC");
