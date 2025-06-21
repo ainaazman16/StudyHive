@@ -1,0 +1,18 @@
+<?php
+include("connect.php");
+
+$uniID = $_GET['id'] ?? 0;
+
+$stmt = $conn->prepare("SELECT faculty_ID AS id, faculty_name AS name FROM faculty WHERE uni_ID = ?");
+$stmt->bind_param("i", $uniID);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$data = [];
+while ($row = $result->fetch_assoc()) {
+    $data[] = $row;
+}
+
+header('Content-Type: application/json');
+echo json_encode($data);
+?>
