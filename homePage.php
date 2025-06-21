@@ -1,10 +1,15 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home - StudyHive</title>
   <link rel="stylesheet" href="style.css">
-  <title>HOME</title>
+
   <style>
     body {
       background-color: #ffffff;
@@ -12,86 +17,117 @@
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    .topic {
-      background-color: #ec97ec;
+    h1 {
+      font-size: 60px;
+      text-align: center;
+      color: #4b004b;
       font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-      font-size: 230%;
-      text-decoration: none;
-      color: #5e1b5e;
-      text-align: center;
-      height: 500px;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      position: relative;
+      margin-top: 30px;
     }
 
-    .topic img {
-      width: 350px;
-      height: auto;
-      margin-bottom: 10px;
-      margin-top: 5px;
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      padding: 30px;
+      max-width: 1300px;
+      margin: 0 auto;
     }
 
-    /* === Bottom Navigation Bar === */
-    .bottom-nav {
+    .card {
       display: flex;
-      align-items: center;
-      background-color: #4b004b;
-      padding: 20 20px;
-      height: 60px;
+      flex-direction: column;
+      justify-content: flex-start;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: 0.3s;
+      border-radius: 5px;
+      background-color: #fff;
+      height: 250px;
+      width: 100%; /* normal cards fill the grid cell */
     }
 
-    .bottom-nav img.logo {
-      height: 40px;
+    .card:hover {
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
 
-    .nav-links {
+    .card .container {
+      flex-grow: 1;
+      padding: 15px 20px;
       display: flex;
-      margin-left: auto;
+      align-items: flex-start;
+      justify-content: flex-start;
     }
 
-    .nav-btn {
-      background-color: #4b004b;
-      color: white;
-      padding: 23px 30px;
-      text-align: center;
-      text-decoration: none;
-      font-weight: bold;
-      text-transform: uppercase;
-      font-size: 12px;
-      border-right: 2px solid #ffffff;
-      transition: background-color 0.3s;
+    .card .container h3 {
+      margin: 0;
+      font-size: 16px;
+      color: #4b004b;
+      font-family: Montserrat, sans-serif;
     }
 
-    .nav-btn:last-child {
-      border-right: none;
+    /* ✅ Recently Viewed: fixed width + centered in row */
+    .card.recently-viewed {
+      grid-column: 1 / -1;           /* Span full row */
+      width: 600px;                  /* Fixed width */
+      justify-self: center;          /* Center in grid */
     }
 
-    .nav-btn:hover {
-      background-color: #e696ec;
+    @media screen and (max-width: 1000px) {
+      .cards-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .card.recently-viewed {
+        width: 100%;
+        grid-column: 1 / -1;
+      }
     }
 
-    .nav-btn.active {
-      background-color: #e696ec;
-      color: #ffffff;
+    @media screen and (max-width: 600px) {
+      .cards-container {
+        grid-template-columns: 1fr;
+      }
+
+      .card.recently-viewed {
+        width: 100%;
+        grid-column: auto;
+      }
     }
-
-    h1{
-        font-size: 60px;
-        text-align: center;
-        color: #4b004b;
-        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-    }
-
-
   </style>
 </head>
 <body>
-    <?php
-    include('head.php');
-    ?>
+
+  <?php include('head.php'); ?>
 
   <h1>User's Dashboard</h1>
 
+  <div class="cards-container">
+    <!-- Top row -->
+    <div class="card">
+      <div class="container">
+        <h3><b>My Notes</b></h3>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="container">
+        <h3><b>Recommendations</b></h3>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="container">
+        <h3><b>Connection</b></h3>
+      </div>
+    </div>
+
+    <!-- Centered Recently Viewed card with fixed width -->
+    <div class="card recently-viewed">
+      <div class="container">
+        <h3><b>Recently Viewed</b></h3>
+      </div>
+    </div>
+  </div>
+<?php include('footer.php'); ?>
 </body>
 </html>

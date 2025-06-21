@@ -1,23 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<footer class="footer">
+  <h4>&copy; StudyHive - <?php echo date("Y"); ?></h4>
+</footer>
 
-</head>
 <style>
-    .footer {
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        color: white;
-        text-align: center;
-}
+  .footer {
+    background-color: #4b004b;           /* Match navigation bar color */
+    color: white;
+    text-align: center;
+    padding: 20px 0;                     /* Match nav padding height */
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    width: 100%;                         /* Ensure full width */
+    box-sizing: border-box;
+  }
+
+  .footer h4 {
+    margin: 0;
+    font-weight: normal;
+    letter-spacing: 0.5px;
+  }
 </style>
-<body>
-    <footer class = "footer">
-        <h4>&copy; StudyHive - <?php echo Date("Y"); ?></h4>
-    </footer>
-</body>
-</html>

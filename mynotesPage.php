@@ -81,5 +81,8 @@ $downloaded->close();
     <p>You haven't downloaded any notes yet.</p>
   <?php endif; ?>
 </div>
+<?php
+    include('footer.php');
+    ?>
 </body>
 </html>
