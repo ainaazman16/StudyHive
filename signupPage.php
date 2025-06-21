@@ -235,7 +235,7 @@
 
           <div class="form-group">
             <label for="picture">Picture:</label>
-            <input type="file" name="picture" id="ppicture" required />
+            <input type="file" name="profile_picture" id="profile_picture" required />
           </div>
 
           <div class="form-actions">
