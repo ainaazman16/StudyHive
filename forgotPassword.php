@@ -14,7 +14,7 @@ if (isset($_POST['check_username'])) {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $msg = "Username found. Please reset your password.";
+        $msg = "✅ Username found. Please reset your password.";
         $showResetForm = true;
     } else {
         $msg = "❌ Username not found.";
@@ -28,6 +28,7 @@ if (isset($_POST['reset_password'])) {
 
     if ($newpass !== $confirmpass) {
         $msg = "❌ Passwords do not match.";
+        $showResetForm = true;
     } else {
         $hashed = password_hash($newpass, PASSWORD_DEFAULT);
         $sql = "UPDATE user SET password = ? WHERE user_Name = ?";
@@ -39,6 +40,7 @@ if (isset($_POST['reset_password'])) {
             $showResetForm = false;
         } else {
             $msg = "❌ Error updating password.";
+            $showResetForm = true;
         }
     }
 }
@@ -56,171 +58,106 @@ if (isset($_POST['reset_password'])) {
       background-color: #f2f2f2;
     }
 
-    .navbar {
-      background-color: #660066;
-      position: sticky;
-      top: 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 10px;
-      height: 60px;
-    }
-
-    .navbar .logo {
-      height: 60px;
-    }
-
-    .navbar ul {
-      list-style: none;
-      display: flex;
-      margin: 0;
-      padding: 0;
-    }
-
-    .navbar li {
-      margin-left: 10px;
-    }
-
-    .navbar a {
-      text-decoration: none;
-      color: white;
-      padding: 14px 16px;
-      display: block;
-      font-size: 14px;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-
-    .navbar a:hover {
-      background-color: #990099;
-    }
-
-    .topic {
-      background-color: #ec97ec;
-      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-      font-size: 230%;
-      text-decoration: none;
-      color: #5e1b5e;
-      text-align: center;
-      height: 400px;
-      padding-top: 5px;
-      padding-bottom: 5px;
-    }
-
-    .topic img {
-      width: 245px;
-      height: auto;
-      margin-bottom: 5px;
-      margin-top: 5px;
-    }
-
-    .back-btn {
-      display: inline-block;
-      margin-top: 20px;
-      margin-left: 20px;
-      font-size: 16px;
-      color: #660066;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
     .container {
-      width: 100%;
       display: flex;
       justify-content: center;
-      padding: 50px 20px;
-      box-sizing: border-box;
+      align-items: center;
+      min-height: 80vh;
+    }
+
+    .box {
+      background: #ffe0ff;
+      padding: 40px 30px;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      text-align: center;
+      color: #660066;
+      margin-bottom: 25px;
     }
 
     .form-group {
       margin-bottom: 20px;
     }
 
-    .form-group label {
+    label {
       display: block;
+      margin-bottom: 6px;
       font-weight: bold;
       color: #660066;
-      margin-bottom: 6px;
     }
 
-    .form-actions {
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    .box {
-      background: #ffe0ff;
-      padding: 40px;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      text-align: center;
-    }
-    h2 {
-      color: #660066;
-    }
-    input[type="email"],
+    input[type="text"],
     input[type="password"] {
       width: 100%;
       padding: 12px;
-      margin-top: 15px;
+      margin-top: 5px;
       border-radius: 8px;
       border: 1px solid #ccc;
+      background-color: #f7f7f7;
     }
+
     input[type="submit"] {
-      margin-top: 20px;
-      padding: 12px 20px;
-      border: none;
+      width: 100%;
+      padding: 12px;
       background-color: #cc66cc;
       color: white;
       font-weight: bold;
+      border: none;
       border-radius: 8px;
       cursor: pointer;
+      transition: background 0.3s ease;
+      margin-top: 15px;
     }
+
     input[type="submit"]:hover {
       background-color: #b94cb9;
     }
-    a {
-      display: block;
-      margin-top: 20px;
-      color: #660066;
-      text-decoration: none;
-    }
-    .msg {
-      margin-top: 15px;
-      color: #330033;
-    }
 
-    .footer {
-      background-color: #660066;
-      color: white;
+    .msg {
       text-align: center;
-      padding: 10px;
-      margin-top: 40px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #330033;
     }
   </style>
 </head>
 <body>
-  <h2>Reset Password</h2>
+  <div class="container">
+    <div class="box">
+      <h2>Reset Password</h2>
 
-  <div class="msg"><?= $msg ?></div>
+      <div class="msg"><?= $msg ?></div>
 
-  <?php if (!$showResetForm): ?>
-    <form method="POST">
-      <input type="text" name="username" required placeholder="Enter your username">
-      <input type="submit" name="check_username" value="Check Username">
-    </form>
-  <?php endif; ?>
+      <?php if (!$showResetForm): ?>
+        <form method="POST">
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" name="username" required placeholder="Enter your username">
+          </div>
+          <input type="submit" name="check_username" value="Check Username">
+        </form>
+      <?php endif; ?>
 
-  <?php if ($showResetForm): ?>
-    <form method="POST">
-      <input type="hidden" name="username" value="<?= htmlspecialchars($_POST['username']) ?>">
-      <input type="password" name="new_password" required placeholder="New Password">
-      <input type="password" name="confirm_password" required placeholder="Confirm Password">
-      <input type="submit" name="reset_password" value="Reset Password">
-    </form>
-  <?php endif; ?>
+      <?php if ($showResetForm): ?>
+        <form method="POST">
+          <input type="hidden" name="username" value="<?= htmlspecialchars($_POST['username']) ?>">
+          <div class="form-group">
+            <label for="new_password">New Password:</label>
+            <input type="password" name="new_password" required placeholder="New Password">
+          </div>
+          <div class="form-group">
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" name="confirm_password" required placeholder="Confirm Password">
+          </div>
+          <input type="submit" name="reset_password" value="Reset Password">
+        </form>
+      <?php endif; ?>
+    </div>
+  </div>
 </body>
 </html>
