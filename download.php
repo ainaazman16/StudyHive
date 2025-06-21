@@ -18,7 +18,7 @@ $result = $stmt->get_result();
 if ($result->num_rows == 1) {
     $note = $result->fetch_assoc();
     $fileName = $note['file_path'];
-    $filePath = "uploads/" . $fileName;
+    $filePath = $fileName; // file path already includes 'uploads/'
 
     if (file_exists($filePath)) {
         // Update download count
@@ -27,6 +27,16 @@ if ($result->num_rows == 1) {
         $updateStmt->bind_param("i", $noteID);
         $updateStmt->execute();
         $updateStmt->close();
+
+        // Log this download for user
+        if (isset($_SESSION['user_ID'])) {
+            $userID = $_SESSION['user_ID'];
+            $logSql = "INSERT INTO note_downloads (user_ID, note_ID, download_date) VALUES (?, ?, NOW())";
+            $logStmt = $conn->prepare($logSql);
+            $logStmt->bind_param("ii", $userID, $noteID);
+            $logStmt->execute();
+            $logStmt->close();
+        }
 
         // Force download
         header('Content-Description: File Transfer');
