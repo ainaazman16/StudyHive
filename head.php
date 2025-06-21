@@ -5,6 +5,9 @@ include("connect.php");
 $subjectList = $conn->query("SELECT subject_ID, subject_Name FROM subject");
 $courseList = $conn->query("SELECT course_ID, course_Name FROM course");
 $uniList    = $conn->query("SELECT uni_ID, uni_Name FROM university");
+
+// Get current page name
+$currentPage = basename($_SERVER['PHP_SELF']);
 ?>
 
 <!DOCTYPE html>
@@ -112,7 +115,8 @@ $uniList    = $conn->query("SELECT uni_ID, uni_Name FROM university");
       align-items: center;
       background-color: #4b004b;
       height: 60px;
-      padding: 0 20px;
+      padding-left: 20px;  /* keep some space on the left */
+      padding-right: 0;    /* remove space on the right */
     }
 
     .bottom-nav img.logo {
@@ -137,9 +141,30 @@ $uniList    = $conn->query("SELECT uni_ID, uni_Name FROM university");
       transition: background-color 0.3s;
     }
 
-    .nav-btn:last-child {
-      border-right: none;
-    }
+    .nav-links {
+    display: flex;
+    margin-left: auto;
+   }
+
+    .nav-btn {
+    background-color: #4b004b;
+    color: white;
+    padding: 23px 30px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 12px;
+    border-right: 2px solid #ffffff;
+    transition: background-color 0.3s;
+    margin: 0; 
+  }
+
+    .nav-links a:last-child {
+    border-right: none;
+    margin-right: 0; /
+}
+
 
     .nav-btn:hover {
       background-color: #e696ec;
@@ -198,11 +223,11 @@ $uniList    = $conn->query("SELECT uni_ID, uni_Name FROM university");
   <div class="bottom-nav">
     <img src="images/whiteLogo.png" alt="Logo" class="logo" />
     <div class="nav-links">
-      <a href="homePage.php" class="nav-btn active">Home</a>
-      <a href="mynotesPage.php" class="nav-btn">My Notes</a>
-      <a href="uploadPage.php" class="nav-btn">Upload</a>
-      <a href="connectionPage.php" class="nav-btn">Connection</a>
-      <a href="profilePage.php" class="nav-btn">Profile</a>
+      <a href="homePage.php" class="nav-btn <?= $currentPage == 'homePage.php' ? 'active' : '' ?>">Home</a>
+      <a href="mynotesPage.php" class="nav-btn <?= $currentPage == 'mynotesPage.php' ? 'active' : '' ?>">My Notes</a>
+      <a href="uploadPage.php" class="nav-btn <?= $currentPage == 'uploadPage.php' ? 'active' : '' ?>">Upload</a>
+      <a href="connectionPage.php" class="nav-btn <?= $currentPage == 'connectionPage.php' ? 'active' : '' ?>">Connection</a>
+      <a href="profilePage.php" class="nav-btn <?= $currentPage == 'profilePage.php' ? 'active' : '' ?>">Profile</a>
       <a href="logout.php" class="nav-btn">Log Out</a>
     </div>
   </div>

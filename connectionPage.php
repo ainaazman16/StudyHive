@@ -190,5 +190,6 @@ $potential->execute(); $potentialResult = $potential->get_result(); $potential->
     <?php if ($pendingResult->num_rows === 0) echo '<li>No pending requests.</li>'; ?>
   </ul>
 </div>
+<?php include('footer.php'); ?>
 </body>
 </html>
