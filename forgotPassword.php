@@ -193,6 +193,14 @@ if (isset($_POST['reset_password'])) {
       font-weight: bold;
       color: #330033;
     }
+
+    .footer {
+      background-color: #660066;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      margin-top: 40px;
+    }
   </style>
 </head>
 <body>
@@ -242,5 +250,6 @@ if (isset($_POST['reset_password'])) {
     </div>
   </div>
 </section>
+<?php include('footer.php');?>
 </body>
 </html>
