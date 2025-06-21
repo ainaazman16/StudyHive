@@ -64,8 +64,16 @@ $stmt = $conn->prepare($sql);
 if ($params) {
     $stmt->bind_param($types, ...$params);
 }
-$stmt->execute();
-$result = $stmt->get_result();
+
+  $stmt->execute();
+  $result = $stmt->get_result();
+  // Track view
+  $viewStmt = $conn->prepare("INSERT INTO note_views (user_ID, note_ID, view_date) VALUES (?, ?, NOW())");
+  $viewStmt->bind_param("ii", $_SESSION['user_ID'], $noteID);
+  $viewStmt->execute();
+  $viewStmt->close();
+
+
 ?>
 
 <!DOCTYPE html>

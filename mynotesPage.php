@@ -15,6 +15,11 @@ $uploaded->execute();
 $uploadedNotes = $uploaded->get_result();
 $uploaded->close();
 
+$recentUploads = $conn->prepare("SELECT note_Name, upload_date FROM notes WHERE user_ID = ? ORDER BY upload_date DESC LIMIT 3");
+$recentUploads->bind_param("i", $userID);
+$recentUploads->execute();
+$uploadResult = $recentUploads->get_result();
+
 // Fetch downloaded notes with download date
 $downloaded = $conn->prepare("SELECT n.*, d.download_date FROM notes n
     JOIN note_downloads d ON n.note_ID = d.note_ID
@@ -24,6 +29,8 @@ $downloaded->bind_param("i", $userID);
 $downloaded->execute();
 $downloadedNotes = $downloaded->get_result();
 $downloaded->close();
+
+
 ?>
 
 <!DOCTYPE html>
