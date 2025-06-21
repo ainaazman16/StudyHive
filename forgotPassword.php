@@ -207,6 +207,7 @@ if (isset($_POST['reset_password'])) {
             <li><a href="signupPage.php">Sign Up</a></li>
           </ul>
         </div>
+        <a class="back-btn" href="loginPage.php">← Back</a>
   <div class="container">
     <div class="box">
       <h2>Reset Password</h2>
@@ -216,6 +217,7 @@ if (isset($_POST['reset_password'])) {
       <?php if (!$showResetForm): ?>
         <form method="POST">
           <div class="form-group">
+            <label><h4>Check Your username before resetting your password:</h4></label>
             <label for="username">Username:</label>
             <input type="text" name="username" required placeholder="Enter your username">
           </div>
