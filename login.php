@@ -1,48 +1,40 @@
 <?php
 session_start();
-include('connect.php');
+require("connect.php");
 
-$error = '';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['user_Name'];
+    $password = $_POST['password'];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['user_Name'] ?? '';
-    $password = $_POST['password'] ?? '';
+    $sql = "SELECT * FROM user WHERE user_Name = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
 
-    if (empty($username) || empty($password)) {
-        $error = "Please provide both username and password.";
-    } else {
-        // Fetch user by username
-        $stmt = $conn->prepare("SELECT user_ID, user_Fname, email, user_Name, password, role FROM `user` WHERE user_Name = ?");
-        $stmt->bind_param('s', $username);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-        if ($result->num_rows === 1) {
-            $user = $result->fetch_assoc();
+    if ($user = $result->fetch_assoc()) {
+        if (password_verify($password, $user['password'])) {
+            $_SESSION['username'] = $user['user_Name'];
 
-            if (password_verify($password, $user['password'])) {
-                // Success
-                $_SESSION['user_Name'] = $user['user_Name'];
-
-                // Redirect to welcomePage.php for all users
-                echo "<script>window.location.href='homePage.php';</script>";
-                exit();
+            // ✅ Remember Me
+            if (isset($_POST['remember'])) {
+                setcookie("remember_username", $user['user_Name'], time() + (7 * 24 * 60 * 60), "/");
             } else {
-                $error = "Incorrect password. Please try again.";
-                echo "<script>window.location.href='index.php';</script>";
+                setcookie("remember_username", "", time() - 3600, "/");
             }
+
+            // ✅ Redirect
+            header("Location: homePage.php");
+            exit();
         } else {
-            $error = "Username does not exist. Please sign up first.";
-            echo "<script>window.location.href='index.php';</script>";
+            echo "<script>alert('Invalid password'); window.location='loginPage.php';</script>";
         }
-
-        $stmt->close();
+    } else {
+        echo "<script>alert('User not found'); window.location='loginPage.php';</script>";
     }
 
-    // Show error via popup
-    if (!empty($error)) {
-        echo "<script>alert('$error'); window.location.href='index.php';</script>";
-        exit();
-    }
+    $stmt->close();
+    $conn->close();
 }
 ?>
