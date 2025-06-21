@@ -192,7 +192,7 @@
     <h2>WELCOME TO STUDY HIVE</h2>
   </div>
 
-  <a class="back-btn" href="index.php">← Back</a>
+  <a class="back-btn" href="loginPage.php">← Back</a>
 
   <div class="container">
     <div class="signup-container">
