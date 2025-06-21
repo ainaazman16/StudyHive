@@ -4,11 +4,6 @@ session_start();
 include('connect.php');
 
 // Ensure user is logged in
-if (!isset($_SESSION['user_ID'])) {
-    header('Location: loginPage.php');
-    exit();
-}
-$userID = $_SESSION['user_ID'];
 
 // Handle actions: send request, accept, decline, remove, cancel
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
