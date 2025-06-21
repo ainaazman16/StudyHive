@@ -30,6 +30,14 @@ $downloaded->close();
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Notes</title>
+</head>
+<body>
+    
+</body>
+</html>
   <meta charset="UTF-8">
   <title>My Notes - StudyHive</title>
   <link rel="stylesheet" href="style.css">
