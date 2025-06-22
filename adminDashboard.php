@@ -156,9 +156,8 @@ $totalReports = $conn->query("SELECT COUNT(*) FROM report_note")->fetch_row()[0]
             </div>
         </div>
     </div>
-
-    <div class="footer">
-        &copy; <?= date("Y") ?> StudyHive Admin Panel
-    </div>
+     <?php
+    include('footer.php');
+    ?>
 </body>
 </html>
