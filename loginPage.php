@@ -1,5 +1,7 @@
 <?php
 session_start();
+$savedUsername = isset($_COOKIE['remember_username']) ? $_COOKIE['remember_username'] : "";
+$savedPassword = isset($_COOKIE['remember_password']) ? base64_decode($_COOKIE['remember_password']) : "";
 if(isset($_SESSION['username']))
 {
   $_SESSION = array();
@@ -234,32 +236,33 @@ if(isset($_SESSION['username']))
           </div>
           <a class="back-btn" href="index.php">← Back</a>
     <div class="container">
-      <div class="login-box">
-        <h2>Log in</h2>
-        <form action="login.php" method="POST">
-          <label for="username">Username</label>
-          <input type="text" id="username" name="user_Name" placeholder="Enter your username">
+        <div class="login-box">
+          <h2>Log in</h2>
+          <form action="login.php" method="POST">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="user_Name" placeholder="Enter your username"
+                   value="<?= htmlspecialchars($savedUsername) ?>">
 
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" placeholder="Enter your password">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password"
+                   value="<?= htmlspecialchars($savedPassword) ?>">
 
-          <div class="remember-forgot">
-            <label><input type="checkbox" name="remember" <?php if (!empty($savedUsername)) echo 'checked'; ?>> Remember me</label>
-            <a href="forgotPassword.php">Forgot password?</a>
+            <div class="remember-forgot">
+              <label><input type="checkbox" name="remember"
+                <?php if (!empty($savedUsername)) echo 'checked'; ?>> Remember me</label>
+              <a href="forgotPassword.php">Forgot password?</a>
+            </div>
+
+            <input type="submit" value="Sign in" name="submit">
+          </form>
+
+          <div class="signup-link">
+            Don’t have an account? <a href="signupPage.php">Sign up</a>
           </div>
-
-          <input type="submit" value="Sign in" name="submit">
-        </form>
-
-        <div class="signup-link">
-          Don’t have an account? <a href="signupPage.php">Sign up</a>
         </div>
       </div>
-    </div>
-  </section>
-</main>
-  <?php
-    include('footer.php');
-    ?>
+    </section>
+  </main>
+  <?php include('footer.php'); ?>
 </body>
 </html>
