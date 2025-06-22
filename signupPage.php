@@ -207,8 +207,8 @@
     <input type="file" name="profile_picture" id="profile_picture" required>
 
     <div class="form-actions">
-      <input type="submit" name="submit" value="REGISTER">
       <input type="reset" value="CLEAR FORM">
+      <input type="submit" name="submit" value="REGISTER">
     </div>
   </form>
 </div>
