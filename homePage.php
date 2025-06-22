@@ -222,6 +222,21 @@ $viewedResult = $viewQuery->get_result();
         grid-column: auto;
       }
     }
+
+    .footer {
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .footer h4 {
+      margin: 0;
+      font-weight: normal;
+      letter-spacing: 0.5px;
+    }
   </style>
 </head>
 <body>
@@ -316,6 +331,6 @@ $viewedResult = $viewQuery->get_result();
   </div>
 </div>
 
-<?php include('footer.php'); ?>
+ <?php include('footer.php'); ?>
 </body>
 </html>
