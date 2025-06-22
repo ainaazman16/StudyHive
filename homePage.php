@@ -224,25 +224,12 @@ $viewedResult = $viewQuery->get_result();
     }
 
     .footer {
+      background-color: #660066;
       color: white;
       text-align: center;
-      padding: 20px 0;
-      font-family: Arial, sans-serif;
-      font-size: 14px;
-      box-sizing: border-box;
-    }
-
-    .footer h4 {
-      margin: 0;
-      font-weight: normal;
-      letter-spacing: 0.5px;
-    }
-
-    .footer-wrapper {
-      background-color: #4b004b; /* Match footer color */
-      width: 100%;
-      position: relative;
-      bottom: 0;
+      padding: 10px;
+      margin-top: 40px;
+      
     }
   </style>
 </head>
@@ -336,6 +323,7 @@ $viewedResult = $viewQuery->get_result();
       </ul>
     </div>
   </div>
+</div>
 </div>
 <?php include('footer.php'); ?>
 </body>
