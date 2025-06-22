@@ -237,6 +237,13 @@ $viewedResult = $viewQuery->get_result();
       font-weight: normal;
       letter-spacing: 0.5px;
     }
+
+    .footer-wrapper {
+      background-color: #4b004b; /* Match footer color */
+      width: 100%;
+      position: relative;
+      bottom: 0;
+    }
   </style>
 </head>
 <body>
@@ -330,7 +337,6 @@ $viewedResult = $viewQuery->get_result();
     </div>
   </div>
 </div>
-
- <?php include('footer.php'); ?>
+<?php include('footer.php'); ?>
 </body>
 </html>
