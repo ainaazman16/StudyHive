@@ -132,7 +132,7 @@ $totalReports = $conn->query("SELECT COUNT(*) FROM report_note")->fetch_row()[0]
         <a href="adminFeedback.php">Feedback</a>
         <a href="adminAnalytics.php">Analytics</a>
         <a href="adminSettings.php">Settings</a>
-        <a href="logout.php">Logout</a>
+        <a href="logout.php">Log out</a>
     </div>
 
     <div class="container">
