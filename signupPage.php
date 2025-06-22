@@ -161,7 +161,7 @@
 </head>
 <body>
 
-<!-- ✅ Header (same as loginPage) -->
+<!-- header -->
 <div class="navbar">
   <img src="images/whiteLogo.png" alt="Logo" class="logo">
   <ul>
@@ -177,7 +177,7 @@
 
 <a class="back-btn" href="index.php">← Back</a>
 
-<!-- ✅ Registration Form -->
+<!-- register form -->
 <div class="container">
   <form action="user.php" method="post" enctype="multipart/form-data" class="signup-box">
     <h2>Create Your Account</h2>
@@ -213,7 +213,7 @@
   </form>
 </div>
 
-<!-- ✅ Footer -->
+<!-- footer studyhive -->
 <?php include("footer.php"); ?>
 
 </body>
