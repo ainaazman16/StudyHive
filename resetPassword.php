@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require("connect.php");
 
 $msg = "";
@@ -47,19 +50,57 @@ if (isset($_POST['reset'])) {
 <html>
 <head>
   <title>Reset Password</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .box {
+      background: #ffe0ff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    input[type="password"], input[type="submit"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    input[type="submit"] {
+      background-color: #cc66cc;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .msg {
+      margin-top: 10px;
+      color: #330033;
+    }
+  </style>
 </head>
 <body>
-  <h2>Reset Password</h2>
+  <div class="box">
+    <h2>Reset Password</h2>
+    <div class="msg"><?= $msg ?></div>
 
-  <div><?= $msg ?></div>
-
-  <?php if ($showForm): ?>
-    <form method="POST">
-      <input type="hidden" name="token" value="<?= htmlspecialchars($_GET['token']) ?>">
-      <input type="password" name="new_password" placeholder="New Password" required>
-      <input type="password" name="confirm_password" placeholder="Confirm Password" required>
-      <input type="submit" name="reset" value="Reset Password">
-    </form>
-  <?php endif; ?>
+    <?php if ($showForm): ?>
+      <form method="POST">
+        <input type="hidden" name="token" value="<?= htmlspecialchars($_GET['token']) ?>">
+        <input type="password" name="new_password" placeholder="New Password" required>
+        <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+        <input type="submit" name="reset" value="Reset Password">
+      </form>
+    <?php endif; ?>
+  </div>
 </body>
 </html>
