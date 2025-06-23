@@ -16,7 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'], $_POST['target_ID'])) {
         $targetID = intval($_POST['target_ID']);
         if ($_POST['action'] === 'send') {
-            $stmt = $conn->prepare("INSERT INTO user_friends (user_ID, friend_ID, status, friend_date) VALUES (?, ?, 'pending', NOW())");
+            $stmt = $conn->prepare("INSERT INTO user_friends (user_ID, friend_ID, status, friend_date)
+                                    VALUES (?, ?, 'pending', NOW())");
             $stmt->bind_param('ii', $userID, $targetID);
             $stmt->execute();
             $stmt->close();
@@ -56,19 +57,32 @@ $friends->bind_param('i', $userID);
 $friends->execute(); $friendsResult = $friends->get_result(); $friends->close();
 
 // Fetch incoming requests
-$incoming = $conn->prepare("SELECT u.user_ID, u.user_Fname, u.user_Name FROM user u
-    JOIN user_friends uf ON u.user_ID = uf.user_ID
-    WHERE uf.friend_ID = ? AND uf.status = 'pending'");
+$incoming = $conn->prepare("
+  SELECT u.user_ID, u.user_Fname, u.user_Name 
+  FROM user u
+  JOIN user_friends uf ON u.user_ID = uf.user_ID
+  WHERE uf.friend_ID = ? AND uf.status = 'pending'
+");
 $incoming->bind_param('i', $userID);
-$incoming->execute(); $incomingResult = $incoming->get_result(); $incoming->close();
+$incoming->execute();
+$incomingResult = $incoming->get_result();
+$incoming->close();
+
 
 // Search filter
 $search = $_GET['search'] ?? '';
 
 // Fetch potential users to add (excluding self and existing/pending relations)
-$potentialQuery = "SELECT user_ID, user_Fname, user_Name FROM user WHERE user_ID != ?
-    AND user_ID NOT IN (SELECT friend_ID FROM user_friends WHERE user_ID = ?)
-    AND user_ID NOT IN (SELECT user_ID FROM user_friends WHERE friend_ID = ?)";
+$potentialQuery = "
+  SELECT user_ID, user_Fname, user_Name FROM user
+  WHERE user_ID != ?
+  AND user_ID NOT IN (
+    SELECT friend_ID FROM user_friends WHERE user_ID = ?
+    UNION
+    SELECT user_ID FROM user_friends WHERE friend_ID = ?
+  )
+";
+
 if (!empty($search)) {
     $potentialQuery .= " AND (user_Fname LIKE ? OR user_Name LIKE ?)";
 }
@@ -104,18 +118,21 @@ $potential->execute(); $potentialResult = $potential->get_result(); $potential->
 <?php include('head.php'); ?>
 <div class="section">
   <h1>Connections</h1>
+  <div class="section">
   <h2>Incoming Friend Requests</h2>
   <ul>
     <?php while($r = $incomingResult->fetch_assoc()): ?>
       <li>
-        <?= htmlspecialchars($r['user_Fname']) ?> (<?= htmlspecialchars($r['user_Name']) ?>)
+       <a href="friendProfile.php?friend_ID=<?= $f['user_ID'] ?>">
+        <?= htmlspecialchars($f['user_Fname']) ?> (<?= htmlspecialchars($f['user_Name']) ?>)
+      </a>
         <div>
-          <form method="post" style="display:inline">
+          <form method="post" style="display:inline;">
             <input type="hidden" name="action" value="accept">
             <input type="hidden" name="target_ID" value="<?= $r['user_ID'] ?>">
             <button type="submit">Accept</button>
           </form>
-          <form method="post" style="display:inline">
+          <form method="post" style="display:inline;">
             <input type="hidden" name="action" value="decline">
             <input type="hidden" name="target_ID" value="<?= $r['user_ID'] ?>">
             <button type="submit" class="decline">Decline</button>
@@ -123,8 +140,12 @@ $potential->execute(); $potentialResult = $potential->get_result(); $potential->
         </div>
       </li>
     <?php endwhile; ?>
-    <?php if ($incomingResult->num_rows === 0) echo '<li>No incoming requests.</li>'; ?>
+    <?php if ($incomingResult->num_rows === 0): ?>
+      <li>No incoming requests.</li>
+    <?php endif; ?>
   </ul>
+</div>
+
 </div>
 
 <div class="section">
@@ -132,7 +153,9 @@ $potential->execute(); $potentialResult = $potential->get_result(); $potential->
   <ul>
     <?php while($f = $friendsResult->fetch_assoc()): ?>
       <li>
+        <a href="friendProfile.php?friend_ID=<?= $f['user_ID'] ?>">
         <?= htmlspecialchars($f['user_Fname']) ?> (<?= htmlspecialchars($f['user_Name']) ?>)
+      </a>
         <form method="post">
           <input type="hidden" name="action" value="remove">
           <input type="hidden" name="target_ID" value="<?= $f['user_ID'] ?>">
