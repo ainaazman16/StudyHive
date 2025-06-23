@@ -1,9 +1,6 @@
 <?php
 session_start();
-$savedUsername = isset($_COOKIE['remember_username']) ? $_COOKIE['remember_username'] : "";
-$savedPassword = isset($_COOKIE['remember_password']) ? base64_decode($_COOKIE['remember_password']) : "";
-if(isset($_SESSION['username']))
-{
+if (isset($_SESSION['username'])) {
   $_SESSION = array();
   session_destroy();
 }
@@ -73,15 +70,10 @@ if(isset($_SESSION['username']))
 
     .login-box .remember-forgot {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      justify-content: flex-end;
       font-size: 14px;
       color: #660066;
       margin-bottom: 20px;
-    }
-
-    .login-box input[type="checkbox"] {
-      margin-right: 5px;
     }
 
     .login-box input[type="submit"] {
@@ -112,105 +104,80 @@ if(isset($_SESSION['username']))
       font-weight: bold;
     }
 
-    .login-box .or {
-      text-align: center;
-      margin: 20px 0;
-      color: #999;
-    }
-
-    .login-box .social-icons {
-      text-align: center;
-    }
-
-    .social-icons img {
-      width: 30px;
-      margin: 0 10px;
-      cursor: pointer;
+    .login-box .signup-link a:hover {
+      text-decoration: underline;
     }
 
     .navbar {
-        background-color: #660066;
-        position: sticky;
-        top: 0;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 10px;
-        height: 60px;
-      }
+      background-color: #660066;
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      height: 60px;
+    }
 
-      .navbar .logo {
-        height: 60px;
-      }
+    .navbar .logo {
+      height: 60px;
+    }
 
-      .navbar ul {
-        list-style: none;
-        display: flex;
-        margin: 0;
-        padding: 0;
-      }
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
 
-      .navbar li {
-        margin-left: 10px;
-      }
+    .navbar li {
+      margin-left: 10px;
+    }
 
-      .navbar a {
-        text-decoration: none;
-        color: white;
-        padding: 14px 16px;
-        display: block;
-        font-size: 14px;
-        font-weight: bold;
-        text-transform: uppercase;
-      }
+    .navbar a {
+      text-decoration: none;
+      color: white;
+      padding: 14px 16px;
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
 
-      .navbar a:hover {
-        background-color: #990099;
-      }
+    .navbar a:hover {
+      background-color: #990099;
+    }
 
-      .title-box {
-        background-color: #f7d7f7;
-        color: #660066;
-        padding: 30px;
-        width: 35%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
-      }
+    .topic {
+      background-color: #ec97ec;
+      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+      font-size: 230%;
+      text-decoration: none;
+      color: #5e1b5e;
+      text-align: center;
+      height: 400px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
 
-      .topic {
-        background-color: #ec97ec;
-        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-        font-size: 230%;
-        text-decoration: none;
-        color: #5e1b5e;
-        text-align: center;
-        height: 400px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-      }
+    .topic img {
+      width: 245px;
+      height: auto;
+      margin-bottom: 5px;
+      margin-top: 5px;
+    }
 
-      .topic img {
-        width: 245px;
-        height: auto;
-        margin-bottom: 5px;
-        margin-top: 5px;
-      }
+    .back-btn {
+      display: inline-block;
+      margin-top: 20px;
+      margin-left: 20px;
+      font-size: 16px;
+      color: #660066;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-      .back-btn {
-        display: inline-block;
-        margin-top: 20px; /* Adjust the value as needed */
-        margin-left: 20px;
-        font-size: 16px;
-        color: #660066;
-        text-decoration: none;
-        font-weight: bold;
-      } 
-      
-      .footer {
+    .footer {
       background-color: #660066;
       color: white;
       text-align: center;
@@ -220,49 +187,49 @@ if(isset($_SESSION['username']))
   </style>
 </head>
 <body>
-  <main>
-    <section>
-      <div class="navbar">
-            <img src="images/whiteLogo.png" alt="Logo" class="logo">
-            <ul>
-          
-            <li><a href="loginPage.php">Login</a></li>
-            <li><a href="signupPage.php">Sign Up</a></li>
-          </ul>
-          </div>
-          <div class="topic">
-            <image src="images/whiteLogo.png" alt="logo" class="logo"></image>
-            <h2>WELCOME TO STUDY HIVE</h2>
-          </div>
-          <a class="back-btn" href="index.php">← Back</a>
-    <div class="container">
-        <div class="login-box">
-          <h2>Log In</h2>
-          <form action="login.php" method="POST">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="user_Name" placeholder="Enter your username"
-                   value="<?= htmlspecialchars($savedUsername) ?>">
 
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password"
-                   value="<?= htmlspecialchars($savedPassword) ?>">
+<!-- Navbar -->
+<div class="navbar">
+  <img src="images/whiteLogo.png" alt="Logo" class="logo">
+  <ul>
+    <li><a href="loginPage.php">Login</a></li>
+    <li><a href="signupPage.php">Sign Up</a></li>
+  </ul>
+</div>
 
-            <div class="remember-forgot">
-              <label><input type="checkbox" name="remember"
-                <?php if (!empty($savedUsername)) echo 'checked'; ?>> Remember me</label>
-              <a href="forgotPassword.php">Forgot password?</a>
-            </div>
+<!-- Hero -->
+<div class="topic">
+  <img src="images/whiteLogo.png" alt="logo" class="logo">
+  <h2>WELCOME TO STUDY HIVE</h2>
+</div>
 
-            <input type="submit" value="Sign in" name="submit">
-          </form>
+<a class="back-btn" href="index.php">← Back</a>
 
-          <div class="signup-link">
-            Don’t have an account? <a href="signupPage.php">Sign Up</a>
-          </div>
-        </div>
+<!-- Login Form -->
+<div class="container">
+  <div class="login-box">
+    <h2>Log In</h2>
+    <form action="login.php" method="POST">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="user_Name" placeholder="Enter your username" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+      <div class="remember-forgot">
+        <a href="forgotPassword.php">Forgot password?</a>
       </div>
-    </section>
-  </main>
-  <?php include('footer.php'); ?>
+
+      <input type="submit" value="Sign in" name="submit">
+    </form>
+
+    <div class="signup-link">
+      Don’t have an account? <a href="signupPage.php">Sign Up</a>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<?php include('footer.php'); ?>
 </body>
 </html>
