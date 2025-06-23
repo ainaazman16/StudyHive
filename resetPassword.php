@@ -1,4 +1,6 @@
 <?php
+session_start();
+date_default_timezone_set("Asia/Kuala_Lumpur"); // or your region
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -95,7 +97,7 @@ if (isset($_POST['reset'])) {
 
     <?php if ($showForm): ?>
       <form method="POST">
-        <input type="hidden" name="token" value="<?= htmlspecialchars($_GET['token']) ?>">
+        <input type="hidden" name="token" value="<?= htmlspecialchars($token ?? '') ?>">
         <input type="password" name="new_password" placeholder="New Password" required>
         <input type="password" name="confirm_password" placeholder="Confirm Password" required>
         <input type="submit" name="reset" value="Reset Password">

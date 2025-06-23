@@ -1,4 +1,5 @@
 <?php
+session_start();
 require("connect.php");
 
 $msg = "";
@@ -19,7 +20,7 @@ if (isset($_POST['email'])) {
         $update->bind_param("sss", $token, $expiry, $email);
         $update->execute();
 
-        $resetLink = "http://localhost/StudyHive/resetPassword.php?token=$token";
+        $resetLink = "http://localhost:8080/StudyHive/resetPassword.php?token=$token";
         $msg = "✅ A reset link has been generated.<br><a href='$resetLink'>Click here to reset your password</a>";
     } else {
         $msg = "❌ Email not found.";
