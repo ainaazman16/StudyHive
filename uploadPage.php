@@ -16,16 +16,7 @@ include("connect.php");
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    .topic {
-      background-color: #ec97ec;
-      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-      font-size: 230%;
-      color: #5e1b5e;
-      text-align: center;
-      height: 500px;
-      padding-top: 10px;
-      padding-bottom: 10px;
-    }
+    
 
     .topic img {
       width: 350px;
