@@ -28,7 +28,7 @@ $friend = $result->fetch_assoc();
 $stmt->close();
 
 // Fetch friend's notes
-$stmt2 = $conn->prepare("SELECT note_Name, file_type, upload_date, download_count FROM notes WHERE user_ID = ?");
+$stmt2 = $conn->prepare("SELECT note_ID, note_Name, file_type, upload_date, download_count FROM notes WHERE user_ID = ?");
 if (!$stmt2) {
     die("Note query failed: " . $conn->error);
 }
@@ -36,6 +36,9 @@ $stmt2->bind_param("i", $friendID);
 $stmt2->execute();
 $notesResult = $stmt2->get_result();
 $stmt2->close();
+
+// Optional: If you want to pass filters/search from before
+$queryString = http_build_query($_GET);
 ?>
 
 <!DOCTYPE html>
@@ -57,9 +60,6 @@ $stmt2->close();
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       text-align: center;
-    }
-    .section h1 {
-      margin-bottom: 20px;
     }
     .profile-pic {
       width: 120px;
@@ -90,6 +90,30 @@ $stmt2->close();
     .note-card small {
       color: #666;
     }
+    .note-actions {
+      margin-top: 10px;
+    }
+    .note-actions a {
+      display: inline-block;
+      padding: 8px 15px;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 14px;
+      margin-right: 10px;
+    }
+    .btn {
+      background-color: #660066;
+    }
+    .btn-rate {
+      background-color: #E38BCE;
+    }
+    .btn-report {
+      background-color: #ED3232;
+    }
+    .note-actions a:hover {
+      opacity: 0.9;
+    }
   </style>
 </head>
 <body>
@@ -97,7 +121,6 @@ $stmt2->close();
 
 <div class="section">
   <h1><?= htmlspecialchars($friend['user_Fname']) ?>'s Profile</h1>
-
 
   <h2>Uploaded Notes</h2>
   <div class="notes-container">
@@ -108,6 +131,12 @@ $stmt2->close();
           <p>Type: <?= htmlspecialchars($note['file_type']) ?></p>
           <small>Uploaded: <?= htmlspecialchars($note['upload_date']) ?></small><br>
           <small>Downloads: <?= htmlspecialchars($note['download_count']) ?></small>
+
+          <div class="note-actions">
+            <a class="btn" href="download.php?note_ID=<?= $note['note_ID'] ?>">Download</a>
+            <a class="btn btn-rate" href="rateNotes.php?note_ID=<?= $note['note_ID'] ?>&<?= $queryString ?>">Rate</a>
+            <a class="btn btn-report" href="reportNotes.php?note_ID=<?= $note['note_ID'] ?>&<?= $queryString ?>">Report</a>
+          </div>
         </div>
       <?php endwhile; ?>
     <?php else: ?>
