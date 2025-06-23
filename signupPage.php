@@ -170,6 +170,20 @@
       padding: 10px;
       margin-top: 40px;
     }
+
+    .match-status {
+      font-size: 13px;
+      margin-top: 5px;
+      font-weight: bold;
+    }
+
+    .match-status.good {
+      color: green;
+    }
+
+    .match-status.bad {
+      color: red;
+    }
   </style>
 </head>
 <body>
@@ -192,7 +206,7 @@
 
 <!-- register form -->
 <div class="container">
-  <form action="user.php" method="post" enctype="multipart/form-data" class="signup-box">
+  <form action="user.php" method="post" enctype="multipart/form-data" class="signup-box" id="signupForm">
     <h2>Create Your Account</h2>
 
     <label for="user_Fname">Full Name:</label>
@@ -217,6 +231,10 @@
     <input type="password" name="password" id="password" placeholder="Enter your password" required
            minlength="8" pattern=".{8,}" title="Password must be at least 8 characters long">
 
+    <label for="confirm_password">Confirm Password:</label>
+    <input type="password" id="confirm_password" placeholder="Re-enter your password" required>
+    <div id="matchStatus" class="match-status"></div>
+
     <label for="profile_picture">Profile Picture:</label>
     <input type="file" name="profile_picture" id="profile_picture" required>
 
@@ -235,7 +253,7 @@
 <?php include("footer.php"); ?>
 
 <script>
-  // Password validation
+  // Password strength check
   document.getElementById('password').addEventListener('input', function () {
     this.setCustomValidity(this.value.length < 8 ? 'Password must be at least 8 characters long.' : '');
   });
@@ -244,7 +262,6 @@
   const phoneInput = document.getElementById('phone');
   phoneInput.addEventListener('input', function () {
     const phone = this.value.trim();
-
     if (!/^\d+$/.test(phone)) {
       this.setCustomValidity('Phone number must contain digits only.');
     } else if (phone.length < 10 || phone.length > 15) {
@@ -254,8 +271,29 @@
     }
   });
 
-  // Prevent form submission if phone is invalid
-  document.querySelector('form').addEventListener('submit', function (e) {
+  // Confirm password live check
+  const password = document.getElementById('password');
+  const confirm = document.getElementById('confirm_password');
+  const matchStatus = document.getElementById('matchStatus');
+
+  function checkMatch() {
+    if (confirm.value === "") {
+      matchStatus.textContent = "";
+      matchStatus.className = "match-status";
+    } else if (confirm.value === password.value) {
+      matchStatus.textContent = "✅ Password match";
+      matchStatus.className = "match-status good";
+    } else {
+      matchStatus.textContent = "❌ Password do not match";
+      matchStatus.className = "match-status bad";
+    }
+  }
+
+  confirm.addEventListener('input', checkMatch);
+  password.addEventListener('input', checkMatch);
+
+  // Final form check before submit
+  document.getElementById('signupForm').addEventListener('submit', function (e) {
     const phone = phoneInput.value.trim();
     if (!/^\d+$/.test(phone)) {
       e.preventDefault();
@@ -265,6 +303,10 @@
       e.preventDefault();
       alert("❌ Phone number must be between 10 to 15 digits.");
       phoneInput.focus();
+    } else if (password.value !== confirm.value) {
+      e.preventDefault();
+      alert("❌ Password and Confirm Password must match.");
+      confirm.focus();
     }
   });
 </script>
