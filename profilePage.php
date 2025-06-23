@@ -21,24 +21,23 @@ $stmt->bind_param("i", $userID);
 $stmt->execute();
 $result = $stmt->get_result();
 
-include("head.php");
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
-        font-family: Arial, sans-serif;
-        background-color: #ffffff;
-        margin: 0;
-        padding: 0;
+      background-color: #ffffff;
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
     .welcome-message {
         text-align: center;
-        font-size: 20px;
+        font-size: 230%;
         color: #4b004b;
         margin-top: 30px;
         font-weight: 600;
@@ -90,6 +89,7 @@ include("head.php");
 </head>
 <body>
 
+<?php include("head.php"); ?>
 <div class="welcome-message">YOUR PROFILE</div>
 
 <section>
