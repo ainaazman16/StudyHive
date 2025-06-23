@@ -13,20 +13,9 @@ if (!isset($_SESSION['user_ID'])) {
 
 $userID = $_SESSION['user_ID'];
 $search = $_GET['search'] ?? '';
-$uni_ID = $_GET['uni_ID'] ?? '';
-$faculty_ID = $_GET['faculty_ID'] ?? '';
-$course_ID = $_GET['course_ID'] ?? '';
-$subject_ID = $_GET['subject_ID'] ?? '';
-
-$checkHelpful = $conn->prepare("SELECT * FROM note_helpful WHERE note_ID = ? AND user_ID = ?");
-$checkHelpful->bind_param("ii", $noteID, $userID);
-$checkHelpful->execute();
-$alreadyHelpful = $checkHelpful->get_result()->num_rows > 0;
-$query = $conn->prepare("SELECT * FROM notes WHERE note_ID = ?");
-$query->bind_param("i", $noteID);
-$query->execute();
-$result = $query->get_result();
-$note = $result->fetch_assoc();
+$uni_ID = $_GET['university'] ?? '';
+$course_ID = $_GET['course'] ?? '';
+$subject_ID = $_GET['subject'] ?? '';
 
 if (!isset($_SESSION['role'])) {
     $_SESSION['role'] = '';
@@ -36,7 +25,7 @@ $conditions = [];
 $params = [];
 $types = '';
 
-$sql = "SELECT n.note_ID, n.note_Name, n.user_ID, u.user_Fname, uni.uni_name
+$sql = "SELECT n.note_ID, n.note_Name, n.user_ID, u.user_Fname, uni.uni_Name
         FROM notes n
         LEFT JOIN user u ON n.user_ID = u.user_ID
         LEFT JOIN subject s ON n.subject_ID = s.subject_ID
@@ -44,7 +33,7 @@ $sql = "SELECT n.note_ID, n.note_Name, n.user_ID, u.user_Fname, uni.uni_name
         LEFT JOIN faculty f ON c.faculty_ID = f.faculty_ID
         LEFT JOIN university uni ON f.uni_ID = uni.uni_ID";
 
-$queryString = "search=$search&uni_ID=$uni_ID&faculty_ID=$faculty_ID&course_ID=$course_ID&subject_ID=$subject_ID";
+$queryString = "search=$search&university=$uni_ID&course=$course_ID&subject=$subject_ID";
 
 if (!empty($search)) {
     $conditions[] = "(n.note_Name LIKE ? OR u.user_Fname LIKE ?)";
@@ -56,11 +45,6 @@ if (!empty($uni_ID)) {
     $conditions[] = "uni.uni_ID = ?";
     $types .= 'i';
     $params[] = $uni_ID;
-}
-if (!empty($faculty_ID)) {
-    $conditions[] = "f.faculty_ID = ?";
-    $types .= 'i';
-    $params[] = $faculty_ID;
 }
 if (!empty($course_ID)) {
     $conditions[] = "c.course_ID = ?";
@@ -119,24 +103,7 @@ $result = $stmt->get_result();
       border-radius: 6px;
       margin-top: 10px;
     }
-    .btn-helpful {
-      display: inline-block;
-      padding: 6px 10px;
-      background-color: #008000;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    .btn-helpful[disabled] {
-      background-color: #cccccc;
-      cursor: default;
-    }
     .btn:hover { background-color: #990099; }
-    .btn-report { background-color: rgb(237, 50, 50); }
-    .btn-rate { background-color: rgb(227, 139, 206); }
-    .btn-edit { background-color: #007bff; }
     .btn-delete { background-color: #dc3545; }
   </style>
 </head>
@@ -172,20 +139,17 @@ $result = $stmt->get_result();
 
     <div class="note-card" style="background-color:<?= $isOwner ? '#f7f7ff' : '#ffffff' ?>">
       <h3><?= htmlspecialchars($row['note_Name']) ?></h3>
-  <p><strong>Author:</strong> <?= htmlspecialchars($row['user_Fname']) ?></p>
-  <p><strong>University:</strong> <?= htmlspecialchars($row['uni_name']) ?></p>
-    <?php
-$noteID = $row['note_ID'];
-$helpfulQuery = $conn->query("SELECT COUNT(*) FROM note_helpful WHERE note_ID = $noteID");
-$helpfulCount = $helpfulQuery ? $helpfulQuery->fetch_row()[0] : 0;
-?>
-  <div class="note-detail"><strong>Helpful Count:</strong> <?= $helpfulCount ?></div>
+      <p><strong>Author:</strong> <?= htmlspecialchars($row['user_Fname']) ?></p>
+      <p><strong>University:</strong> <?= htmlspecialchars($row['uni_Name']) ?></p>
 
-  <a href="noteDetails.php?note_ID=<?= $row['note_ID'] ?>" class="btn">View Note</a>
-</a>
-      
+      <?php if (!$isOwner): ?>
+        <p><strong>Helpful Count:</strong> <?= $helpfulTotal ?></p>
+      <?php endif; ?>
+
+      <a href="noteDetails.php?note_ID=<?= $row['note_ID'] ?>" class="btn">View Note</a>
+
       <?php if ($_SESSION['role'] === 'admin'): ?>
-        <a class="btn btn-delete" href="adminDeleteNote.php?note_ID=<?= $row['note_ID'] ?>">Admin Delete</a>
+        <a class="btn btn-delete" href="adminDeleteNote.php?note_ID=<?= $row['note_ID'] ?>" onclick="return confirm('Are you sure you want to delete this note?');">Admin Delete</a>
       <?php endif; ?>
     </div>
   <?php endwhile; ?>
