@@ -8,19 +8,13 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     exit();
 }
 
-// Get total stats
-$userRes = $conn->query("SELECT COUNT(*) FROM user");
-$totalUsers = ($userRes && $userRes->num_rows > 0) ? $userRes->fetch_row()[0] : 0;
+// Fetch counts
+$totalUsers = $conn->query("SELECT COUNT(*) FROM user")->fetch_row()[0] ?? 0;
+$totalNotes = $conn->query("SELECT COUNT(*) FROM notes")->fetch_row()[0] ?? 0;
+$totalDownloads = $conn->query("SELECT COUNT(*) FROM note_downloads")->fetch_row()[0] ?? 0;
+$totalReports = $conn->query("SELECT COUNT(*) FROM report_note")->fetch_row()[0] ?? 0;
 
-$noteRes = $conn->query("SELECT COUNT(*) FROM notes");
-$totalNotes = ($noteRes && $noteRes->num_rows > 0) ? $noteRes->fetch_row()[0] : 0;
-
-$downloadRes = $conn->query("SELECT COUNT(*) FROM note_downloads");
-$totalDownloads = ($downloadRes && $downloadRes->num_rows > 0) ? $downloadRes->fetch_row()[0] : 0;
-
-$reportRes = $conn->query("SELECT COUNT(*) FROM report_note");
-$totalReports = ($reportRes && $reportRes->num_rows > 0) ? $reportRes->fetch_row()[0] : 0;
-
+// Auto download TXT report
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_report'])) {
     header('Content-Type: text/plain');
     header('Content-Disposition: attachment; filename="StudyHive_Report.txt"');
@@ -42,10 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_report'])) {
     echo "- Reports   = User-submitted content issues.\n";
 
     echo "\n📌 Keep monitoring weekly for system health.\n";
-    exit(); // stop further HTML output
+    exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,10 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_report'])) {
 
     .navbar {
       background-color: #660066;
-      position: sticky;
-      top: 0;
       display: flex;
-      align-items: center;
       justify-content: center;
       padding: 0 10px;
       height: 60px;
@@ -74,8 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_report'])) {
     }
 
     .navbar ul {
-      list-style: none;
       display: flex;
+      list-style: none;
       margin: 0;
       padding: 0;
     }
@@ -89,10 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_report'])) {
       color: white;
       padding: 14px 16px;
       display: block;
-      font-size: 14px;
       font-weight: bold;
       text-transform: uppercase;
-      transition: background-color 0.3s ease;
     }
 
     .navbar a:hover {
@@ -104,14 +92,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_report'])) {
       color: #5e1b5e;
       text-align: center;
       padding: 30px 20px;
-      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
     .header h1 {
       margin: 0;
       font-size: 2.8em;
-      font-weight: bold;
     }
 
     .header p {
@@ -121,7 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_report'])) {
     }
 
     .container {
-      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
       max-width: 1000px;
       margin: 40px auto;
       background-color: #660066;
@@ -131,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_report'])) {
       box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     }
 
-    .card-container {
+      .card-container {
       display: flex;
       justify-content: space-around;
       flex-wrap: wrap;
@@ -171,10 +156,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_report'])) {
       color: #3d0d3d;
     }
 
+    .chart-container {
+      margin-top: 50px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    canvas {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      margin: 20px auto;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
     .report-btn {
-      display: block;
-      width: fit-content;
-      margin: 40px auto 0;
       padding: 12px 24px;
       background-color: #f7d7f7;
       color: #660066;
@@ -189,44 +196,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_report'])) {
 
     .report-btn:hover {
       background-color: #f0bdf0;
-    }
-
-    .chart-container {
-        margin-top: 50px;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-    canvas {
-        background: #fff;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        margin: 20px auto;
-        display: block;
-    }
-
-    .report-btn {
-        display: block;
-        width: fit-content;
-        margin: 40px auto 0;
-        padding: 12px 24px;
-        background-color: #f7d7f7;
-        color: #660066;
-        font-size: 16px;
-        font-weight: bold;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        text-decoration: none;
-    }
-    .report-btn:hover {
-        background-color: #f0bdf0;
     }
   </style>
 </head>
@@ -251,46 +220,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_report'])) {
 
 <main class="container">
   <h1 style="text-align:center;">System Overview</h1>
+
   <div class="card-container">
-    <a href="adminUsers.php" class="card-link">
-      <div class="card">
-        <h2><?= $totalUsers ?></h2>
-        <p>Total Users</p>
-      </div>
-    </a>
-
-    <a href="adminNotes.php" class="card-link">
-      <div class="card">
-        <h2><?= $totalNotes ?></h2>
-        <p>Total Notes</p>
-      </div>
-    </a>
-
-    <a href="adminAnalytics.php" class="card-link">
-      <div class="card">
-        <h2><?= $totalDownloads ?></h2>
-        <p>Total Downloads</p>
-      </div>
-    </a>
-
-    <a href="adminReports.php" class="card-link">
-      <div class="card">
-        <h2><?= $totalReports ?></h2>
-        <p>Reported Notes</p>
-      </div>
-    </a>
+    <a href="adminUsers.php" class="card-link"><div class="card"><h2><?= $totalUsers ?></h2><p>Total Users</p></div></a>
+    <a href="adminNotes.php" class="card-link"><div class="card"><h2><?= $totalNotes ?></h2><p>Total Notes</p></div></a>
+    <a href="adminAnalytics.php" class="card-link"><div class="card"><h2><?= $totalDownloads ?></h2><p>Total Downloads</p></div></a>
+    <a href="adminReports.php" class="card-link"><div class="card"><h2><?= $totalReports ?></h2><p>Reported Notes</p></div></a>
   </div>
 
   <div class="chart-container">
     <h2 style="color: #660066;">System Stats Chart</h2>
     <canvas id="statsChart" width="600" height="400"></canvas>
-    <button class="report-btn" onclick="downloadChart()">Download Report & Graph</button>
+
+    <div class="button-row">
+      <form method="POST">
+        <button type="submit" name="download_report" class="report-btn">📄 Download Report Summary</button>
+      </form>
+
+      <button class="report-btn" onclick="downloadChart()">📊 Download Report & Graph</button>
+    </div>
   </div>
-
-  <form method="POST" style="text-align: center; margin-top: 30px;">
-  <button type="submit" name="download_report" class="report-btn">📄 Download Report Summary</button>
-</form>
-
 </main>
 
 <script>
@@ -307,18 +256,14 @@ const chart = new Chart(ctx, {
   },
   options: {
     responsive: false,
-    plugins: {
-      legend: { display: false }
-    },
-    scales: {
-      y: { beginAtZero: true }
-    }
+    plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: true } }
   }
 });
 
 function downloadChart() {
   const link = document.createElement('a');
-  link.download = 'system_report.png';
+  link.download = 'system_graph.png';
   link.href = chart.toBase64Image();
   link.click();
 }
