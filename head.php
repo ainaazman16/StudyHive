@@ -1,7 +1,8 @@
 <?php
-
-
 include("connect.php");
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Fetch dropdown options
 $subjectList = $conn->query("SELECT subject_ID, subject_Name FROM subject");
@@ -17,7 +18,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile</title>
+  <title>StudyHive</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
@@ -117,8 +118,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
       align-items: center;
       background-color: #4b004b;
       height: 60px;
-      padding-left: 20px;  /* keep some space on the left */
-      padding-right: 0;    /* remove space on the right */
+      padding-left: 20px;
     }
 
     .bottom-nav img.logo {
@@ -141,32 +141,12 @@ $currentPage = basename($_SERVER['PHP_SELF']);
       font-size: 12px;
       border-right: 2px solid #ffffff;
       transition: background-color 0.3s;
+      margin: 0;
     }
 
-    .nav-links {
-    display: flex;
-    margin-left: auto;
-   }
-
-    .nav-btn {
-    background-color: #4b004b;
-    color: white;
-    padding: 23px 30px;
-    text-align: center;
-    text-decoration: none;
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 12px;
-    border-right: 2px solid #ffffff;
-    transition: background-color 0.3s;
-    margin: 0; 
-  }
-
     .nav-links a:last-child {
-    border-right: none;
-    margin-right: 0; /
-}
-
+      border-right: none;
+    }
 
     .nav-btn:hover {
       background-color: #e696ec;
@@ -175,6 +155,15 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     .nav-btn.active {
       background-color: #e696ec;
       color: #ffffff;
+    }
+
+    .welcome-message {
+      text-align: center;
+      font-size: 20px;
+      color: #4b004b;
+      margin-top: 15px;
+      font-weight: 600;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
   </style>
 </head>
@@ -219,6 +208,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         </div>
       </form>
     </div>
+
+    <!-- 👋 Welcome Message -->
+    <?php if (isset($_SESSION['user_Fname'])): ?>
+      <div class="welcome-message">
+        <h1>Welcome back, <strong><?= htmlspecialchars($_SESSION['user_Fname']) ?>!</strong> </h1>
+      </div>
+    <?php endif; ?>
   </div>
 
   <!-- Navigation Bar -->
