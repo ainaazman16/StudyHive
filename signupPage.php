@@ -217,7 +217,7 @@
     <input type="text" name="user_Name" id="user_Name" placeholder="Enter your username" required>
 
     <label for="password">Password:</label>
-    <input type="password" name="password" id="password" placeholder="Enter your password" required>
+    <input type="password" name="password" id="password" placeholder="Enter your password" required minlength="8" pattern=".{8,}" title="Password must be at least 8 characters long">
 
     <label for="profile_picture">Profile Picture:</label>
     <input type="file" name="profile_picture" id="profile_picture" required>
@@ -235,6 +235,12 @@
 
 <!-- footer -->
 <?php include("footer.php"); ?>
+  <script>
+  document.getElementById('password').addEventListener('input', function () {
+    const pwd = this.value;
+    this.setCustomValidity(pwd.length < 8 ? 'Password must be at least 8 characters long.' : '');
+  });
+  </script>
 
 </body>
 </html>

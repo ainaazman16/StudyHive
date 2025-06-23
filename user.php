@@ -36,6 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $checkUser->close();
 
+
+    
     // Save user
     if (move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $targetFilePath)) {
         $stmt = $conn->prepare("INSERT INTO user (user_Fname, email, phone, gender, user_Name, password, profile_picture)
