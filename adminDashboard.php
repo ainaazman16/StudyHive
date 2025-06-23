@@ -150,7 +150,7 @@ $totalReports = $conn->query("SELECT COUNT(*) FROM report_note")->fetch_row()[0]
 <body>
 
     <header class="header">
-        <img src="images/whiteLogo.png" alt="Logo" style="width: 200px; height: auto;">
+        <img src="images/whiteLogo.png" alt="Logo" style="width: 170px; height: auto;">
         <h1>Admin Dashboard</h1>
         <p>Welcome, <?= htmlspecialchars($_SESSION['user_Name']) ?>!</p>
     </header>
