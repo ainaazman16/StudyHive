@@ -1,6 +1,21 @@
 <?php
   session_start();
+  include('connect.php');
+  
+  $noteID = $_GET['note_ID'] ?? null;
+  $note = null;
 
+  if ($noteID) {
+      $stmt = $conn->prepare("SELECT n.note_Name, n.file_type, n.upload_date, u.user_Fname 
+                              FROM notes n 
+                              JOIN user u ON n.user_ID = u.user_ID 
+                              WHERE n.note_ID = ?");
+      $stmt->bind_param("i", $noteID);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $note = $result->fetch_assoc();
+      $stmt->close();
+  }
   $backQuery = http_build_query([
     'search' => $_GET['search'] ?? '',
     'uni_ID' => $_GET['uni_ID'] ?? '',
@@ -105,11 +120,12 @@
   <h3 class="title-reason">Select a reason</h3>
 
   <ul class="list-report">
-    <li><a href="reportDetails.php?report_type=Inappropriate Language">1. Inappropriate Language</a></li>
-    <li><a href="reportDetails.php?report_type=Harassment or Bullying">2. Harassment or Bullying</a></li>
-    <li><a href="reportDetails.php?report_type=Irrelevant or Spam Content">3. Irrelevant or Spam Content</a></li>
-    <li><a href="reportDetails.php?report_type=Plagiarized or Copyrighted Material">4. Plagiarized or Copyrighted Material</a></li>
-  </ul>
+  <li><a href="reportDetails.php?note_ID=<?= $noteID ?>&report_type=Inappropriate Language">1. Inappropriate Language</a></li>
+  <li><a href="reportDetails.php?note_ID=<?= $noteID ?>&report_type=Harassment or Bullying">2. Harassment or Bullying</a></li>
+  <li><a href="reportDetails.php?note_ID=<?= $noteID ?>&report_type=Irrelevant or Spam Content">3. Irrelevant or Spam Content</a></li>
+  <li><a href="reportDetails.php?note_ID=<?= $noteID ?>&report_type=Plagiarized or Copyrighted Material">4. Plagiarized or Copyrighted Material</a></li>
+</ul>
+
 
 </body>
 </html>

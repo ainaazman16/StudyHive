@@ -1,15 +1,36 @@
 <?php
 session_start();
-include("connect.php"); // Make sure this connects to your database
+include("connect.php");
 
 $reportType = $_SESSION['report_type'] ?? '';
 $detail = $_GET['detail'] ?? '';
-$noteID = $_GET['note_ID'] ?? null;
+$noteID = isset($_GET['note_ID']) ? intval($_GET['note_ID']) : null;
 $userID = $_SESSION['user_ID'] ?? null;
 
-if (!$noteID || !$userID) {
-    die("Missing note ID or not logged in.");
+if (!$noteID || !$userID || !$reportType || !$detail) {
+    die("❌ Missing required information.");
 }
+
+// Optional: Check if the note exists
+$check = $conn->prepare("SELECT note_ID FROM notes WHERE note_ID = ?");
+$check->bind_param("i", $noteID);
+$check->execute();
+$check->store_result();
+
+if ($check->num_rows === 0) {
+    die("❌ Invalid note ID.");
+}
+$check->close();
+
+$dupCheck = $conn->prepare("SELECT 1 FROM report_note WHERE note_ID = ? AND user_ID = ?");
+$dupCheck->bind_param("ii", $noteID, $userID);
+$dupCheck->execute();
+$dupCheck->store_result();
+
+if ($dupCheck->num_rows > 0) {
+    die("⚠️ You have already reported this note.");
+}
+$dupCheck->close();
 
 // Insert the report
 $stmt = $conn->prepare("INSERT INTO report_note (note_ID, user_ID, report_type, report_detail, report_date) VALUES (?, ?, ?, ?, NOW())");
@@ -17,6 +38,7 @@ $stmt->bind_param("iiss", $noteID, $userID, $reportType, $detail);
 $stmt->execute();
 $stmt->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

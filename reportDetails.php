@@ -8,10 +8,11 @@ if (isset($_GET['report_type'])) {
 $reportType = $_SESSION['report_type'] ?? 'No report type selected';
 $noteID = $_GET['note_ID'] ?? null;
 
-if (!$noteID) {
-    die("Note ID missing.");
+if (!$noteID || !is_numeric($noteID)) {
+    die("❌ Note ID missing or invalid.");
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
