@@ -45,7 +45,7 @@ try {
     .topic {
       background-color: #ec97ec;
       text-align: center;
-      padding: 40px 20px;
+      padding: 0px 0px; 
       position: relative;
     }
 
@@ -131,51 +131,39 @@ try {
     }
 
     .bottom-nav {
+      background-color: #660066;
+      position: sticky;
+      top: 0;
       display: flex;
       align-items: center;
-      background-color: #4b004b;
+      justify-content: center;
+      padding: 0 10px;
       height: 60px;
-      padding-left: 20px;
-      overflow-x: auto;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+      z-index: 999;
     }
 
-    .bottom-nav img.logo {
-      height: 40px;
-      flex-shrink: 0;
-    }
-
-    .nav-links {
+    .bottom-nav .nav-links {
       display: flex;
-      margin-left: auto;
-      flex-shrink: 0;
+      list-style: none;
+      margin: 0;
+      padding: 0;
     }
 
-    .nav-btn {
-      background-color: #4b004b;
-      color: white;
-      padding: 15px 20px;
-      text-align: center;
+    .nav-links a {
       text-decoration: none;
+      color: white;
+      padding: 14px 16px;
+      display: block;
+      font-size: 14px;
       font-weight: bold;
       text-transform: uppercase;
-      font-size: 12px;
-      border-right: 2px solid #ffffff;
-      transition: background-color 0.3s;
-      margin: 0;
-      white-space: nowrap;
+      transition: background-color 0.3s ease;
     }
 
-    .nav-links a:last-child {
-      border-right: none;
-    }
-
-    .nav-btn:hover {
-      background-color: #e696ec;
-    }
-
-    .nav-btn.active {
-      background-color: #e696ec;
-      color: #ffffff;
+    .nav-links a:hover,
+    .nav-links a.active {
+      background-color: #990099;
     }
 
     .welcome-message {
@@ -196,9 +184,9 @@ try {
         padding: 8px 15px;
       }
 
-      .nav-btn {
-        padding: 15px 12px;
-        font-size: 11px;
+      .nav-links a {
+        padding: 12px;
+        font-size: 12px;
       }
     }
   </style>
@@ -254,15 +242,14 @@ try {
 
   <!-- Navigation Bar -->
   <div class="bottom-nav">
-    <img src="images/whiteLogo.png" alt="Logo" class="logo" />
     <div class="nav-links">
-      <a href="homePage.php" class="nav-btn <?= $currentPage == 'homePage.php' ? 'active' : '' ?>">Home</a>
-      <a href="viewNotes.php" class="nav-btn <?= $currentPage == 'viewNotes.php' ? 'active' : '' ?>">Browse Notes</a>
-      <a href="mynotesPage.php" class="nav-btn <?= $currentPage == 'mynotesPage.php' ? 'active' : '' ?>">My Notes</a>
-      <a href="uploadPage.php" class="nav-btn <?= $currentPage == 'uploadPage.php' ? 'active' : '' ?>">Upload</a>
-      <a href="connectionPage.php" class="nav-btn <?= $currentPage == 'connectionPage.php' ? 'active' : '' ?>">Connection</a>
-      <a href="profilePage.php" class="nav-btn <?= $currentPage == 'profilePage.php' ? 'active' : '' ?>">Profile</a>
-      <a href="logout.php" class="nav-btn">Log Out</a>
+      <a href="homePage.php" class="<?= $currentPage == 'homePage.php' ? 'active' : '' ?>">Home</a>
+      <a href="viewNotes.php" class="<?= $currentPage == 'viewNotes.php' ? 'active' : '' ?>">Browse Notes</a>
+      <a href="mynotesPage.php" class="<?= $currentPage == 'mynotesPage.php' ? 'active' : '' ?>">My Notes</a>
+      <a href="uploadPage.php" class="<?= $currentPage == 'uploadPage.php' ? 'active' : '' ?>">Upload</a>
+      <a href="connectionPage.php" class="<?= $currentPage == 'connectionPage.php' ? 'active' : '' ?>">Connection</a>
+      <a href="profilePage.php" class="<?= $currentPage == 'profilePage.php' ? 'active' : '' ?>">Profile</a>
+      <a href="logout.php">Log Out</a>
     </div>
   </div>
 
