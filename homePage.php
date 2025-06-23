@@ -146,6 +146,21 @@ $viewedResult = $viewQuery->get_result();
       box-shadow: 0 6px 12px rgba(0,0,0,0.15);
     }
 
+    .note-link {
+      text-decoration: none;
+      color: #4b004b;
+      font-weight: bold;
+      display: inline-block;
+      padding: 3px 6px;
+      border-radius: 6px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .note-link:hover {
+      background-color: #f4d5f4;
+      color: #660066;
+    }
+
     .card.recently-viewed {
       grid-column: 1 / -1;
       max-width: 600px;
@@ -198,13 +213,13 @@ $viewedResult = $viewQuery->get_result();
     </div>
   </a>
 
-  <!-- Recommendations (Not Clickable) -->
+  <!-- Recommendations (Now Clickable) -->
   <div class="card">
     <h3>Recommendations</h3>
     <ul>
       <?php if ($recommendations->num_rows > 0): ?>
         <?php while ($rec = $recommendations->fetch_assoc()): ?>
-          <li><?= htmlspecialchars($rec['note_Name']) ?></li>
+          <li><a class="note-link" href="download.php?note_ID=<?= $rec['note_ID'] ?>"><?= htmlspecialchars($rec['note_Name']) ?></a></li>
         <?php endwhile; ?>
       <?php else: ?>
         <li>No recommendations available.</li>
@@ -228,13 +243,13 @@ $viewedResult = $viewQuery->get_result();
     </div>
   </a>
 
-  <!-- Recently Viewed (Not Clickable) -->
+  <!-- Recently Viewed (Now Clickable) -->
   <div class="card recently-viewed">
     <h3>Recently Viewed</h3>
     <ul>
       <?php if ($viewedResult->num_rows > 0): ?>
         <?php while ($view = $viewedResult->fetch_assoc()): ?>
-          <li><?= htmlspecialchars($view['note_Name']) ?></li>
+          <li><a class="note-link" href="download.php?note_ID=<?= $view['note_ID'] ?>"><?= htmlspecialchars($view['note_Name']) ?></a></li>
         <?php endwhile; ?>
       <?php else: ?>
         <li>You haven't viewed any notes yet.</li>
