@@ -1,15 +1,35 @@
 <?php
-
-
 include("connect.php");
 
-// Fetch dropdown options
-$subjectList = $conn->query("SELECT subject_ID, subject_Name FROM subject");
-$courseList = $conn->query("SELECT course_ID, course_Name FROM course");
-$uniList    = $conn->query("SELECT uni_ID, uni_Name FROM university");
+// Start session if not already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
-// Get current page name
+// Initialize variables
+$subjectList = null;
+$courseList = null;
+$uniList = null;
+$userData = null;
 $currentPage = basename($_SERVER['PHP_SELF']);
+
+try {
+    // Fetch dropdown options
+    $subjectList = $conn->query("SELECT subject_ID, subject_Name FROM subject");
+    $courseList = $conn->query("SELECT course_ID, course_Name FROM course");
+    $uniList    = $conn->query("SELECT uni_ID, uni_Name FROM university");
+
+    // Fetch user's name if logged in
+    if (isset($_SESSION['user_ID'])) {
+        $stmt = $conn->prepare("SELECT user_Fname FROM user WHERE user_ID = ?");
+        $stmt->bind_param("i", $_SESSION['user_ID']);
+        $stmt->execute();
+        $userData = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+    }
+} catch (Exception $e) {
+    error_log("Database error in head.php: " . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +37,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile</title>
+  <title>StudyHive</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
@@ -37,12 +57,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
       width: 250px;
       height: auto;
       margin-bottom: 20px;
+      max-width: 100%;
     }
 
     .search-wrapper {
       display: flex;
       justify-content: center;
-      margin-top: 10px;
+      width: 100%;
     }
 
     .search-bar {
@@ -51,7 +72,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
       background-color: #fff;
       border-radius: 999px;
       padding: 10px 20px;
-      width: 70%;
+      width: 90%;
       max-width: 800px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       position: relative;
@@ -63,6 +84,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
       flex: 1;
       padding: 10px;
       font-size: 16px;
+      min-width: 0;
     }
 
     .search-icon {
@@ -117,23 +139,25 @@ $currentPage = basename($_SERVER['PHP_SELF']);
       align-items: center;
       background-color: #4b004b;
       height: 60px;
-      padding-left: 20px;  /* keep some space on the left */
-      padding-right: 0;    /* remove space on the right */
+      padding-left: 20px;
+      overflow-x: auto;
     }
 
     .bottom-nav img.logo {
       height: 40px;
+      flex-shrink: 0;
     }
 
     .nav-links {
       display: flex;
       margin-left: auto;
+      flex-shrink: 0;
     }
 
     .nav-btn {
       background-color: #4b004b;
       color: white;
-      padding: 23px 30px;
+      padding: 15px 20px;
       text-align: center;
       text-decoration: none;
       font-weight: bold;
@@ -141,32 +165,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
       font-size: 12px;
       border-right: 2px solid #ffffff;
       transition: background-color 0.3s;
+      margin: 0;
+      white-space: nowrap;
     }
 
-    .nav-links {
-    display: flex;
-    margin-left: auto;
-   }
-
-    .nav-btn {
-    background-color: #4b004b;
-    color: white;
-    padding: 23px 30px;
-    text-align: center;
-    text-decoration: none;
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 12px;
-    border-right: 2px solid #ffffff;
-    transition: background-color 0.3s;
-    margin: 0; 
-  }
-
     .nav-links a:last-child {
-    border-right: none;
-    margin-right: 0; /
-}
-
+      border-right: none;
+    }
 
     .nav-btn:hover {
       background-color: #e696ec;
@@ -176,6 +181,31 @@ $currentPage = basename($_SERVER['PHP_SELF']);
       background-color: #e696ec;
       color: #ffffff;
     }
+
+    .welcome-message {
+      text-align: center;
+      font-size: 20px;
+      color: #4b004b;
+      margin-top: 15px;
+      font-weight: 600;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    @media (max-width: 768px) {
+      .topic img.logo {
+        width: 180px;
+      }
+
+      .search-bar {
+        width: 95%;
+        padding: 8px 15px;
+      }
+
+      .nav-btn {
+        padding: 15px 12px;
+        font-size: 11px;
+      }
+    }
   </style>
 </head>
 
@@ -183,12 +213,11 @@ $currentPage = basename($_SERVER['PHP_SELF']);
   <div class="topic">
     <img src="images/whiteLogo.png" alt="logo" class="logo" />
 
-    <!-- Search Bar UI -->
+    <!-- 🔍 Search Bar -->
     <div class="search-wrapper">
       <form action="viewNotes.php" method="get" class="search-bar">
         <span class="search-icon"><i class="fa fa-search"></i></span>
         <input type="text" name="search" placeholder="Search notes by title, tag or keyword..." />
-
         <button type="button" class="filter-btn" onclick="toggleFilter()" title="Filter options">
           <i class="fa fa-sliders-h"></i>
         </button>
@@ -196,29 +225,36 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         <div class="filter-options" id="filterOptions">
           <select name="subject">
             <option value="">All Subjects</option>
-            <?php while ($s = $subjectList->fetch_assoc()): ?>
-              <option value="<?= $s['subject_ID'] ?>"><?= $s['subject_Name'] ?></option>
-            <?php endwhile; ?>
+            <?php if ($subjectList): while ($s = $subjectList->fetch_assoc()): ?>
+              <option value="<?= htmlspecialchars($s['subject_ID']) ?>"><?= htmlspecialchars($s['subject_Name']) ?></option>
+            <?php endwhile; endif; ?>
           </select>
 
           <select name="course">
             <option value="">All Courses</option>
-            <?php while ($c = $courseList->fetch_assoc()): ?>
-              <option value="<?= $c['course_ID'] ?>"><?= $c['course_Name'] ?></option>
-            <?php endwhile; ?>
+            <?php if ($courseList): while ($c = $courseList->fetch_assoc()): ?>
+              <option value="<?= htmlspecialchars($c['course_ID']) ?>"><?= htmlspecialchars($c['course_Name']) ?></option>
+            <?php endwhile; endif; ?>
           </select>
 
           <select name="university">
             <option value="">All Universities</option>
-            <?php while ($u = $uniList->fetch_assoc()): ?>
-              <option value="<?= $u['uni_ID'] ?>"><?= $u['uni_Name'] ?></option>
-            <?php endwhile; ?>
+            <?php if ($uniList): while ($u = $uniList->fetch_assoc()): ?>
+              <option value="<?= htmlspecialchars($u['uni_ID']) ?>"><?= htmlspecialchars($u['uni_Name']) ?></option>
+            <?php endwhile; endif; ?>
           </select>
 
           <button type="submit" class="apply-filter">Apply</button>
         </div>
       </form>
     </div>
+
+    <!-- Welcome Message -->
+    <?php if (isset($userData['user_Fname'])): ?>
+      <div class="welcome-message">
+        <h1>Welcome back, <strong><?= htmlspecialchars($userData['user_Fname']) ?>!</strong></h1>
+      </div>
+    <?php endif; ?>
   </div>
 
   <!-- Navigation Bar -->
@@ -239,6 +275,14 @@ $currentPage = basename($_SERVER['PHP_SELF']);
       const filters = document.getElementById('filterOptions');
       filters.style.display = filters.style.display === 'none' || filters.style.display === '' ? 'flex' : 'none';
     }
+
+    document.addEventListener('click', function (e) {
+      const filter = document.getElementById('filterOptions');
+      const btn = document.querySelector('.filter-btn');
+      if (!filter.contains(e.target) && !btn.contains(e.target)) {
+        filter.style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>

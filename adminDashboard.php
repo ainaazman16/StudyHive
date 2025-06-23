@@ -123,6 +123,12 @@ $totalReports = $conn->query("SELECT COUNT(*) FROM report_note")->fetch_row()[0]
             transition: transform 0.3s ease;
         }
 
+        .card-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+
         .card:hover {
             transform: scale(1.05);
         }
@@ -144,7 +150,7 @@ $totalReports = $conn->query("SELECT COUNT(*) FROM report_note")->fetch_row()[0]
 <body>
 
     <header class="header">
-        <img src="images/whiteLogo.png" alt="Logo" style="width: 200px; height: auto;">
+        <img src="images/whiteLogo.png" alt="Logo" style="width: 170px; height: auto;">
         <h1>Admin Dashboard</h1>
         <p>Welcome, <?= htmlspecialchars($_SESSION['user_Name']) ?>!</p>
     </header>
@@ -156,7 +162,6 @@ $totalReports = $conn->query("SELECT COUNT(*) FROM report_note")->fetch_row()[0]
             <li><a href="adminNotes.php">Manage Notes</a></li>
             <li><a href="adminReports.php">Reported Content</a></li>
             <li><a href="adminFeedback.php">Feedback</a></li>
-            <li><a href="adminSettings.php">Settings</a></li>
             <li><a href="logout.php">Log out</a></li>
         </ul>
     </nav>
@@ -164,24 +169,36 @@ $totalReports = $conn->query("SELECT COUNT(*) FROM report_note")->fetch_row()[0]
     <main class="container">
         <h1 style="text-align:center;">System Overview</h1>
         <div class="card-container">
+        <a href="adminUsers.php" class="card-link">
             <div class="card">
                 <h2><?= $totalUsers ?></h2>
                 <p>Total Users</p>
             </div>
+        </a>
+
+        <a href="adminNotes.php" class="card-link">
             <div class="card">
-                <h2><?= $totalNotes ?></h2>
-                <p>Total Notes</p>
+            <h2><?= $totalNotes ?></h2>
+            <p>Total Notes</p>
             </div>
+        </a>
+
+        <a href="adminAnalytics.php" class="card-link">
             <div class="card">
-                <h2><?= $totalDownloads ?></h2>
-                <p>Total Downloads</p>
+            <h2><?= $totalDownloads ?></h2>
+            <p>Total Downloads</p>
             </div>
+        </a>
+
+        <a href="adminReports.php" class="card-link">
             <div class="card">
-                <h2><?= $totalReports ?? 0 ?></h2>
-                <p>Reported Notes</p>
+            <h2><?= $totalReports ?? 0 ?></h2>
+            <p>Reported Notes</p>
             </div>
+        </a>
         </div>
     </main>
+
     <?php
         include('footer.php');
     ?>
