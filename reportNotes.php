@@ -1,5 +1,13 @@
 <?php
   session_start();
+
+  $backQuery = http_build_query([
+    'search' => $_GET['search'] ?? '',
+    'uni_ID' => $_GET['uni_ID'] ?? '',
+    'faculty_ID' => $_GET['faculty_ID'] ?? '',
+    'course_ID' => $_GET['course_ID'] ?? '',
+    'subject_ID' => $_GET['subject_ID'] ?? ''
+  ]);
 ?>
 
 
@@ -7,27 +15,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Report Notes</title>
   <style>
     body { 
       background-color: #ffffff; 
       margin: 0; font-family: Arial, Helvetica, sans-serif;
-      background-size : 90%; 
     }
 
     h1 { 
       font-size: 60px; 
       text-align: center; 
-      color: #4b004b; 
+      color: #660066; 
     }
-    
-    .back-btn { 
+
+    .back-btn {
+      display: block;
       margin: 20px;
-      display: inline-block; 
-      font-size: 16px; color: #660066; 
-      text-decoration: none; 
-      font-weight: bold; 
+      font-size: 16px;
+      color: #660066;
+      text-decoration: none;
+      font-weight: bold;
+      text-align: left;
+    }
+
+    .note-card {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 10px;
+      color: #333;
     }
 
     .list-report { 
@@ -63,22 +81,35 @@
       font-size: 1.2em; 
       color: #222; 
     }
-
   </style>
 </head>
 <body>
-  <?php
-    include('head.php');
-  ?>
-  <a class="back-btn" href="viewNotes.php?<?= $backQuery ?>">&larr; Back</a>
-  <h1>Report Notes</h1>
-  <h3 class="title-reason">Select a reason</h3>
-  <ul class="list-report">
-    <li><a href="reportDetails.php?report_type=Inappropriate Language&note_ID=<?= $noteID ?>">1. Inappropriate Language</a></li>
-    <li><a href="reportDetails.php?report_type=Harassment or Bullying&note_ID=<?= $noteID ?>">2. Harassment or Bullying</a></li>
-    <li><a href="reportDetails.php?report_type=Irrelevant or Spam Content&note_ID=<?= $noteID ?>">3. Irrelevant or Spam Content</a></li>
-    <li><a href="reportDetails.php?report_type=Plagiarized or Copyrighted Material&note_ID=<?= $noteID ?>">4. Plagiarized or Copyrighted Material</a></li>
 
+  <?php include('head.php'); ?>
+
+  <a class="back-btn" href="viewNotes.php?<?= $backQuery ?>">&larr; Back</a>
+
+  <h1>Report Notes</h1>
+
+  <?php if ($note): ?>
+    <div class="note-card">
+      <h3><?= htmlspecialchars($note['note_Name']) ?></h3>
+      <p><strong>Type:</strong> <?= strtoupper($note['file_type']) ?></p>
+      <p><strong>Author:</strong> <?= htmlspecialchars($note['user_Fname']) ?></p>
+      <p><strong>Uploaded:</strong> <?= $note['upload_date'] ?></p>
+    </div>
+  <?php else: ?>
+    <p style="color:red; text-align:center;">Note not found.</p>
+  <?php endif; ?>
+
+  <h3 class="title-reason">Select a reason</h3>
+
+  <ul class="list-report">
+    <li><a href="reportDetails.php?report_type=Inappropriate Language">1. Inappropriate Language</a></li>
+    <li><a href="reportDetails.php?report_type=Harassment or Bullying">2. Harassment or Bullying</a></li>
+    <li><a href="reportDetails.php?report_type=Irrelevant or Spam Content">3. Irrelevant or Spam Content</a></li>
+    <li><a href="reportDetails.php?report_type=Plagiarized or Copyrighted Material">4. Plagiarized or Copyrighted Material</a></li>
   </ul>
+
 </body>
 </html>
