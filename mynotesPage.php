@@ -111,6 +111,7 @@ $downloaded->close();
         <p><strong>Type:</strong> <?= strtoupper($note['file_type']) ?></p>
         <p><strong>Downloaded:</strong> <?= $note['download_date'] ?></p>
         <a class="btn" href="download.php?note_ID=<?= $note['note_ID'] ?>">Download Again</a>
+        <a class="btn" href="deleteNote.php?note_ID=<?= $note['note_ID'] ?>" style="background:#dc3545;" onclick="return confirm('Are you sure you want to delete this note?');">Delete</a>
       </div>
     <?php endwhile; ?>
   <?php else: ?>
