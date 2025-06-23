@@ -45,7 +45,7 @@ try {
     .topic {
       background-color: #ec97ec;
       text-align: center;
-      padding: 30px 10px; 
+      padding: 30px 10px;
       position: relative;
     }
 
@@ -111,7 +111,7 @@ try {
       border-radius: 12px;
       padding: 15px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      z-index: 10;
+      z-index: 1000;
       display: none;
       flex-direction: column;
       gap: 10px;
@@ -162,12 +162,37 @@ try {
       font-size: 14px;
       font-weight: bold;
       text-transform: uppercase;
-      transition: background-color 0.3s ease;
+      position: relative;
+      transition: all 0.3s ease;
+      background-color: transparent;
     }
 
-    .nav-links a:hover,
+    .nav-links a:hover {
+      transform: translateY(-5px);
+      background-color: transparent;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%) scaleX(0);
+      transform-origin: center;
+      width: 70%;
+      height: 3px;
+      background-color: white;
+      transition: transform 0.3s ease;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      transform: translateX(-50%) scaleX(1);
+    }
+
     .nav-links a.active {
-      background-color: #990099;
+      transform: translateY(-5px);
+      background-color: transparent;
     }
 
     .welcome-message {

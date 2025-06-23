@@ -1,6 +1,7 @@
 <?php
 session_start();
 include("connect.php");
+include("head.php"); 
 
 if (!isset($_SESSION['user_ID'])) {
     header("Location: loginPage.php");
@@ -69,6 +70,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <meta charset="UTF-8">
   <title>Edit Note</title>
   <style>
+
+    /* Copy all search bar styles from head.php */
+.search-wrapper {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+      border-radius: 999px;
+      padding: 10px 20px;
+      width: 90%;
+      max-width: 800px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+/* Include all other search-related styles from head.php */
     body { font-family: Arial; background: #fdfdfd; }
     .container {
       max-width: 700px;
@@ -77,7 +99,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       background: #f4caff;
       border-radius: 10px;
     }
-    label { display: block; margin-top: 10px; font-weight: bold; }
+
+    
+
+    label { 
+      display: block; margin-top: 10px; font-weight: bold; 
+    }
     
     /* Uniform sizing for inputs and selects */
     input[type="text"],
@@ -151,7 +178,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   </script>
 </head>
 <body>
-<?php include("head.php"); ?>
+
 <h1>Edit Note</h1>
 <div class="container">
   
