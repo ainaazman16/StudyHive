@@ -1,5 +1,13 @@
 <?php
   session_start();
+
+  $backQuery = http_build_query([
+    'search' => $_GET['search'] ?? '',
+    'uni_ID' => $_GET['uni_ID'] ?? '',
+    'faculty_ID' => $_GET['faculty_ID'] ?? '',
+    'course_ID' => $_GET['course_ID'] ?? '',
+    'subject_ID' => $_GET['subject_ID'] ?? ''
+  ]);
 ?>
 
 <!DOCTYPE html>
@@ -69,7 +77,7 @@
   <?php
     include('head.php');
   ?>
-  <a class="back-btn" href="viewNotes.php">&larr; Back</a>
+  <a class="back-btn" href="viewNotes.php?<?= $backQuery ?>">&larr; Back</a>
   <h1>Report Notes</h1>
   <h3 class="title-reason">Select a reason</h3>
   <ul class="list-report">
