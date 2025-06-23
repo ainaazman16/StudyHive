@@ -138,8 +138,13 @@ $result = $conn->query($query);
         }
 
         a.btn-download {
-            color: white;
-        }
+    color:rgb(0, 38, 206);
+    font-weight: bold;
+    text-decoration: underline;
+    background-color: transparent;
+    border: none;
+}
+
     </style>
 </head>
 <body>
@@ -178,11 +183,14 @@ $result = $conn->query($query);
                 <td><?= htmlspecialchars($row['user_Name']) ?></td>
                 <td>
                     <?php if (!empty($row['file_path'])): ?>
-                        <a class="btn btn-download" href="uploads/<?= htmlspecialchars($row['file_path']) ?>" download>Download</a>
+                        <a class="btn btn-download" href="uploads/<?= htmlspecialchars($row['file_path']) ?>" download>
+                            <?= basename($row['file_path']) ?>
+                        </a>
                     <?php else: ?>
                         N/A
                     <?php endif; ?>
                 </td>
+
                 <td>
                     <form method="POST" action="adminDeleteNote.php" onsubmit="return confirm('Delete this note?');">
                         <input type="hidden" name="note_ID" value="<?= $row['note_ID'] ?>">
