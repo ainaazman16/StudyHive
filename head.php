@@ -262,6 +262,7 @@ try {
     <img src="images/whiteLogo.png" alt="Logo" class="logo" />
     <div class="nav-links">
       <a href="homePage.php" class="nav-btn <?= $currentPage == 'homePage.php' ? 'active' : '' ?>">Home</a>
+      <a href="viewNotes.php" class="nav-btn <?= $currentPage == 'viewNotes.php' ? 'active' : '' ?>">Browse Notes</a>
       <a href="mynotesPage.php" class="nav-btn <?= $currentPage == 'mynotesPage.php' ? 'active' : '' ?>">My Notes</a>
       <a href="uploadPage.php" class="nav-btn <?= $currentPage == 'uploadPage.php' ? 'active' : '' ?>">Upload</a>
       <a href="connectionPage.php" class="nav-btn <?= $currentPage == 'connectionPage.php' ? 'active' : '' ?>">Connection</a>

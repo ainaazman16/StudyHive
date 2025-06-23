@@ -9,10 +9,18 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 }
 
 // Get total stats
-$totalUsers = $conn->query("SELECT COUNT(*) FROM user")->fetch_row()[0];
-$totalNotes = $conn->query("SELECT COUNT(*) FROM notes")->fetch_row()[0];
-$totalDownloads = $conn->query("SELECT COUNT(*) FROM note_downloads")->fetch_row()[0];
-$totalReports = $conn->query("SELECT COUNT(*) FROM report_note")->fetch_row()[0];
+$userRes = $conn->query("SELECT COUNT(*) FROM user");
+$totalUsers = ($userRes && $userRes->num_rows > 0) ? $userRes->fetch_row()[0] : 0;
+
+$noteRes = $conn->query("SELECT COUNT(*) FROM notes");
+$totalNotes = ($noteRes && $noteRes->num_rows > 0) ? $noteRes->fetch_row()[0] : 0;
+
+$downloadRes = $conn->query("SELECT COUNT(*) FROM note_downloads");
+$totalDownloads = ($downloadRes && $downloadRes->num_rows > 0) ? $downloadRes->fetch_row()[0] : 0;
+
+$reportRes = $conn->query("SELECT COUNT(*) FROM report_note");
+$totalReports = ($reportRes && $reportRes->num_rows > 0) ? $reportRes->fetch_row()[0] : 0;
+
 ?>
 
 <!DOCTYPE html>
