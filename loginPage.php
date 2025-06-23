@@ -257,7 +257,7 @@ if(isset($_SESSION['username']))
           </form>
 
           <div class="signup-link">
-            Don’t have an account? <a href="signupPage.php">Sign up</a>
+            Don’t have an account? <a href="signupPage.php">Sign Up</a>
           </div>
         </div>
       </div>
