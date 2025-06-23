@@ -108,6 +108,18 @@ $result = $stmt->get_result();
       color: white; text-decoration: none;
       border-radius: 6px; margin-top: 10px;
     }
+    .btn-report{
+      display: inline-block;
+      padding: 8px 15px; background-color:rgb(237, 50, 50);
+      color: white; text-decoration: none;
+      border-radius: 6px; margin-top: 10px;
+    }
+    .btn-rate{
+      display: inline-block;
+      padding: 8px 15px; background-color:rgb(227, 139, 206);
+      color: white; text-decoration: none;
+      border-radius: 6px; margin-top: 10px;
+    }
     .btn:hover { background-color: #990099; }
   </style>
 </head>
@@ -124,7 +136,8 @@ $result = $stmt->get_result();
       <p><strong>Author:</strong> <?= htmlspecialchars($row['user_Fname']) ?></p>
       <p><strong>Uploaded:</strong> <?= $row['upload_date'] ?></p>
       <a class="btn" href="download.php?note_ID=<?= $row['note_ID'] ?>">Download</a>
-      <a class="btn" href="rateNotes.php?note_ID=<?= $row['note_ID'] ?>">Rate Notes</a>
+      <a class="btn-rate" href="rateNotes.php?note_ID=<?= $row['note_ID'] ?>">Rate Notes</a>
+      <a class="btn-report" href="reportNotes.php?note_ID=<?= $row['note_ID'] ?>">Report Notes</a>
       <?php if ($_SESSION['role'] === 'admin'): ?>
         <a class="btn" style="background-color: #aa0033;" href="adminDeleteNote.php?note_ID=<?= $row['note_ID'] ?>">Delete</a>
       <?php endif; ?>

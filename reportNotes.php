@@ -69,7 +69,7 @@
   <?php
     include('head.php');
   ?>
-  <a class="back-btn" href="index.php">&larr; Back</a>
+  <a class="back-btn" href="viewNotes.php">&larr; Back</a>
   <h1>Report Notes</h1>
   <h3 class="title-reason">Select a reason</h3>
   <ul class="list-report">
