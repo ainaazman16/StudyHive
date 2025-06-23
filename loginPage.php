@@ -237,7 +237,7 @@ if(isset($_SESSION['username']))
           <a class="back-btn" href="index.php">← Back</a>
     <div class="container">
         <div class="login-box">
-          <h2>Log in</h2>
+          <h2>Log In</h2>
           <form action="login.php" method="POST">
             <label for="username">Username</label>
             <input type="text" id="username" name="user_Name" placeholder="Enter your username"
@@ -257,7 +257,7 @@ if(isset($_SESSION['username']))
           </form>
 
           <div class="signup-link">
-            Don’t have an account? <a href="signupPage.php">Sign up</a>
+            Don’t have an account? <a href="signupPage.php">Sign Up</a>
           </div>
         </div>
       </div>
