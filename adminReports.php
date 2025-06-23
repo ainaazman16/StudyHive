@@ -150,7 +150,7 @@ if (!$result) {
     <a href="adminNotes.php">Manage Notes</a>
     <a href="adminReports.php">Reported Content</a>
     <a href="adminFeedback.php">Feedback</a>
-    <a href="logout.php">Logout</a>
+    <a href="logout.php">Log out</a>
 </div>
 
 <div class="container">
