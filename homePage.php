@@ -206,12 +206,6 @@ $viewedResult = $viewQuery->get_result();
 <body>
 <?php include('head.php'); ?>
 
-<!-- PROFILE SECTION -->
-<div class="profile-card">
-  <img src="uploads/<?= htmlspecialchars($userData['profile_picture']) ?>" alt="Profile Picture" class="profile-pic">
-  <h2>Hello, <?= htmlspecialchars($userData['user_Fname']) ?> 👋</h2>
-</div>
-
 <h1>User's Dashboard</h1>
 
 <div class="cards-container">
