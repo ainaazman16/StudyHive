@@ -27,42 +27,45 @@ if ($result->num_rows !== 1) {
 $note = $result->fetch_assoc();
 $stmt->close();
 
-// Fetch current subject hierarchy
+// Fetch current subject hierarchy securely
 $subjectID = $note['subject_ID'];
-$current = $conn->query("
+$currentStmt = $conn->prepare("
     SELECT s.subject_ID, s.course_ID, c.faculty_ID, f.uni_ID
     FROM subject s
     JOIN course c ON s.course_ID = c.course_ID
     JOIN faculty f ON c.faculty_ID = f.faculty_ID
-    WHERE s.subject_ID = $subjectID
-")->fetch_assoc();
+    WHERE s.subject_ID = ?
+");
+$currentStmt->bind_param("i", $subjectID);
+$currentStmt->execute();
+$currentResult = $currentStmt->get_result();
+$current = $currentResult->fetch_assoc();
+$currentStmt->close();
 
 // Fetch all universities
 $universities = $conn->query("SELECT * FROM university ORDER BY uni_name");
 
-// Handle submission
+// Handle form submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $noteName = $_POST['note_Name'];
     $subjectID = $_POST['subject_ID'];
 
     $update = $conn->prepare("UPDATE notes SET note_Name = ?, subject_ID = ? WHERE note_ID = ? AND user_ID = ?");
-      if (!$update) {
-          die("SQL prepare failed: " . $conn->error);
-      }
-        $update->bind_param("siii", $noteName, $subjectID, $noteID, $userID);
-      if ($update->execute()) {
+    if (!$update) {
+        die("SQL prepare failed: " . $conn->error);
+    }
+
+    $update->bind_param("siii", $noteName, $subjectID, $noteID, $userID);
+    if ($update->execute()) {
         $_SESSION['success_message'] = "Note updated successfully!";
         header("Location: myNotesPage.php");
         exit();
-
-
     } else {
         $error = "Update failed: " . $conn->error;
     }
     $update->close();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -112,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         loadOptions('getSubjects', course.value, subject);
       });
 
-      // preload selections
+      // Preload selection
       <?php if ($current): ?>
       loadOptions('getFaculties', <?= $current['uni_ID'] ?>, faculty, <?= $current['faculty_ID'] ?>);
       loadOptions('getCourses', <?= $current['faculty_ID'] ?>, course, <?= $current['course_ID'] ?>);
@@ -123,7 +126,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <body>
 <?php include("head.php"); ?>
-
 
 <div class="container">
   <h2>Edit Note</h2>
