@@ -1,12 +1,10 @@
 <?php
 include("connect.php");
 
-// Start session if not already started
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Initialize variables
 $subjectList = null;
 $courseList = null;
 $uniList = null;
@@ -14,12 +12,10 @@ $userData = null;
 $currentPage = basename($_SERVER['PHP_SELF']);
 
 try {
-    // Fetch dropdown options
     $subjectList = $conn->query("SELECT subject_ID, subject_Name FROM subject");
     $courseList = $conn->query("SELECT course_ID, course_Name FROM course");
     $uniList    = $conn->query("SELECT uni_ID, uni_Name FROM university");
 
-    // Fetch user's name if logged in
     if (isset($_SESSION['user_ID'])) {
         $stmt = $conn->prepare("SELECT user_Fname FROM user WHERE user_ID = ?");
         $stmt->bind_param("i", $_SESSION['user_ID']);
@@ -183,11 +179,10 @@ try {
     }
 
     .welcome-message {
-      text-align: center;
       font-size: 20px;
       color: #4b004b;
-      margin-top: 15px;
       font-weight: 600;
+      margin-top: 15px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
@@ -213,7 +208,7 @@ try {
   <div class="topic">
     <img src="images/whiteLogo.png" alt="logo" class="logo" />
 
-    <!-- 🔍 Search Bar -->
+    <!-- Search Bar -->
     <div class="search-wrapper">
       <form action="viewNotes.php" method="get" class="search-bar">
         <span class="search-icon"><i class="fa fa-search"></i></span>
@@ -248,6 +243,13 @@ try {
         </div>
       </form>
     </div>
+
+    <!-- Welcome Message (Only on homePage) -->
+    <?php if ($currentPage === 'homePage.php' && isset($userData['user_Fname'])): ?>
+      <div class="welcome-message">
+        Welcome back, <strong><?= htmlspecialchars($userData['user_Fname']) ?>!</strong>
+      </div>
+    <?php endif; ?>
   </div>
 
   <!-- Navigation Bar -->

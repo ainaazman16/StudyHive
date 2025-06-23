@@ -9,7 +9,6 @@ if (!isset($_SESSION['user_ID'])) {
 
 $userID = $_SESSION['user_ID'];
 
-// Fetch user name
 $userQuery = $conn->prepare("SELECT user_Fname FROM user WHERE user_ID = ?");
 $userQuery->bind_param("i", $userID);
 $userQuery->execute();
