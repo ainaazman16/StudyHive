@@ -140,9 +140,8 @@ include("connect.php");
     </div>
 
     <div class="form-group">
-      <label>Drop Files Here</label>
-      <div id="dropZone">
-        <p>Drop files here</p>
+      <label>Input Files Here</label>
+      <div>
         <p><small>Supported: PNG, JPG, PDF</small></p>
         <input type="file" name="file" id="fileInput" required />
       </div>
