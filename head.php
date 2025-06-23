@@ -49,6 +49,10 @@ try {
       position: relative;
     }
 
+    .welcome-message h2 {
+      font-family: 'Cambria', 'Georgia', serif;
+    }
+
     .topic img.logo {
       width: 250px;
       height: auto;
@@ -235,7 +239,7 @@ try {
     <!-- Welcome Message (Only on homePage) -->
     <?php if ($currentPage === 'homePage.php' && isset($userData['user_Fname'])): ?>
       <div class="welcome-message">
-        Welcome back, <strong><?= htmlspecialchars($userData['user_Fname']) ?>!</strong>
+        <h2>Welcome back, <strong><?= htmlspecialchars($userData['user_Fname']) ?>!</strong></h2>
       </div>
     <?php endif; ?>
   </div>
