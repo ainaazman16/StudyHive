@@ -1,9 +1,5 @@
 <?php
-session_start();
-$noteID = $_GET['note_ID'] ?? null;
-if (!$noteID) {
-  die("Note ID missing.");
-}
+  session_start();
 ?>
 
 
@@ -74,7 +70,7 @@ if (!$noteID) {
   <?php
     include('head.php');
   ?>
-  <a class="back-btn" href="index.php">&larr; Back</a>
+  <a class="back-btn" href="viewNotes.php?<?= $backQuery ?>">&larr; Back</a>
   <h1>Report Notes</h1>
   <h3 class="title-reason">Select a reason</h3>
   <ul class="list-report">

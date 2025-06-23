@@ -2,6 +2,14 @@
 session_start();
 include("connect.php");
 
+$backQuery = http_build_query([
+    'search' => $_GET['search'] ?? '',
+    'uni_ID' => $_GET['uni_ID'] ?? '',
+    'faculty_ID' => $_GET['faculty_ID'] ?? '',
+    'course_ID' => $_GET['course_ID'] ?? '',
+    'subject_ID' => $_GET['subject_ID'] ?? ''
+]);
+
 // Get note ID from query parameter
 $noteID = $_GET['note_ID'] ?? null;
 $userID = $_SESSION['user_ID'] ?? null;
@@ -89,10 +97,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         include('head.php');
     ?>
 
-    <!-- <a class="back-btn" href=".php">&larr; Back</a> -->
+    <a class="back-btn" href="viewNotes.php?<?= $backQuery ?>">&larr; Back</a>
     <h1>Review Notes</h1>
     <form method="POST" >
         <div class="review">
+         <?php if ($result && $result->num_rows > 0): ?>
+            <?php while($row = $result->fetch_assoc()): ?>
+                <div class="note-card">
+                <h3><?= htmlspecialchars($row['note_Name']) ?></h3>
+                <p><strong>Type:</strong> <?= strtoupper($row['file_type']) ?></p>
+                <p><strong>Author:</strong> <?= htmlspecialchars($row['user_Fname']) ?></p>
+                <p><strong>Uploaded:</strong> <?= $row['upload_date'] ?></p>
+                </div>
+            <?php endwhile; ?>
             <div>
                 <h2><label for="rating">Rate this note:</label></h2>
                 <select name="rating" id="rating" required>
