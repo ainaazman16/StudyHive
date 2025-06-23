@@ -1,20 +1,26 @@
 <?php
+// ⚠️ Debug mode on (remove in production)
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 include("connect.php");
 
-// Capture filter and search parameters
+if (!isset($_SESSION['user_ID'])) {
+    header("Location: loginPage.php");
+    exit();
+}
+
 $search = $_GET['search'] ?? '';
 $uni_ID = $_GET['uni_ID'] ?? '';
 $faculty_ID = $_GET['faculty_ID'] ?? '';
 $course_ID = $_GET['course_ID'] ?? '';
 $subject_ID = $_GET['subject_ID'] ?? '';
 
-// Capture role from session after login
 if (!isset($_SESSION['role'])) {
   $_SESSION['role'] = '';
 }
 
-// Build dynamic SQL with filters
 $conditions = [];
 $params = [];
 $types = '';
@@ -60,20 +66,25 @@ if ($conditions) {
 
 $sql .= " ORDER BY n.upload_date DESC";
 
+// 🔍 Prepare and check query
 $stmt = $conn->prepare($sql);
+if (!$stmt) {
+    die("❌ SQL Prepare Failed: " . $conn->error);
+}
+
+// 🔗 Bind if necessary
 if ($params) {
     $stmt->bind_param($types, ...$params);
 }
 
-  $stmt->execute();
-  $result = $stmt->get_result();
-  // Track view
-  $viewStmt = $conn->prepare("INSERT INTO note_views (user_ID, note_ID, view_date) VALUES (?, ?, NOW())");
-  $viewStmt->bind_param("ii", $_SESSION['user_ID'], $noteID);
-  $viewStmt->execute();
-  $viewStmt->close();
+$stmt->execute();
 
+// 🔎 Check if get_result is available
+if (!method_exists($stmt, 'get_result')) {
+    die("❌ get_result() not supported. Make sure PHP has mysqlnd enabled.");
+}
 
+$result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -83,119 +94,29 @@ if ($params) {
   <title>Filtered Notes - StudyHive</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    h1 {
-      text-align: center;
-      color: #660066;
-    }
-    .filter-bar, .note-card {
-      max-width: 700px;
-      margin: 20px auto;
-    }
-    .filter-bar form {
-      background-color: #fff0ff;
-      padding: 20px;
-      border-radius: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .filter-bar input, .filter-bar select {
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      width: 100%;
-    }
-    .filter-bar button {
-      background-color: #660066;
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+    h1 { text-align: center; color: #660066; }
     .note-card {
-      background-color: #fff;
-      border: 1px solid #ccc;
-      padding: 20px;
-      border-radius: 10px;
+      max-width: 700px; margin: 20px auto;
+      background-color: #fff; border: 1px solid #ccc;
+      padding: 20px; border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
-    .note-card h3 {
-      margin: 0 0 10px;
-    }
+    .note-card h3 { margin: 0 0 10px; }
     .btn {
       display: inline-block;
-      padding: 8px 15px;
-      background-color: #660066;
-      color: white;
-      text-decoration: none;
-      border-radius: 6px;
-      margin-top: 10px;
+      padding: 8px 15px; background-color: #660066;
+      color: white; text-decoration: none;
+      border-radius: 6px; margin-top: 10px;
     }
-    .btn:hover {
-      background-color: #990099;
-    }
+    .btn:hover { background-color: #990099; }
   </style>
 </head>
 <body>
+<?php include("head.php"); ?>
 
-<?php include('head.php'); ?>
+<h1>Filtered Notes</h1>
 
-<h1>Find Notes</h1>
-<div class="filter-bar">
-  <form method="get">
-    <input type="text" name="search" placeholder="Search notes..." value="<?= htmlspecialchars($search) ?>">
-
-    <select name="uni_ID">
-      <option value="">All Universities</option>
-      <?php
-      $q = $conn->query("SELECT * FROM university");
-      while ($row = $q->fetch_assoc()) {
-        $selected = ($row['uni_ID'] == $uni_ID) ? 'selected' : '';
-        echo "<option value='{$row['uni_ID']}' $selected>{$row['uni_Name']}</option>";
-      }
-      ?>
-    </select>
-
-    <select name="faculty_ID">
-      <option value="">All Faculties</option>
-      <?php
-      $q = $conn->query("SELECT * FROM faculty");
-      while ($row = $q->fetch_assoc()) {
-        $selected = ($row['faculty_ID'] == $faculty_ID) ? 'selected' : '';
-        echo "<option value='{$row['faculty_ID']}' $selected>{$row['faculty_Name']}</option>";
-      }
-      ?>
-    </select>
-
-    <select name="course_ID">
-      <option value="">All Courses</option>
-      <?php
-      $q = $conn->query("SELECT * FROM course");
-      while ($row = $q->fetch_assoc()) {
-        $selected = ($row['course_ID'] == $course_ID) ? 'selected' : '';
-        echo "<option value='{$row['course_ID']}' $selected>{$row['course_Name']}</option>";
-      }
-      ?>
-    </select>
-
-    <select name="subject_ID">
-      <option value="">All Subjects</option>
-      <?php
-      $q = $conn->query("SELECT * FROM subject");
-      while ($row = $q->fetch_assoc()) {
-        $selected = ($row['subject_ID'] == $subject_ID) ? 'selected' : '';
-        echo "<option value='{$row['subject_ID']}' $selected>{$row['subject_Name']}</option>";
-      }
-      ?>
-    </select>
-
-    <button type="submit">Apply Filter</button>
-  </form>
-</div>
-
-<?php if ($result->num_rows > 0): ?>
+<?php if ($result && $result->num_rows > 0): ?>
   <?php while($row = $result->fetch_assoc()): ?>
     <div class="note-card">
       <h3><?= htmlspecialchars($row['note_Name']) ?></h3>
@@ -204,12 +125,12 @@ if ($params) {
       <p><strong>Uploaded:</strong> <?= $row['upload_date'] ?></p>
       <a class="btn" href="download.php?note_ID=<?= $row['note_ID'] ?>">Download</a>
       <?php if ($_SESSION['role'] === 'admin'): ?>
-        <a class="btn" href="adminDeleteNote.php?note_ID=<?= $row['note_ID'] ?>" style="background-color:#aa0033">Delete</a>
+        <a class="btn" style="background-color: #aa0033;" href="adminDeleteNote.php?note_ID=<?= $row['note_ID'] ?>">Delete</a>
       <?php endif; ?>
     </div>
   <?php endwhile; ?>
 <?php else: ?>
-  <p style="text-align:center; color:#888;">No notes found.</p>
+  <p style="text-align:center; color:#888;">🔍 No notes found for your search/filter.</p>
 <?php endif; ?>
 
 </body>
