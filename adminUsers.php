@@ -46,47 +46,66 @@ $result = $conn->query($query);
             color: #3d0d3d;
         }
 
-        .navbar {
-            background-color: #660066;
-            position: sticky;
-            top: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 10px;
-            height: 60px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-        }
+         .navbar {
+      background-color: #660066;
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+      height: 60px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
 
-        .navbar .logo {
-            height: 60px;
-        }
+    .navbar .logo {
+      height: 60px;
+    }
 
-        .navbar ul {
-            list-style: none;
-            display: flex;
-            margin: 0;
-            padding: 0;
-        }
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
 
-        .navbar li {
-            margin-left: 10px;
-        }
+    .navbar li {
+      margin-left: 10px;
+    }
 
-        .navbar a {
-            text-decoration: none;
-            color: white;
-            padding: 14px 16px;
-            display: block;
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: uppercase;
-            transition: background-color 0.3s ease;
-        }
+  .navbar a {
+  position: relative;
+  text-decoration: none;
+  color: white;
+  padding: 14px 16px;
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
 
-        .navbar a:hover {
-            background-color: #990099;
-        }
+.navbar a::after {
+  content: "";
+  position: absolute;
+  bottom: 6px; /* space below text */
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: center;
+  width: 60%;  /* underline is 60% of the word width */
+  height: 3px;
+  background-color: white;
+  transition: transform 0.3s ease;
+}
+
+.navbar a:hover::after,
+.navbar a.active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+    .navbar a:hover {
+      transform: scale(1.09);
+    }
 
         .container {
             max-width: 1000px;
@@ -142,7 +161,7 @@ $result = $conn->query($query);
     <nav class="navbar">
         <ul>
             <li><a href="adminDashboard.php">Dashboard</a></li>
-            <li><a href="adminUsers.php">Manage Users</a></li>
+            <li><a href="adminUsers.php" class="active">Manage Users</a></li>
             <li><a href="adminNotes.php">Manage Notes</a></li>
             <li><a href="adminReports.php">Reported Content</a></li>
             <li><a href="adminFeedback.php">Feedback</a></li>

@@ -48,24 +48,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_report'])) {
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
-      background-color: white;
+      font-family: Arial, sans-serif;
+      background-color: #f3f4f6;
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      color: white;
+    }
+
+    .header {
+      background-color: #ec97ec;
+      color: #5e1b5e;
+      text-align: center;
+      padding: 30px 20px;
+      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 2.8em;
+      font-weight: bold;
+    }
+
+    .header p {
+      font-size: 1.2em;
+      margin-top: 10px;
+      color: #3d0d3d;
     }
 
     .navbar {
       background-color: #660066;
+      position: sticky;
+      top: 0;
       display: flex;
+      align-items: center;
       justify-content: center;
       padding: 0 10px;
       height: 60px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.5);
     }
 
+    .navbar .logo {
+      height: 60px;
+    }
+
     .navbar ul {
-      display: flex;
       list-style: none;
+      display: flex;
       margin: 0;
       padding: 0;
     }
@@ -74,36 +101,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_report'])) {
       margin-left: 10px;
     }
 
-    .navbar a {
-      text-decoration: none;
-      color: white;
-      padding: 14px 16px;
-      display: block;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
+  .navbar a {
+  position: relative;
+  text-decoration: none;
+  color: white;
+  padding: 14px 16px;
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+.navbar a::after {
+  content: "";
+  position: absolute;
+  bottom: 6px; /* space below text */
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: center;
+  width: 60%;  /* underline is 60% of the word width */
+  height: 3px;
+  background-color: white;
+  transition: transform 0.3s ease;
+}
+
+.navbar a:hover::after,
+.navbar a.active::after {
+  transform: translateX(-50%) scaleX(1);
+}
 
     .navbar a:hover {
-      background-color: #990099;
-    }
-
-    .header {
-      background-color: #ec97ec;
-      color: #5e1b5e;
-      text-align: center;
-      padding: 30px 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    .header h1 {
-      margin: 0;
-      font-size: 2.8em;
-    }
-
-    .header p {
-      font-size: 1.2em;
-      margin-top: 10px;
-      color: #3d0d3d;
+      transform: scale(1.09);
     }
 
     .container {
@@ -202,14 +231,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_report'])) {
 <body>
 
 <header class="header">
-  <img src="images/whiteLogo.png" alt="Logo" style="width: 170px; height: auto;">
+  <img src="images/whiteLogo.png" alt="Logo" style="width: 180px; height: auto;">
   <h1>Admin Dashboard</h1>
   <p>Welcome, <?= htmlspecialchars($_SESSION['user_Name']) ?>!</p>
 </header>
 
 <nav class="navbar">
   <ul>
-    <li><a href="adminDashboard.php">Dashboard</a></li>
+    <li><a href="adminDashboard.php" class="active">Dashboard</a></li>
     <li><a href="adminUsers.php">Manage Users</a></li>
     <li><a href="adminNotes.php">Manage Notes</a></li>
     <li><a href="adminReports.php">Reported Content</a></li>

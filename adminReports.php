@@ -92,38 +92,87 @@ if (!$result) {
     <title>Admin - Reported Notes</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f3f4f6; margin: 0; }
-        .navbar {
-            background-color: #660066;
-            position: sticky;
-            top: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 10px;
-            height: 60px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-        }
-        .navbar a {
-            text-decoration: none;
-            color: white;
-            padding: 14px 16px;
-            display: block;
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: uppercase;
-            transition: background-color 0.3s ease;
-        }
-        .navbar a:hover { background-color: #990099; }
         .header {
-            background-color: #ec97ec;
-            color: #5e1b5e;
-            text-align: center;
-            padding: 30px 20px;
-            font-family: Cambria, serif;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .header h1 { margin: 0; font-size: 2.8em; font-weight: bold; }
-        .header p { font-size: 1.2em; margin-top: 10px; color: #3d0d3d; }
+      background-color: #ec97ec;
+      color: #5e1b5e;
+      text-align: center;
+      padding: 30px 20px;
+      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 2.8em;
+      font-weight: bold;
+    }
+
+    .header p {
+      font-size: 1.2em;
+      margin-top: 10px;
+      color: #3d0d3d;
+    }
+
+    .navbar {
+      background-color: #660066;
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+      height: 60px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    .navbar .logo {
+      height: 60px;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar li {
+      margin-left: 10px;
+    }
+
+  .navbar a {
+  position: relative;
+  text-decoration: none;
+  color: white;
+  padding: 14px 16px;
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+.navbar a::after {
+  content: "";
+  position: absolute;
+  bottom: 6px; /* space below text */
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: center;
+  width: 60%;  /* underline is 60% of the word width */
+  height: 3px;
+  background-color: white;
+  transition: transform 0.3s ease;
+}
+
+.navbar a:hover::after,
+.navbar a.active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+    .navbar a:hover {
+      transform: scale(1.09);
+    }
         .container {
             max-width: 1000px;
             margin: 30px auto;
@@ -166,7 +215,7 @@ if (!$result) {
     <a href="adminDashboard.php">Dashboard</a>
     <a href="adminUsers.php">Manage Users</a>
     <a href="adminNotes.php">Manage Notes</a>
-    <a href="adminReports.php">Reported Content</a>
+    <a href="adminReports.php" class="active">Reported Content</a>
     <a href="adminFeedback.php">Feedback</a>
     <a href="logout.php">Log out</a>
 </div>
