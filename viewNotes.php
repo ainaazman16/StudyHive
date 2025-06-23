@@ -13,6 +13,7 @@ if (!isset($_SESSION['user_ID'])) {
 
 $userID = $_SESSION['user_ID'];
 
+
 $search = $_GET['search'] ?? '';
 $uni_ID = $_GET['uni_ID'] ?? '';
 $faculty_ID = $_GET['faculty_ID'] ?? '';
@@ -20,14 +21,14 @@ $course_ID = $_GET['course_ID'] ?? '';
 $subject_ID = $_GET['subject_ID'] ?? '';
 
 if (!isset($_SESSION['role'])) {
-  $_SESSION['role'] = '';
+    $_SESSION['role'] = '';
 }
 
 $conditions = [];
 $params = [];
 $types = '';
 
-$sql = "SELECT n.note_ID, n.note_Name, n.file_type, n.upload_date, u.user_Fname
+$sql = "SELECT n.note_ID, n.note_Name, n.file_type, n.upload_date, n.user_ID, u.user_Fname
         FROM notes n
         LEFT JOIN user u ON n.user_ID = u.user_ID
         LEFT JOIN subject s ON n.subject_ID = s.subject_ID
@@ -35,13 +36,7 @@ $sql = "SELECT n.note_ID, n.note_Name, n.file_type, n.upload_date, u.user_Fname
         LEFT JOIN faculty f ON c.faculty_ID = f.faculty_ID
         LEFT JOIN university uni ON f.uni_ID = uni.uni_ID";
 
-$queryString = http_build_query([
-    'search' => $search,
-    'uni_ID' => $uni_ID,
-    'faculty_ID' => $faculty_ID,
-    'course_ID' => $course_ID,
-    'subject_ID' => $subject_ID
-]);
+$queryString = "search=$search&uni_ID=$uni_ID&faculty_ID=$faculty_ID&course_ID=$course_ID&subject_ID=$subject_ID";
 
 if (!empty($search)) {
     $conditions[] = "(n.note_Name LIKE ? OR u.user_Fname LIKE ?)";
@@ -96,34 +91,31 @@ $result = $stmt->get_result();
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Filtered Notes - StudyHive</title>
+  <title>Browse Notes - StudyHive</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    h1 { text-align: center; color: #660066; }
+    h1 { 
+      text-align: center; 
+      color: #4b004b; 
+    }
     .note-card {
-      max-width: 700px; margin: 20px auto;
-      background-color: #fff; border: 1px solid #ccc;
-      padding: 20px; border-radius: 10px;
+      max-width: 700px;
+      margin: 20px auto;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
     .note-card h3 { margin: 0 0 10px; }
     .btn {
       display: inline-block;
-      padding: 8px 15px; background-color: #660066;
-      color: white; text-decoration: none;
-      border-radius: 6px; margin-top: 10px;
-    }
-    .btn-report{
-      display: inline-block;
-      padding: 8px 15px; background-color:rgb(237, 50, 50);
-      color: white; text-decoration: none;
-      border-radius: 6px; margin-top: 10px;
-    }
-    .btn-rate{
-      display: inline-block;
-      padding: 8px 15px; background-color:rgb(227, 139, 206);
-      color: white; text-decoration: none;
-      border-radius: 6px; margin-top: 10px;
+      padding: 8px 15px;
+      background-color: #660066;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      margin-top: 10px;
     }
     .btn-helpful {
       display: inline-block;
@@ -139,7 +131,20 @@ $result = $stmt->get_result();
       background-color: #cccccc;
       cursor: default;
     }
+
     .btn:hover { background-color: #990099; }
+    .btn-report {
+      background-color: rgb(237, 50, 50);
+    }
+    .btn-rate {
+      background-color: rgb(227, 139, 206);
+    }
+    .btn-edit {
+      background-color: #007bff;
+    }
+    .btn-delete {
+      background-color: #dc3545;
+    }
   </style>
 </head>
 <body>
@@ -163,16 +168,24 @@ $result = $stmt->get_result();
       $helpfulTotal = $countResult ? $countResult->fetch_row()[0] : 0;
     ?>
 
-    <div class="note-card">
+    <div class="note-card" style="background-color:<?= $row['user_ID'] == $userID ? '#f7f7ff' : '#ffffff' ?>">
       <h3><?= htmlspecialchars($row['note_Name']) ?></h3>
       <p><strong>Type:</strong> <?= strtoupper($row['file_type']) ?></p>
       <p><strong>Author:</strong> <?= htmlspecialchars($row['user_Fname']) ?></p>
       <p><strong>Uploaded:</strong> <?= $row['upload_date'] ?></p>
-      <p><strong>Helpful:</strong> <?= $helpfulTotal ?></p>
+
+      <?php if ($row['user_ID'] == $userID): ?>
+        <a class="btn" href="download.php?note_ID=<?= $row['note_ID'] ?>">Download</a>
+        <a class="btn btn-edit" href="editNote.php?note_ID=<?= $row['note_ID'] ?>">Edit</a>
+        <a class="btn btn-delete" href="deleteNote.php?note_ID=<?= $row['note_ID'] ?>" onclick="return confirm('Are you sure you want to delete this note?');">Delete</a>
+      <?php else: ?>
+        <p><strong>Helpful:</strong> <?= $helpfulTotal ?></p>
 
       <a class="btn" href="download.php?note_ID=<?= $row['note_ID'] ?>">Download</a>
-      <a class="btn-rate" href="rateNotes.php?note_ID=<?= $row['note_ID'] ?>">Rate Notes</a>
-      <a class="btn-report" href="reportNotes.php?note_ID=<?= $row['note_ID'] ?>&<?= $queryString ?>">Report</a>
+      <a class="btn btn-rate" href="rateNotes.php?note_ID=<?= $row['note_ID'] ?>&<?= $queryString ?>">Rate Notes</a>
+        <a class="btn btn-report" href="reportNotes.php?note_ID=<?= $row['note_ID'] ?>&<?= $queryString ?>">Report</a>
+      <?php endif; ?>
+
 
       <?php if (!$alreadyHelpful): ?>
         <form method="post" action="markHelpful.php" style="display:inline;">
@@ -184,7 +197,7 @@ $result = $stmt->get_result();
       <?php endif; ?>
 
       <?php if ($_SESSION['role'] === 'admin'): ?>
-        <a class="btn" style="background-color: #aa0033;" href="adminDeleteNote.php?note_ID=<?= $row['note_ID'] ?>">Delete</a>
+        <a class="btn btn-delete" href="adminDeleteNote.php?note_ID=<?= $row['note_ID'] ?>">Admin Delete</a>
       <?php endif; ?>
     </div>
   <?php endwhile; ?>
@@ -192,5 +205,6 @@ $result = $stmt->get_result();
   <p style="text-align:center; color:#888;">🔍 No notes found for your search/filter.</p>
 <?php endif; ?>
 
+<?php include('footer.php'); ?>
 </body>
 </html>

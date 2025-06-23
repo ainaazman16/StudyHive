@@ -157,5 +157,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <button type="submit">Save Changes</button>
   </form>
 </div>
+<?php include('footer.php'); ?>
 </body>
 </html>

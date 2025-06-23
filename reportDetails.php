@@ -158,6 +158,6 @@ if (!$noteID || !is_numeric($noteID)) {
     ?>
   </ul>
 </div>
-
+<?php include('footer.php'); ?>
 </body>
 </html>

@@ -58,5 +58,6 @@ $stmt->close();
   <h4>Thank you for your feedback. Your report has been received and will be reviewed by our team to ensure the learning environment remains safe and respectful for everyone.</h4>
 </section>
 
+<?php include('footer.php'); ?>
 </body>
 </html>

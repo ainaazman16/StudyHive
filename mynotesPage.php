@@ -75,14 +75,27 @@ $downloaded->close();
   <?php if ($uploadedNotes->num_rows > 0): ?>
     <?php while($note = $uploadedNotes->fetch_assoc()): ?>
       <div class="note-card">
-        <h3><?= htmlspecialchars($note['note_Name']) ?></h3>
-        <p><strong>Type:</strong> <?= strtoupper($note['file_type']) ?></p>
-        <p><strong>Uploaded:</strong> <?= $note['upload_date'] ?></p>
-        <p><strong>Downloads:</strong> <?= $note['download_count'] ?></p>
-        <a class="btn" href="download.php?note_ID=<?= $note['note_ID'] ?>">Download</a>
-        <a class="btn" href="editNote.php?note_ID=<?= $note['note_ID'] ?>" style="background:#007bff;">Edit</a>
-        <a class="btn" href="deleteNote.php?note_ID=<?= $note['note_ID'] ?>" style="background:#dc3545;" onclick="return confirm('Are you sure you want to delete this note?');">Delete</a>
-      </div>
+      <h3><?= htmlspecialchars($note['note_Name']) ?></h3>
+      <p><strong>Type:</strong> <?= strtoupper($note['file_type']) ?></p>
+      <p><strong>Uploaded:</strong> <?= $note['upload_date'] ?></p>
+      <p><strong>Downloads:</strong> <?= $note['download_count'] ?></p>
+
+      <?php
+        // Fetch helpful count
+        $helpfulStmt = $conn->prepare("SELECT COUNT(*) FROM note_helpful WHERE note_ID = ?");
+        $helpfulStmt->bind_param("i", $note['note_ID']);
+        $helpfulStmt->execute();
+        $helpfulStmt->bind_result($helpfulCount);
+        $helpfulStmt->fetch();
+        $helpfulStmt->close();
+      ?>
+      <p><strong>Helpful:</strong> <?= $helpfulCount ?></p>
+
+      <a class="btn" href="download.php?note_ID=<?= $note['note_ID'] ?>">Download</a>
+      <a class="btn" href="editNote.php?note_ID=<?= $note['note_ID'] ?>" style="background:#007bff;">Edit</a>
+      <a class="btn" href="deleteNote.php?note_ID=<?= $note['note_ID'] ?>" style="background:#dc3545;" onclick="return confirm('Are you sure you want to delete this note?');">Delete</a>
+    </div>
+
     <?php endwhile; ?>
   <?php else: ?>
     <p>No uploaded notes yet.</p>
