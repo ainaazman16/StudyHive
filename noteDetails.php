@@ -32,16 +32,30 @@ if (!$note) {
       background-color: #f8f2f9;
     }
 
-    .header {
-      background-color: #660066;
-      color: white;
-      padding: 20px;
+    .back-link {
+      display: inline-block;
+      margin: 25px auto 0 auto;
+      max-width: 800px;
+      padding-left: 15px;
+      text-decoration: none;
+      color: #660066;
+      font-weight: bold;
+      font-size: 15px;
+      display: block;
+    }
+
+    .page-title {
+      max-width: 800px;
+      margin: 30px auto 10px auto;
+      color: #660066;
+      font-size: 28px;
       text-align: center;
+      font-weight: bold;
     }
 
     .container {
       max-width: 800px;
-      margin: 40px auto;
+      margin: 0 auto 40px auto;
       background-color: #fff0ff;
       padding: 30px;
       border-radius: 12px;
@@ -52,6 +66,7 @@ if (!$note) {
       color: #4b004b;
       font-size: 28px;
       margin-bottom: 20px;
+      text-align: center;
     }
 
     .note-detail {
@@ -81,14 +96,16 @@ if (!$note) {
       background-color: #b94cb9;
     }
 
-    .back-link {
+    .back-btn {
       display: inline-block;
-      margin-top: 30px;
-      text-decoration: none;
+      margin-top: 20px;
+      margin-left: 20px;
+      font-size: 16px;
       color: #660066;
+      text-decoration: none;
       font-weight: bold;
     }
-
+    
     .footer {
       margin-top: 60px;
       background-color: #660066;
@@ -99,26 +116,23 @@ if (!$note) {
   </style>
 </head>
 <body>
+<?php include('head.php'); ?>
 
-  <div class="header">
-    <h2>StudyHive | Note Details</h2>
-  </div>
+<a class="back-btn" href="homePage.php">← Back to Dashboard</a>
 
-  <div class="container">
-    <h1><?= htmlspecialchars($note['note_Name']) ?></h1>
+<!-- "Note Details" outside the pink box -->
+<div class="page-title">Note Details</div>
 
-    <div class="note-detail"><strong>Uploaded On:</strong> <?= $note['upload_date'] ?></div>
-    <div class="note-detail"><strong>Downloads:</strong> <?= $note['download_count'] ?></div>
-    <div class="note-detail"><strong>File Type:</strong> <?= strtoupper($note['file_type']) ?></div>
+<div class="container">
+  <h1><?= htmlspecialchars($note['note_Name']) ?></h1>
 
-    <a href="download.php?note_ID=<?= $note['note_ID'] ?>" class="download-btn">Download This Note</a><br>
+  <div class="note-detail"><strong>Uploaded On:</strong> <?= $note['upload_date'] ?></div>
+  <div class="note-detail"><strong>Downloads:</strong> <?= $note['download_count'] ?></div>
+  <div class="note-detail"><strong>File Type:</strong> <?= strtoupper($note['file_type']) ?></div>
 
-    <a href="homePage.php" class="back-link">← Back to Dashboard</a>
-  </div>
+  <a href="download.php?note_ID=<?= $note['note_ID'] ?>" class="download-btn">Download This Note</a>
+</div>
 
-  <div class="footer">
-    &copy; <?= date('Y') ?> StudyHive. All rights reserved.
-  </div>
-
+<?php include("footer.php"); ?>
 </body>
 </html>
