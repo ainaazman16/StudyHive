@@ -45,7 +45,7 @@ try {
     .topic {
       background-color: #ec97ec;
       text-align: center;
-      padding: 0px 0px; 
+      padding: 30px 10px; 
       position: relative;
     }
 
