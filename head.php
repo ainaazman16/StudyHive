@@ -248,13 +248,6 @@ try {
         </div>
       </form>
     </div>
-
-    <!-- Welcome Message -->
-    <?php if (isset($userData['user_Fname'])): ?>
-      <div class="welcome-message">
-        <h1>Welcome back, <strong><?= htmlspecialchars($userData['user_Fname']) ?>!</strong></h1>
-      </div>
-    <?php endif; ?>
   </div>
 
   <!-- Navigation Bar -->
