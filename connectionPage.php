@@ -110,9 +110,26 @@ $potential->execute(); $potentialResult = $potential->get_result(); $potential->
     button { padding:5px 10px; border:none; background:#660066; color:#fff; border-radius:4px; cursor:pointer; }
     button.decline { background:#aa0033; }
     button.remove { background:#999; } 
-    /* .search-bar { text-align:center; margin-bottom:20px; }
-    .search-bar input { padding:6px; width:60%; border:1px solid #ccc; border-radius:4px; }
-    .search-bar button { padding:6px 12px; background:#660066; color:#fff; border:none; border-radius:4px; margin-left:6px; } */
+   
+ 
+
+.search-bar form {
+  display: flex;
+  gap: 200px; /* space between input and button */
+  align-items: center;
+}
+
+.search-bar input[type="text"] {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 250px;
+}
+
+
+
+    
+    
   </style>
 </head>
 <body>
@@ -161,7 +178,7 @@ $potential->execute(); $potentialResult = $potential->get_result(); $potential->
         <form method="post">
           <input type="hidden" name="action" value="remove">
           <input type="hidden" name="target_ID" value="<?= $f['user_ID'] ?>">
-          <button type="submit" class="remove">Remove</button>
+          <button type="submit" style="background:#dc3545; "class="remove">Remove</button>
         </form>
       </li>
     <?php endwhile; ?>
@@ -210,7 +227,7 @@ $potential->execute(); $potentialResult = $potential->get_result(); $potential->
         <form method="post">
           <input type="hidden" name="action" value="cancel">
           <input type="hidden" name="target_ID" value="<?= $p['user_ID'] ?>">
-          <button type="submit" class="remove">Cancel Request</button>
+          <button type="submit"style="background:#dc3545;" class="remove">Cancel Request</button>
         </form>
       </li>
     <?php endwhile; ?>
