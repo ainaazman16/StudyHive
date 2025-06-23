@@ -122,10 +122,11 @@ $potential->execute(); $potentialResult = $potential->get_result(); $potential->
   <h2>Incoming Friend Requests</h2>
   <ul>
     <?php while($r = $incomingResult->fetch_assoc()): ?>
-      <li>
-       <a href="friendProfile.php?friend_ID=<?= $f['user_ID'] ?>">
-        <?= htmlspecialchars($f['user_Fname']) ?> (<?= htmlspecialchars($f['user_Name']) ?>)
+      <li>     
+       <a href="friendProfile.php?friend_ID=<?= $r['user_ID'] ?>">
+        <?= htmlspecialchars($r['user_Fname']) ?> (<?= htmlspecialchars($r['user_Name']) ?>)
       </a>
+
         <div>
           <form method="post" style="display:inline;">
             <input type="hidden" name="action" value="accept">
