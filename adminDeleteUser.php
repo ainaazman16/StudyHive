@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_ID']) && is_nume
         exit();
     }
 
-    // Check if user exists
+    // Check if user exists and not already deactivated
     $check = $conn->prepare("SELECT role FROM user WHERE user_ID = ?");
     $check->bind_param("i", $user_ID);
     $check->execute();
