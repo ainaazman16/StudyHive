@@ -88,7 +88,7 @@ $viewedResult = $viewQuery->get_result();
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Home - StudyHive</title>
-  <link rel="stylesheet" >
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
       background-color: #ffffff;
@@ -96,14 +96,11 @@ $viewedResult = $viewQuery->get_result();
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    h1 {
-      font-size: 40px;
-      text-align: center;
-      color: #4b004b;
-      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-      margin-top: 10px;
+    h1 { 
+      text-align: center; 
+      color: #660066; 
     }
-
+    
     .cards-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
