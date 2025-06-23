@@ -114,7 +114,7 @@ $result = $stmt->get_result();
 <body>
 <?php include("head.php"); ?>
 
-<h1>Filtered Notes</h1>
+<h1>Browse Notes</h1>
 
 <?php if ($result && $result->num_rows > 0): ?>
   <?php while($row = $result->fetch_assoc()): ?>
