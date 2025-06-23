@@ -29,13 +29,7 @@ $stmt->close();
 
 // Fetch current subject hierarchy securely
 $subjectID = $note['subject_ID'];
-$currentStmt = $conn->prepare("
-    SELECT s.subject_ID, s.course_ID, c.faculty_ID, f.uni_ID
-    FROM subject s
-    JOIN course c ON s.course_ID = c.course_ID
-    JOIN faculty f ON c.faculty_ID = f.faculty_ID
-    WHERE s.subject_ID = ?
-");
+$currentStmt = $conn->prepare("SELECT s.subject_ID, s.course_ID, c.faculty_ID, f.uni_ID FROM subject s JOIN course c ON s.course_ID = c.course_ID JOIN faculty f ON c.faculty_ID = f.faculty_ID WHERE s.subject_ID = ?");
 $currentStmt->bind_param("i", $subjectID);
 $currentStmt->execute();
 $currentResult = $currentStmt->get_result();
@@ -69,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Edit Note</title>
   <style>
     body { font-family: Arial; background: #fdfdfd; }
@@ -115,11 +109,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         loadOptions('getSubjects', course.value, subject);
       });
 
-      // Preload selection
       <?php if ($current): ?>
-      loadOptions('getFaculties', <?= $current['uni_ID'] ?>, faculty, <?= $current['faculty_ID'] ?>);
-      loadOptions('getCourses', <?= $current['faculty_ID'] ?>, course, <?= $current['course_ID'] ?>);
-      loadOptions('getSubjects', <?= $current['course_ID'] ?>, subject, <?= $current['subject_ID'] ?>);
+        loadOptions('getFaculties', <?= $current['uni_ID'] ?>, faculty, <?= $current['faculty_ID'] ?>);
+        loadOptions('getCourses', <?= $current['faculty_ID'] ?>, course, <?= $current['course_ID'] ?>);
+        loadOptions('getSubjects', <?= $current['course_ID'] ?>, subject, <?= $current['subject_ID'] ?>);
       <?php endif; ?>
     });
   </script>
@@ -146,17 +139,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </select>
 
     <label for="faculty">Faculty</label>
-    <select name="faculty" id="faculty" required><option>-- Select --</option></select>
+    <select name="faculty_ID" id="faculty" required><option value="">-- Select --</option></select>
 
     <label for="course">Course</label>
-    <select name="course" id="course" required><option>-- Select --</option></select>
+    <select name="course_ID" id="course" required><option value="">-- Select --</option></select>
 
     <label for="subject_ID">Subject</label>
-    <select name="subject_ID" id="subject_ID" required><option>-- Select --</option></select>
+    <select name="subject_ID" id="subject_ID" required><option value="">-- Select --</option></select>
 
     <button type="submit">Save Changes</button>
   </form>
 </div>
-<?php include('footer.php'); ?>
+<?php include("footer.php"); ?>
 </body>
 </html>
