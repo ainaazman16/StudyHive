@@ -112,7 +112,7 @@ include("connect.php");
     <!-- Note Title -->
     <div class="form-group">
       <label>Note Title</label>
-      <input type="text" name="note_name" required>
+      <input type="text" value= "Enter notes title here..." name="note_name" required>
     </div>
 
     <!-- File Upload -->
@@ -187,7 +187,7 @@ include("connect.php");
     </div>
 
     <div class="btn-group">
-      <button type="reset">Cancel</button>
+      <button type="reset">Reset</button>
       <button type="submit">Upload</button>
     </div>
   </form>
