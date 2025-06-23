@@ -4,40 +4,25 @@ include("connect.php");
 
 $reportType = $_SESSION['report_type'] ?? '';
 $detail = $_GET['detail'] ?? '';
-$noteID = isset($_GET['note_ID']) ? intval($_GET['note_ID']) : null;
+$noteID = $_GET['note_ID'] ?? null;
 $userID = $_SESSION['user_ID'] ?? null;
 
 if (!$noteID || !$userID || !$reportType || !$detail) {
-    die("❌ Missing required information.");
+    die("Missing required report data.");
 }
 
-// Optional: Check if the note exists
-$check = $conn->prepare("SELECT note_ID FROM notes WHERE note_ID = ?");
-$check->bind_param("i", $noteID);
-$check->execute();
-$check->store_result();
+// Insert the report into the updated table
+$stmt = $conn->prepare("INSERT INTO report_note (note_ID, user_ID, report_type, report_detail, reported_at) VALUES (?, ?, ?, ?, NOW())");
 
-if ($check->num_rows === 0) {
-    die("❌ Invalid note ID.");
+if (!$stmt) {
+    die("SQL Error: " . $conn->error);
 }
-$check->close();
 
-$dupCheck = $conn->prepare("SELECT 1 FROM report_note WHERE note_ID = ? AND user_ID = ?");
-$dupCheck->bind_param("ii", $noteID, $userID);
-$dupCheck->execute();
-$dupCheck->store_result();
-
-if ($dupCheck->num_rows > 0) {
-    die("⚠️ You have already reported this note.");
-}
-$dupCheck->close();
-
-// Insert the report
-$stmt = $conn->prepare("INSERT INTO report_note (note_ID, user_ID, report_type, report_detail, report_date) VALUES (?, ?, ?, ?, NOW())");
 $stmt->bind_param("iiss", $noteID, $userID, $reportType, $detail);
 $stmt->execute();
 $stmt->close();
 ?>
+
 
 
 <!DOCTYPE html>
