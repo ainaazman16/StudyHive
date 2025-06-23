@@ -27,6 +27,7 @@ include("head.php");
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="style.css">
   <style>
     body {
         font-family: Arial, sans-serif;

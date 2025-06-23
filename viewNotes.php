@@ -162,5 +162,6 @@ $result = $stmt->get_result();
   <p style="text-align:center; color:#888;">🔍 No notes found for your search/filter.</p>
 <?php endif; ?>
 
+<?php include('footer.php'); ?>
 </body>
 </html>
