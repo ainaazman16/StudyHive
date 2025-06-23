@@ -126,10 +126,33 @@ $potential->execute(); $potentialResult = $potential->get_result(); $potential->
   width: 250px;
 }
 
+button:hover {
+  opacity: 0.85;
+  transform: scale(1.03);
+  transition: 0.2s ease-in-out;
+}
 
+button.decline:hover {
+  background-color: #cc0044;
+}
 
-    
-    
+button.remove:hover {
+  background-color: #777;
+}
+
+button:hover {
+  background-color: #550055;
+}
+
+button.decline:hover {
+  background-color: #880022;
+}
+
+button.remove:hover {
+  background-color: #777;
+}
+
+  
   </style>
 </head>
 <body>
