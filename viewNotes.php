@@ -188,13 +188,17 @@ $result = $stmt->get_result();
 
 
       <?php if (!$alreadyHelpful): ?>
-        <form method="post" action="markHelpful.php" style="display:inline;">
-          <input type="hidden" name="note_ID" value="<?= $row['note_ID'] ?>">
-          <button class="btn-helpful" type="submit">👍 Helpful</button>
-        </form>
-      <?php else: ?>
-        <button class="btn-helpful" disabled>✅ Marked Helpful</button>
-      <?php endif; ?>
+      <form method="post" action="markHelpful.php" style="display:inline;">
+        <input type="hidden" name="note_ID" value="<?= $row['note_ID'] ?>">
+        <button class="btn-helpful" type="submit">👍 Helpful</button>
+      </form>
+    <?php else: ?>
+      <form method="post" action="unmarkHelpful.php" style="display:inline;">
+        <input type="hidden" name="note_ID" value="<?= $row['note_ID'] ?>">
+        <button class="btn-helpful" type="submit" style="background-color:#cc3300;">❌ Unmark Helpful</button>
+      </form>
+    <?php endif; ?>
+
 
       <?php if ($_SESSION['role'] === 'admin'): ?>
         <a class="btn btn-delete" href="adminDeleteNote.php?note_ID=<?= $row['note_ID'] ?>">Admin Delete</a>
