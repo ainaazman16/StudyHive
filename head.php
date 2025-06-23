@@ -1,26 +1,35 @@
 <?php
 include("connect.php");
+
+// Start session if not already started
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Fetch dropdown options
-$subjectList = $conn->query("SELECT subject_ID, subject_Name FROM subject");
-$courseList = $conn->query("SELECT course_ID, course_Name FROM course");
-$uniList    = $conn->query("SELECT uni_ID, uni_Name FROM university");
-
-// Get current page name
+// Initialize variables
+$subjectList = null;
+$courseList = null;
+$uniList = null;
+$userData = null;
 $currentPage = basename($_SERVER['PHP_SELF']);
 
-// Fetch user's profile picture
-$userID = $_SESSION['user_ID'] ?? null;
-$userData = null;
+try {
+    // Fetch dropdown options
+    $subjectList = $conn->query("SELECT subject_ID, subject_Name FROM subject");
+    $courseList = $conn->query("SELECT course_ID, course_Name FROM course");
+    $uniList = $conn->query("SELECT uni_ID, uni_Name FROM university");
 
-if ($userID) {
-    $stmt = $conn->prepare("SELECT profile_picture FROM user WHERE user_ID = ?");
-    $stmt->bind_param("i", $userID);
-    $stmt->execute();
-    $userData = $stmt->get_result()->fetch_assoc();
+    // Fetch user's profile picture if logged in
+    if (isset($_SESSION['user_ID'])) {
+        $stmt = $conn->prepare("SELECT profile_picture, user_Fname FROM user WHERE user_ID = ?");
+        $stmt->bind_param("i", $_SESSION['user_ID']);
+        $stmt->execute();
+        $userData = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+    }
+} catch (Exception $e) {
+    // Log error instead of displaying to users
+    error_log("Database error in head.php: " . $e->getMessage());
 }
 ?>
 
@@ -49,12 +58,20 @@ if ($userID) {
       width: 250px;
       height: auto;
       margin-bottom: 20px;
+      max-width: 100%;
+    }
+
+    .search-profile-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      padding: 0 30px;
     }
 
     .search-wrapper {
+      width: 100%;
       display: flex;
       justify-content: center;
-      margin-top: 10px;
     }
 
     .search-bar {
@@ -63,7 +80,7 @@ if ($userID) {
       background-color: #fff;
       border-radius: 999px;
       padding: 10px 20px;
-      width: 70%;
+      width: 90%;
       max-width: 800px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       position: relative;
@@ -75,6 +92,7 @@ if ($userID) {
       flex: 1;
       padding: 10px;
       font-size: 16px;
+      min-width: 0;
     }
 
     .search-icon {
@@ -125,9 +143,6 @@ if ($userID) {
     }
 
     .profile-container {
-      display: flex;
-      justify-content: flex-end;
-      padding: 0 30px;
       margin-top: 10px;
     }
 
@@ -146,21 +161,24 @@ if ($userID) {
       background-color: #4b004b;
       height: 60px;
       padding-left: 20px;
+      overflow-x: auto;
     }
 
     .bottom-nav img.logo {
       height: 40px;
+      flex-shrink: 0;
     }
 
     .nav-links {
       display: flex;
       margin-left: auto;
+      flex-shrink: 0;
     }
 
     .nav-btn {
       background-color: #4b004b;
       color: white;
-      padding: 23px 30px;
+      padding: 15px 20px;
       text-align: center;
       text-decoration: none;
       font-weight: bold;
@@ -169,6 +187,7 @@ if ($userID) {
       border-right: 2px solid #ffffff;
       transition: background-color 0.3s;
       margin: 0;
+      white-space: nowrap;
     }
 
     .nav-links a:last-child {
@@ -192,6 +211,22 @@ if ($userID) {
       font-weight: 600;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
+    @media (max-width: 768px) {
+      .topic img.logo {
+        width: 180px;
+      }
+
+      .search-bar {
+        width: 95%;
+        padding: 8px 15px;
+      }
+
+      .nav-btn {
+        padding: 15px 12px;
+        font-size: 11px;
+      }
+    }
   </style>
 </head>
 
@@ -199,56 +234,57 @@ if ($userID) {
   <div class="topic">
     <img src="images/whiteLogo.png" alt="logo" class="logo" />
 
-    <!-- Search Bar UI -->
-    <div class="search-wrapper">
-      <form action="viewNotes.php" method="get" class="search-bar">
-        <span class="search-icon"><i class="fa fa-search"></i></span>
-        <input type="text" name="search" placeholder="Search notes by title, tag or keyword..." />
+    <!-- 🔍 Search Bar + Profile Pic -->
+    <div class="search-profile-wrapper">
+      <div class="search-wrapper">
+        <form action="viewNotes.php" method="get" class="search-bar">
+          <span class="search-icon"><i class="fa fa-search"></i></span>
+          <input type="text" name="search" placeholder="Search notes by title, tag or keyword..." />
+          <button type="button" class="filter-btn" onclick="toggleFilter()" title="Filter options">
+            <i class="fa fa-sliders-h"></i>
+          </button>
 
-        <button type="button" class="filter-btn" onclick="toggleFilter()" title="Filter options">
-          <i class="fa fa-sliders-h"></i>
-        </button>
+          <div class="filter-options" id="filterOptions">
+            <select name="subject">
+              <option value="">All Subjects</option>
+              <?php if ($subjectList): while ($s = $subjectList->fetch_assoc()): ?>
+                <option value="<?= htmlspecialchars($s['subject_ID']) ?>"><?= htmlspecialchars($s['subject_Name']) ?></option>
+              <?php endwhile; endif; ?>
+            </select>
 
-        <div class="filter-options" id="filterOptions">
-          <select name="subject">
-            <option value="">All Subjects</option>
-            <?php while ($s = $subjectList->fetch_assoc()): ?>
-              <option value="<?= $s['subject_ID'] ?>"><?= $s['subject_Name'] ?></option>
-            <?php endwhile; ?>
-          </select>
+            <select name="course">
+              <option value="">All Courses</option>
+              <?php if ($courseList): while ($c = $courseList->fetch_assoc()): ?>
+                <option value="<?= htmlspecialchars($c['course_ID']) ?>"><?= htmlspecialchars($c['course_Name']) ?></option>
+              <?php endwhile; endif; ?>
+            </select>
 
-          <select name="course">
-            <option value="">All Courses</option>
-            <?php while ($c = $courseList->fetch_assoc()): ?>
-              <option value="<?= $c['course_ID'] ?>"><?= $c['course_Name'] ?></option>
-            <?php endwhile; ?>
-          </select>
+            <select name="university">
+              <option value="">All Universities</option>
+              <?php if ($uniList): while ($u = $uniList->fetch_assoc()): ?>
+                <option value="<?= htmlspecialchars($u['uni_ID']) ?>"><?= htmlspecialchars($u['uni_Name']) ?></option>
+              <?php endwhile; endif; ?>
+            </select>
 
-          <select name="university">
-            <option value="">All Universities</option>
-            <?php while ($u = $uniList->fetch_assoc()): ?>
-              <option value="<?= $u['uni_ID'] ?>"><?= $u['uni_Name'] ?></option>
-            <?php endwhile; ?>
-          </select>
+            <button type="submit" class="apply-filter">Apply</button>
+          </div>
+        </form>
+      </div>
 
-          <button type="submit" class="apply-filter">Apply</button>
+      <!-- 👤 Profile Picture -->
+      <?php if (isset($userData) && !empty($userData['profile_picture'])): ?>
+        <div class="profile-container">
+          <a href="profilePage.php">
+            <img src="uploads/<?= htmlspecialchars($userData['profile_picture']) ?>" alt="Profile Picture" class="profile-pic-below" />
+          </a>
         </div>
-      </form>
+      <?php endif; ?>
     </div>
 
-    <!-- ✅ Profile Picture Below Search Bar (Right-Aligned) -->
-    <?php if ($userData && !empty($userData['profile_picture'])): ?>
-      <div class="profile-container">
-        <a href="profilePage.php">
-          <img src="uploads/<?= htmlspecialchars($userData['profile_picture']) ?>" alt="Profile Picture" class="profile-pic-below" />
-        </a>
-      </div>
-    <?php endif; ?>
-
-    <!-- ✅ Original Welcome Message -->
-    <?php if (isset($_SESSION['user_Fname'])): ?>
+    <!-- 👋 Welcome Message -->
+    <?php if (isset($userData['user_Fname'])): ?>
       <div class="welcome-message">
-        <h1>Welcome back, <strong><?= htmlspecialchars($_SESSION['user_Fname']) ?>!</strong> </h1>
+        <h1>Welcome back, <strong><?= htmlspecialchars($userData['user_Fname']) ?>!</strong></h1>
       </div>
     <?php endif; ?>
   </div>
@@ -271,6 +307,15 @@ if ($userID) {
       const filters = document.getElementById('filterOptions');
       filters.style.display = filters.style.display === 'none' || filters.style.display === '' ? 'flex' : 'none';
     }
+
+    // Auto close filter dropdown
+    document.addEventListener('click', function (e) {
+      const filter = document.getElementById('filterOptions');
+      const btn = document.querySelector('.filter-btn');
+      if (!filter.contains(e.target) && !btn.contains(e.target)) {
+        filter.style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>
