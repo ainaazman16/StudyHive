@@ -14,7 +14,7 @@ if (!isset($_GET['friend_ID'])) {
 $friendID = intval($_GET['friend_ID']);
 
 // Fetch friend's info
-$stmt = $conn->prepare("SELECT user_Fname, user_Name FROM user WHERE user_ID = ?");
+$stmt = $conn->prepare("SELECT user_Fname, user_Name, profile_picture FROM user WHERE user_ID = ?");
 if (!$stmt) {
     die("Friend info query failed: " . $conn->error);
 }
@@ -45,11 +45,51 @@ $stmt2->close();
   <title><?= htmlspecialchars($friend['user_Fname']) ?>'s Profile</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .note-card {
-      background:#fff; border:1px solid #ccc; padding:15px; margin-bottom:12px;
-      border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.05);
+    body {
+      background-color: #f9f9f9;
+      font-family: Arial, sans-serif;
     }
-    .note-card h3 { margin:0 0 8px; }
+    .section {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+    .section h1 {
+      margin-bottom: 20px;
+    }
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+      border: 2px solid #ddd;
+    }
+    .notes-container {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .note-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      text-align: left;
+    }
+    .note-card h3 {
+      margin: 0 0 8px;
+      color: #333;
+    }
+    .note-card small {
+      color: #666;
+    }
   </style>
 </head>
 <body>
@@ -58,28 +98,22 @@ $stmt2->close();
 <div class="section">
   <h1><?= htmlspecialchars($friend['user_Fname']) ?>'s Profile</h1>
 
-  <!-- Profile Picture -->
-  <?php if (!empty($friend['profile_picture'])): ?>
-    <img src="<?= htmlspecialchars($friend['profile_picture']) ?>" alt="Profile Picture" width="100">
-  <?php endif; ?>
 
   <h2>Uploaded Notes</h2>
-  <?php if ($notesResult->num_rows > 0): ?>
-    <ul>
+  <div class="notes-container">
+    <?php if ($notesResult->num_rows > 0): ?>
       <?php while ($note = $notesResult->fetch_assoc()): ?>
-        <div>
-        <li>
-          <strong><?= htmlspecialchars($note['note_Name']) ?></strong><br>
-          <?= nl2br(htmlspecialchars($note['file_type'])) ?><br>
-          <small><?= htmlspecialchars($note['upload_date']) ?></small>
-        </li>
+        <div class="note-card">
+          <h3><?= htmlspecialchars($note['note_Name']) ?></h3>
+          <p>Type: <?= htmlspecialchars($note['file_type']) ?></p>
+          <small>Uploaded: <?= htmlspecialchars($note['upload_date']) ?></small><br>
+          <small>Downloads: <?= htmlspecialchars($note['download_count']) ?></small>
         </div>
-        
       <?php endwhile; ?>
-    </ul>
-  <?php else: ?>
-    <p>This user has not uploaded any notes yet.</p>
-  <?php endif; ?>
+    <?php else: ?>
+      <p>This user has not uploaded any notes yet.</p>
+    <?php endif; ?>
+  </div>
 </div>
 
 <?php include('footer.php'); ?>
