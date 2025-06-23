@@ -101,6 +101,7 @@ $potential->execute(); $potentialResult = $potential->get_result(); $potential->
   <meta charset="UTF-8">
   <title>Connections - StudyHive</title>
   <link rel="stylesheet" href="style.css">
+      <link rel="icon" type="image/png" href="images/logo.png">
   <style>
     .section { max-width:600px; margin:20px auto; }
     h2 { color:#660066; }

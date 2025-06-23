@@ -47,6 +47,7 @@ $downloaded->close();
   <meta charset="UTF-8">
   <title>My Notes - StudyHive</title>
   <link rel="stylesheet" href="style.css">
+      <link rel="icon" type="image/png" href="images/logo.png">
   <style>
     .section { max-width:800px; margin:20px auto; padding:10px; }
     h2 { color:#660066; }

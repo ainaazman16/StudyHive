@@ -47,6 +47,7 @@ $queryString = http_build_query($_GET);
   <meta charset="UTF-8">
   <title><?= htmlspecialchars($friend['user_Fname']) ?>'s Profile</title>
   <link rel="stylesheet" href="style.css">
+      <link rel="icon" type="image/png" href="images/logo.png">
   <style>
     body {
       background-color: #f9f9f9;

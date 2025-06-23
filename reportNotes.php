@@ -37,6 +37,7 @@ if ($noteID) {
   <meta charset="UTF-8">
   <title>Report Notes</title>
   <link rel="stylesheet" href="style.css">
+      <link rel="icon" type="image/png" href="images/logo.png">
   <style>
     body {
       font-family: Arial, Helvetica, sans-serif;
