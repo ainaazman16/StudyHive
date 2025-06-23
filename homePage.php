@@ -243,19 +243,24 @@ $viewedResult = $viewQuery->get_result();
     </div>
   </a>
 
-  <!-- Recently Viewed (Now Clickable) -->
-  <div class="card recently-viewed">
-    <h3>Recently Viewed</h3>
-    <ul>
-      <?php if ($viewedResult->num_rows > 0): ?>
-        <?php while ($view = $viewedResult->fetch_assoc()): ?>
-          <li><a class="note-link" href="download.php?note_ID=<?= $view['note_ID'] ?>"><?= htmlspecialchars($view['note_Name']) ?></a></li>
-        <?php endwhile; ?>
-      <?php else: ?>
-        <li>You haven't viewed any notes yet.</li>
-      <?php endif; ?>
-    </ul>
-  </div>
+  <!-- Recently Viewed (Not Clickable) -->
+<!-- Recently Viewed (Clickable to noteDetails) -->
+<div class="card recently-viewed">
+  <h3>Recently Viewed</h3>
+  <ul>
+    <?php if ($viewedResult->num_rows > 0): ?>
+      <?php while ($view = $viewedResult->fetch_assoc()): ?>
+        <li>
+          <a href="noteDetails.php?note_ID=<?= $view['note_ID'] ?>" style="color:#4b004b; font-weight:bold;">
+            <?= htmlspecialchars($view['note_Name']) ?>
+          </a>
+        </li>
+      <?php endwhile; ?>
+    <?php else: ?>
+      <li>You haven't viewed any notes yet.</li>
+    <?php endif; ?>
+  </ul>
+</div>
 </div>
 
 <?php include('footer.php'); ?>
