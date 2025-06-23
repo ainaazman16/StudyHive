@@ -98,9 +98,9 @@ $viewedResult = $viewQuery->get_result();
 
     h1 { 
       text-align: center; 
-      color: #660066; 
+      color: #4b004b; 
     }
-    
+
     .cards-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
