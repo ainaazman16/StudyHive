@@ -88,13 +88,13 @@ $potential->execute(); $potentialResult = $potential->get_result(); $potential->
   <title>Connections - StudyHive</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .section { max-width:600px; margin:20px auto; }
+    /* .section { max-width:600px; margin:20px auto; }
     h2 { color:#660066; }
     ul { list-style:none; padding:0; }
     li { padding:8px; background:#f9f9f9; margin-bottom:6px; border-radius:4px; display:flex; justify-content:space-between; }
     button { padding:5px 10px; border:none; background:#660066; color:#fff; border-radius:4px; cursor:pointer; }
     button.decline { background:#aa0033; }
-    button.remove { background:#999; }
+    button.remove { background:#999; } */
     /* .search-bar { text-align:center; margin-bottom:20px; }
     .search-bar input { padding:6px; width:60%; border:1px solid #ccc; border-radius:4px; }
     .search-bar button { padding:6px 12px; background:#660066; color:#fff; border:none; border-radius:4px; margin-left:6px; } */
