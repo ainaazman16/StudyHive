@@ -16,15 +16,6 @@ include("connect.php");
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    
-
-    .topic img {
-      width: 350px;
-      height: auto;
-      margin-bottom: 10px;
-      margin-top: 5px;
-    }
-
     h1 {
       font-size: 60px;
       text-align: center;
@@ -55,30 +46,13 @@ include("connect.php");
     }
 
     .form-group select,
-    .form-group input[type="text"] {
+    .form-group input[type="text"],
+    .form-group input[type="file"] {
       width: 100%;
       padding: 10px;
       border-radius: 5px;
       border: 1px solid #ccc;
       font-size: 14px;
-    }
-
-    #dropZone {
-      border: 2px dashed #aaa;
-      background-color: #fff;
-      padding: 20px;
-      margin-bottom: 20px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    #dropZone.dragover {
-      border-color: #660066;
-      background-color: #f0e0f8;
-    }
-
-    #fileInput {
-      margin-top: 10px;
     }
 
     .btn-group {
@@ -117,7 +91,8 @@ include("connect.php");
     }
 
     input[id^="new_"] {
-      margin-top: 3px;
+      margin-top: 5px;
+      display: none;
     }
   </style>
 </head>
@@ -134,19 +109,20 @@ include("connect.php");
   <?php endif; ?>
 
   <form action="uploadSave.php" method="POST" enctype="multipart/form-data">
+    <!-- Note Title -->
     <div class="form-group">
       <label>Note Title</label>
       <input type="text" value= "Enter notes title here..." name="note_name" required>
     </div>
 
+    <!-- File Upload -->
     <div class="form-group">
-      <label>Input Files Here</label>
-      <div>
-        <p><small>Supported: PNG, JPG, PDF</small></p>
-        <input type="file" name="file" id="fileInput" required />
-      </div>
+      <label>Input File</label>
+      <input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png" required>
+      <small>Accepted: PDF, PNG, JPG</small>
     </div>
 
+    <!-- University -->
     <div class="form-group">
       <label>University</label>
       <select name="uni_ID" id="university" required>
@@ -159,9 +135,10 @@ include("connect.php");
         ?>
         <option value="other">Other...</option>
       </select>
-      <input type="text" name="new_uni" id="new_uni" placeholder="Enter new university" style="display:none;">
+      <input type="text" name="new_uni" id="new_university" placeholder="Enter new university">
     </div>
 
+    <!-- Faculty -->
     <div class="form-group">
       <label>Faculty</label>
       <select name="faculty_ID" id="faculty" required>
@@ -174,9 +151,10 @@ include("connect.php");
         ?>
         <option value="other">Other...</option>
       </select>
-      <input type="text" name="new_faculty" id="new_faculty" placeholder="Enter new faculty" style="display:none;">
+      <input type="text" name="new_faculty" id="new_faculty" placeholder="Enter new faculty">
     </div>
 
+    <!-- Course -->
     <div class="form-group">
       <label>Course</label>
       <select name="course_ID" id="course" required>
@@ -189,9 +167,10 @@ include("connect.php");
         ?>
         <option value="other">Other...</option>
       </select>
-      <input type="text" name="new_course" id="new_course" placeholder="Enter new course" style="display:none;">
+      <input type="text" name="new_course" id="new_course" placeholder="Enter new course">
     </div>
 
+    <!-- Subject -->
     <div class="form-group">
       <label>Subject</label>
       <select name="subject_ID" id="subject" required>
@@ -204,7 +183,7 @@ include("connect.php");
         ?>
         <option value="other">Other...</option>
       </select>
-      <input type="text" name="new_subject" id="new_subject" placeholder="Enter new subject" style="display:none;">
+      <input type="text" name="new_subject" id="new_subject" placeholder="Enter new subject">
     </div>
 
     <div class="btn-group">
@@ -215,39 +194,23 @@ include("connect.php");
 </div>
 
 <script>
-  // Toggle "Other" input fields
-  function toggleInput(selectId, inputId) {
+  // Show/hide 'Other' input
+  function toggleOther(selectId, inputId) {
     const select = document.getElementById(selectId);
     const input = document.getElementById(inputId);
-    input.style.display = (select.value === 'other') ? 'block' : 'none';
+    if (select.value === 'other') {
+      input.style.display = 'block';
+      input.required = true;
+    } else {
+      input.style.display = 'none';
+      input.required = false;
+    }
   }
 
-  ['university', 'faculty', 'course', 'subject'].forEach(type => {
-    document.getElementById(type).addEventListener('change', () => {
-      toggleInput(type, 'new_' + type);
-    });
-  });
-
-  // Drag-and-Drop File Upload
-  const dropZone = document.getElementById('dropZone');
-  const fileInput = document.getElementById('fileInput');
-
-  dropZone.addEventListener('dragover', function (e) {
-    e.preventDefault();
-    dropZone.classList.add('dragover');
-  });
-
-  dropZone.addEventListener('dragleave', function () {
-    dropZone.classList.remove('dragover');
-  });
-
-  dropZone.addEventListener('drop', function (e) {
-    e.preventDefault();
-    dropZone.classList.remove('dragover');
-    if (e.dataTransfer.files.length > 0) {
-      fileInput.files = e.dataTransfer.files;
-    }
-  });
+  document.getElementById('university').addEventListener('change', () => toggleOther('university', 'new_university'));
+  document.getElementById('faculty').addEventListener('change', () => toggleOther('faculty', 'new_faculty'));
+  document.getElementById('course').addEventListener('change', () => toggleOther('course', 'new_course'));
+  document.getElementById('subject').addEventListener('change', () => toggleOther('subject', 'new_subject'));
 </script>
 
 <?php include('footer.php'); ?>
