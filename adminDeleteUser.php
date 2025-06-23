@@ -18,13 +18,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_ID']) && is_nume
     }
 
     // Check if user exists
-    $check = $conn->prepare("SELECT * FROM user WHERE user_ID = ?");
+    $check = $conn->prepare("SELECT role FROM user WHERE user_ID = ?");
     $check->bind_param("i", $user_ID);
     $check->execute();
     $result = $check->get_result();
 
     if ($result->num_rows === 1) {
-        // Soft delete: update role to 'deactivated'
+        $row = $result->fetch_assoc();
+
+        if ($row['role'] === 'deactivated') {
+            header("Location: adminUsers.php?error=" . urlencode("User is already deactivated."));
+            exit();
+        }
+
+        // Soft delete user
         $deactivate = $conn->prepare("UPDATE user SET role = 'deactivated' WHERE user_ID = ?");
         $deactivate->bind_param("i", $user_ID);
 
@@ -32,8 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_ID']) && is_nume
             header("Location: adminUsers.php?success=" . urlencode("User account deactivated successfully."));
             exit();
         } else {
-            $error = $conn->error;
-            header("Location: adminUsers.php?error=" . urlencode("Failed to deactivate user: $error"));
+            header("Location: adminUsers.php?error=" . urlencode("Failed to deactivate user."));
             exit();
         }
     } else {

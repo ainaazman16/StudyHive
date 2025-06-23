@@ -11,7 +11,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['user_Name'];
     $password = $_POST['password'];
 
-    $sql = "SELECT * FROM user WHERE user_Name = ?";
+    // Prevent login for deactivated users
+    $sql = "SELECT * FROM user WHERE user_Name = ? AND role != 'deactivated'";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -25,7 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['email'] = $user['email'];
             $_SESSION['role'] = $user['role'];
 
-            // Remember Me feature
             if (isset($_POST['remember'])) {
                 setcookie("remember_username", $user['user_Name'], time() + (7 * 24 * 60 * 60), "/");
                 setcookie("remember_password", base64_encode($_POST['password']), time() + (7 * 24 * 60 * 60), "/");
@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<script>alert('Invalid password'); window.location='loginPage.php';</script>";
         }
     } else {
-        echo "<script>alert('User does not exist, please sign up first'); window.location='loginPage.php';</script>";
+        echo "<script>alert('User does not exist or is deactivated. Please contact admin.'); window.location='loginPage.php';</script>";
     }
 
     $stmt->close();
