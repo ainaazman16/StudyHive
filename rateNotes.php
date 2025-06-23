@@ -6,10 +6,10 @@ include("connect.php");
 $noteID = $_GET['note_ID'] ?? null;
 $userID = $_SESSION['user_ID'] ?? null;
 
-if (!$noteID || !$userID) {
-    echo "<p style='color:red;text-align:center;'>Invalid access. Please log in or select a note.</p>";
-    exit;
-}
+// if (!$noteID || !$userID) {
+//     echo "<p style='color:red;text-align:center;'>Invalid access. Please log in or select a note.</p>";
+//     exit;
+// }
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
