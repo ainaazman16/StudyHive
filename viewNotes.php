@@ -95,7 +95,10 @@ $result = $stmt->get_result();
   <title>Browse Notes - StudyHive</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    h1 { text-align: center; color: #660066; }
+    h1 { 
+      text-align: center; 
+      color: #4b004b; 
+    }
     .note-card {
       max-width: 700px;
       margin: 20px auto;
