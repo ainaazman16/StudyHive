@@ -42,20 +42,17 @@ try {
       font-family: Arial, sans-serif;
     }
 
-    /* Matching Admin Dashboard Header */
     .topic {
-  background-color: #e388e3;
-  text-align: center;
-  padding: 40px 20px 20px;
-  position: relative;
-  color: #3b003b;
-}
-
+      background-color: #ec97ec;
+      text-align: center;
+      padding: 0px 0px; 
+      position: relative;
+    }
 
     .topic img.logo {
-      width: 170px;
+      width: 250px;
       height: auto;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       max-width: 100%;
     }
 
@@ -133,8 +130,7 @@ try {
       margin-top: 10px;
     }
 
-    /* Matching Admin Dashboard Nav Bar */
-    .navbar {
+    .bottom-nav {
       background-color: #660066;
       position: sticky;
       top: 0;
@@ -144,20 +140,17 @@ try {
       padding: 0 10px;
       height: 60px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+      z-index: 999;
     }
 
-    .navbar ul {
-      list-style: none;
+    .bottom-nav .nav-links {
       display: flex;
+      list-style: none;
       margin: 0;
       padding: 0;
     }
 
-    .navbar li {
-      margin-left: 10px;
-    }
-
-    .navbar a {
+    .nav-links a {
       text-decoration: none;
       color: white;
       padding: 14px 16px;
@@ -168,11 +161,8 @@ try {
       transition: background-color 0.3s ease;
     }
 
-    .navbar a:hover {
-      background-color: #990099;
-    }
-
-    .navbar a.active {
+    .nav-links a:hover,
+    .nav-links a.active {
       background-color: #990099;
     }
 
@@ -186,7 +176,7 @@ try {
 
     @media (max-width: 768px) {
       .topic img.logo {
-        width: 150px;
+        width: 180px;
       }
 
       .search-bar {
@@ -194,19 +184,19 @@ try {
         padding: 8px 15px;
       }
 
-      .navbar a {
-        font-size: 12px;
+      .nav-links a {
         padding: 12px;
+        font-size: 12px;
       }
     }
   </style>
 </head>
 
 <body>
-  <!-- Purple Header -->
   <div class="topic">
     <img src="images/whiteLogo.png" alt="logo" class="logo" />
 
+    <!-- Search Bar -->
     <div class="search-wrapper">
       <form action="viewNotes.php" method="get" class="search-bar">
         <span class="search-icon"><i class="fa fa-search"></i></span>
@@ -242,6 +232,7 @@ try {
       </form>
     </div>
 
+    <!-- Welcome Message (Only on homePage) -->
     <?php if ($currentPage === 'homePage.php' && isset($userData['user_Fname'])): ?>
       <div class="welcome-message">
         Welcome back, <strong><?= htmlspecialchars($userData['user_Fname']) ?>!</strong>
@@ -249,18 +240,18 @@ try {
     <?php endif; ?>
   </div>
 
-  <!-- New Unified Navigation Bar -->
-  <nav class="navbar">
-    <ul>
-      <li><a href="homePage.php" class="<?= $currentPage == 'homePage.php' ? 'active' : '' ?>">Home</a></li>
-      <li><a href="viewNotes.php" class="<?= $currentPage == 'viewNotes.php' ? 'active' : '' ?>">Browse Notes</a></li>
-      <li><a href="mynotesPage.php" class="<?= $currentPage == 'mynotesPage.php' ? 'active' : '' ?>">My Notes</a></li>
-      <li><a href="uploadPage.php" class="<?= $currentPage == 'uploadPage.php' ? 'active' : '' ?>">Upload</a></li>
-      <li><a href="connectionPage.php" class="<?= $currentPage == 'connectionPage.php' ? 'active' : '' ?>">Connection</a></li>
-      <li><a href="profilePage.php" class="<?= $currentPage == 'profilePage.php' ? 'active' : '' ?>">Profile</a></li>
-      <li><a href="logout.php">Log Out</a></li>
-    </ul>
-  </nav>
+  <!-- Navigation Bar -->
+  <div class="bottom-nav">
+    <div class="nav-links">
+      <a href="homePage.php" class="<?= $currentPage == 'homePage.php' ? 'active' : '' ?>">Home</a>
+      <a href="viewNotes.php" class="<?= $currentPage == 'viewNotes.php' ? 'active' : '' ?>">Browse Notes</a>
+      <a href="mynotesPage.php" class="<?= $currentPage == 'mynotesPage.php' ? 'active' : '' ?>">My Notes</a>
+      <a href="uploadPage.php" class="<?= $currentPage == 'uploadPage.php' ? 'active' : '' ?>">Upload</a>
+      <a href="connectionPage.php" class="<?= $currentPage == 'connectionPage.php' ? 'active' : '' ?>">Connection</a>
+      <a href="profilePage.php" class="<?= $currentPage == 'profilePage.php' ? 'active' : '' ?>">Profile</a>
+      <a href="logout.php">Log Out</a>
+    </div>
+  </div>
 
   <script>
     function toggleFilter() {
