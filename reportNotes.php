@@ -1,36 +1,69 @@
 <?php
-  session_start();
-  include('connect.php');
-  
-  $noteID = $_GET['note_ID'] ?? null;
-  $note = null;
+session_start();
+include("connect.php");
 
-  if ($noteID) {
-      $stmt = $conn->prepare("SELECT n.note_Name, n.file_type, n.upload_date, u.user_Fname 
-                              FROM notes n 
-                              JOIN user u ON n.user_ID = u.user_ID 
-                              WHERE n.note_ID = ?");
-      $stmt->bind_param("i", $noteID);
-      $stmt->execute();
-      $result = $stmt->get_result();
-      $note = $result->fetch_assoc();
-      $stmt->close();
-  }
-  $backQuery = http_build_query([
-    'search' => $_GET['search'] ?? '',
-    'uni_ID' => $_GET['uni_ID'] ?? '',
-    'faculty_ID' => $_GET['faculty_ID'] ?? '',
-    'course_ID' => $_GET['course_ID'] ?? '',
-    'subject_ID' => $_GET['subject_ID'] ?? ''
-  ]);
+$noteID = $_GET['note_ID'] ?? $_POST['note_ID'] ?? null;
+if (!$noteID){
+    die("Note ID missing.");
+} 
+
+$userID = $_SESSION['user_ID'] ?? null;
+
+$search = $_GET['search'] ?? $_POST['search'] ?? '';
+$uni_ID = $_GET['uni_ID'] ?? $_POST['uni_ID'] ?? '';
+$faculty_ID = $_GET['faculty_ID'] ?? $_POST['faculty_ID'] ?? '';
+$course_ID = $_GET['course_ID'] ?? $_POST['course_ID'] ?? '';
+$subject_ID = $_GET['subject_ID'] ?? $_POST['subject_ID'] ?? '';
+
+$note = null;
+if ($noteID) {
+    $stmt = $conn->prepare("
+        SELECT n.note_Name, n.file_type, n.upload_date, u.user_Fname
+        FROM notes n
+        LEFT JOIN user u ON n.user_ID = u.user_ID
+        WHERE n.note_ID = ?
+    ");
+    $stmt->bind_param("i", $noteID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $note = $result->fetch_assoc();
+    $stmt->close();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
+    $rating = $_POST['rating'];
+    $reviewText = trim($_POST['review']);
+
+    if ($rating && $reviewText && $noteID && $userID) {
+        $isHelpful = 0;
+        $stmt = $conn->prepare("
+            INSERT INTO review (rating, is_helpful, note_ID, review_text, user_ID, review_date)
+            VALUES (?, ?, ?, ?, ?, NOW())
+        ");
+        $stmt->bind_param("iiisi", $rating, $isHelpful, $noteID, $reviewText, $userID);
+
+        if ($stmt->execute()) {
+            echo "<script>
+                alert('Review submitted successfully!');
+                window.location.href = 'viewNotes.php?note_ID=$noteID&search=$search&uni_ID=$uni_ID&faculty_ID=$faculty_ID&course_ID=$course_ID&subject_ID=$subject_ID';
+            </script>";
+        } else {
+            echo "<p style='color:red;text-align:center;'>Error submitting review: {$stmt->error}</p>";
+        }
+
+        $stmt->close();
+    } else {
+        echo "<p style='color:red;text-align:center;'>Please fill out all fields.</p>";
+    }
+}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Report Notes</title>
+  <link rel="stylesheet" href="style.css">
   <style>
     body { 
       background-color: #ffffff; 
