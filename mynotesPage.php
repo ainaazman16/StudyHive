@@ -53,6 +53,12 @@ $downloaded->close();
     .note-card {
       background:#fff; border:1px solid #ccc; padding:15px; margin-bottom:12px;
       border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.05);
+      max-width: 800px;
+      margin: 0 auto 40px auto;
+      background-color: #fff0ff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
     .note-card h3 { margin:0 0 8px; }
     .btn { padding:6px 12px; background:#660066; color:#fff; text-decoration:none; border-radius:5px; display:inline-block; margin-top:8px; }
