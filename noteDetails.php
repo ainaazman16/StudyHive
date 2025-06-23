@@ -34,7 +34,7 @@ if (!$note) {
 
 <!DOCTYPE html>
 <html lang="en">
-
+<link ref="stylesheet" href="style.css">
 <head>
   <meta charset="UTF-8" />
   <title><?= htmlspecialchars($note['note_Name']) ?> - StudyHive</title>
@@ -44,6 +44,13 @@ if (!$note) {
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #f8f2f9;
+    }
+   
+    h1{
+        font-size: 60px;
+        text-align: center;
+        color: #4b004b;
+        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
     }
 
     .back-link {
@@ -59,6 +66,9 @@ if (!$note) {
     }
 
     .page-title {
+        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+
+
       max-width: 800px;
       margin: 30px auto 10px auto;
       color: #660066;
@@ -196,7 +206,7 @@ if (!$note) {
   <a class="back-btn" href="homePage.php">← Back to Dashboard</a>
 
   <!-- "Note Details" outside the pink box -->
-  <div class="page-title">Note Details</div>
+  <h1>Note Details</h1>
 
   <div class="container">
     <h1><?= htmlspecialchars($note['note_Name']) ?></h1>
