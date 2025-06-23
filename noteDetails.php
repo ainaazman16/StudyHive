@@ -1,15 +1,27 @@
 <?php
+session_start(); // You need this to use $_SESSION
 include("connect.php");
+
+if (!isset($_SESSION['user_ID'])) {
+  header("Location: loginPage.php");
+  exit();
+}
+
+$userID = $_SESSION['user_ID'];
 
 if (!isset($_GET['note_ID'])) {
   echo "Note not found.";
   exit();
 }
+$noteID = $_GET['note_ID'];
+
+// Now it's safe to use $noteID and $userID
 $checkHelpful = $conn->prepare("SELECT * FROM note_helpful WHERE note_ID = ? AND user_ID = ?");
 $checkHelpful->bind_param("ii", $noteID, $userID);
 $checkHelpful->execute();
 $alreadyHelpful = $checkHelpful->get_result()->num_rows > 0;
-$noteID = $_GET['note_ID'];
+
+// Then fetch the note info
 $query = $conn->prepare("
   SELECT n.*, u.user_Fname, uni.uni_Name 
   FROM notes n
@@ -31,6 +43,7 @@ if (!$note) {
   exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -183,7 +196,18 @@ if (!$note) {
     }
 
     .btn-unhelpful {
-      background-color: #cc3300;
+      background-color:rgb(167, 20, 71);
+  
+      display: inline-block;
+
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s;
     }
 
     .btn-unhelpful:hover {
