@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             <textarea name="review" id="review" rows="4" required></textarea>
         </div>
 
-        <div class="submit-"btn">
+        <div class="submit-btn">
             <button type="submit" name="submit">Submit Review</button>
         </div>
     </div>
