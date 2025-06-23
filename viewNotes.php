@@ -12,8 +12,6 @@ if (!isset($_SESSION['user_ID'])) {
 }
 
 $userID = $_SESSION['user_ID'];
-
-
 $search = $_GET['search'] ?? '';
 $uni_ID = $_GET['uni_ID'] ?? '';
 $faculty_ID = $_GET['faculty_ID'] ?? '';
@@ -68,18 +66,15 @@ if (!empty($subject_ID)) {
 if ($conditions) {
     $sql .= " WHERE " . implode(" AND ", $conditions);
 }
-
 $sql .= " ORDER BY n.upload_date DESC";
 
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
     die("❌ SQL Prepare Failed: " . $conn->error);
 }
-
 if ($params) {
     $stmt->bind_param($types, ...$params);
 }
-
 $stmt->execute();
 if (!method_exists($stmt, 'get_result')) {
     die("❌ get_result() not supported. Make sure PHP has mysqlnd enabled.");
@@ -94,10 +89,7 @@ $result = $stmt->get_result();
   <title>Browse Notes - StudyHive</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    h1 { 
-      text-align: center; 
-      color: #4b004b; 
-    }
+    h1 { text-align: center; color: #4b004b; }
     .note-card {
       max-width: 700px;
       margin: 20px auto;
@@ -131,24 +123,16 @@ $result = $stmt->get_result();
       background-color: #cccccc;
       cursor: default;
     }
-
     .btn:hover { background-color: #990099; }
-    .btn-report {
-      background-color: rgb(237, 50, 50);
-    }
-    .btn-rate {
-      background-color: rgb(227, 139, 206);
-    }
-    .btn-edit {
-      background-color: #007bff;
-    }
-    .btn-delete {
-      background-color: #dc3545;
-    }
+    .btn-report { background-color: rgb(237, 50, 50); }
+    .btn-rate { background-color: rgb(227, 139, 206); }
+    .btn-edit { background-color: #007bff; }
+    .btn-delete { background-color: #dc3545; }
   </style>
 </head>
 <body>
 <?php include("head.php"); ?>
+
 <?php if (isset($_SESSION['success_message'])): ?>
   <div style="background: #d4edda; color: #155724; padding: 12px; margin: 20px auto; max-width: 800px; text-align: center; border: 1px solid #c3e6cb; border-radius: 5px;">
     <?= $_SESSION['success_message'] ?>
@@ -156,56 +140,54 @@ $result = $stmt->get_result();
   <?php unset($_SESSION['success_message']); ?>
 <?php endif; ?>
 
-
 <h1>Browse Notes</h1>
 
 <?php if ($result && $result->num_rows > 0): ?>
   <?php while($row = $result->fetch_assoc()): ?>
     <?php
-      // Check if current user marked this note as helpful
-      $helpfulCheck = $conn->prepare("SELECT 1 FROM note_helpful WHERE user_ID = ? AND note_ID = ?");
-      $helpfulCheck->bind_param("ii", $userID, $row['note_ID']);
-      $helpfulCheck->execute();
-      $helpfulCheck->store_result();
-      $alreadyHelpful = $helpfulCheck->num_rows > 0;
-      $helpfulCheck->close();
+      $isOwner = $row['user_ID'] == $userID;
 
-      // Count total helpful
-      $countResult = $conn->query("SELECT COUNT(*) FROM note_helpful WHERE note_ID = {$row['note_ID']}");
-      $helpfulTotal = $countResult ? $countResult->fetch_row()[0] : 0;
+      if (!$isOwner) {
+          $helpfulCheck = $conn->prepare("SELECT 1 FROM note_helpful WHERE user_ID = ? AND note_ID = ?");
+          $helpfulCheck->bind_param("ii", $userID, $row['note_ID']);
+          $helpfulCheck->execute();
+          $helpfulCheck->store_result();
+          $alreadyHelpful = $helpfulCheck->num_rows > 0;
+          $helpfulCheck->close();
+
+          $countResult = $conn->query("SELECT COUNT(*) FROM note_helpful WHERE note_ID = {$row['note_ID']}");
+          $helpfulTotal = $countResult ? $countResult->fetch_row()[0] : 0;
+      }
     ?>
 
-    <div class="note-card" style="background-color:<?= $row['user_ID'] == $userID ? '#f7f7ff' : '#ffffff' ?>">
+    <div class="note-card" style="background-color:<?= $isOwner ? '#f7f7ff' : '#ffffff' ?>">
       <h3><?= htmlspecialchars($row['note_Name']) ?></h3>
       <p><strong>Type:</strong> <?= strtoupper($row['file_type']) ?></p>
       <p><strong>Author:</strong> <?= htmlspecialchars($row['user_Fname']) ?></p>
       <p><strong>Uploaded:</strong> <?= $row['upload_date'] ?></p>
 
-      <?php if ($row['user_ID'] == $userID): ?>
+      <?php if ($isOwner): ?>
         <a class="btn" href="download.php?note_ID=<?= $row['note_ID'] ?>">Download</a>
         <a class="btn btn-edit" href="editNote.php?note_ID=<?= $row['note_ID'] ?>">Edit</a>
         <a class="btn btn-delete" href="deleteNote.php?note_ID=<?= $row['note_ID'] ?>" onclick="return confirm('Are you sure you want to delete this note?');">Delete</a>
       <?php else: ?>
         <p><strong>Helpful:</strong> <?= $helpfulTotal ?></p>
-
-      <a class="btn" href="download.php?note_ID=<?= $row['note_ID'] ?>">Download</a>
-      <a class="btn btn-rate" href="rateNotes.php?note_ID=<?= $row['note_ID'] ?>&<?= $queryString ?>">Rate Notes</a>
+        <a class="btn" href="download.php?note_ID=<?= $row['note_ID'] ?>">Download</a>
+        <a class="btn btn-rate" href="rateNotes.php?note_ID=<?= $row['note_ID'] ?>&<?= $queryString ?>">Rate Notes</a>
         <a class="btn btn-report" href="reportNotes.php?note_ID=<?= $row['note_ID'] ?>&<?= $queryString ?>">Report</a>
+
+        <?php if (!$alreadyHelpful): ?>
+          <form method="post" action="markHelpful.php" style="display:inline;">
+            <input type="hidden" name="note_ID" value="<?= $row['note_ID'] ?>">
+            <button class="btn-helpful" type="submit">👍 Helpful</button>
+          </form>
+        <?php else: ?>
+          <form method="post" action="unmarkHelpful.php" style="display:inline;">
+            <input type="hidden" name="note_ID" value="<?= $row['note_ID'] ?>">
+            <button class="btn-helpful" type="submit" style="background-color:#cc3300;">❌ Unmark Helpful</button>
+          </form>
+        <?php endif; ?>
       <?php endif; ?>
-
-
-      <?php if (!$alreadyHelpful): ?>
-      <form method="post" action="markHelpful.php" style="display:inline;">
-        <input type="hidden" name="note_ID" value="<?= $row['note_ID'] ?>">
-        <button class="btn-helpful" type="submit">👍 Helpful</button>
-      </form>
-    <?php else: ?>
-      <form method="post" action="unmarkHelpful.php" style="display:inline;">
-        <input type="hidden" name="note_ID" value="<?= $row['note_ID'] ?>">
-        <button class="btn-helpful" type="submit" style="background-color:#cc3300;">❌ Unmark Helpful</button>
-      </form>
-    <?php endif; ?>
-
 
       <?php if ($_SESSION['role'] === 'admin'): ?>
         <a class="btn btn-delete" href="adminDeleteNote.php?note_ID=<?= $row['note_ID'] ?>">Admin Delete</a>
