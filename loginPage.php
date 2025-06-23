@@ -117,6 +117,7 @@ if (isset($_SESSION['username'])) {
       justify-content: space-between;
       padding: 0 10px;
       height: 60px;
+      z-index: 1000;
     }
 
     .navbar .logo {
@@ -142,10 +143,37 @@ if (isset($_SESSION['username'])) {
       font-size: 14px;
       font-weight: bold;
       text-transform: uppercase;
+      position: relative;
+      transition: all 0.3s ease;
+      background-color: transparent;
     }
 
     .navbar a:hover {
-      background-color: #990099;
+      transform: translateY(-5px);
+      background-color: transparent;
+    }
+
+    .navbar a::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%) scaleX(0);
+      transform-origin: center;
+      width: 70%;
+      height: 3px;
+      background-color: white;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar a:hover::after,
+    .navbar a.active::after {
+      transform: translateX(-50%) scaleX(1);
+    }
+
+    .navbar a.active {
+      transform: translateY(-5px);
+      background-color: transparent;
     }
 
     .topic {
@@ -184,6 +212,21 @@ if (isset($_SESSION['username'])) {
       padding: 10px;
       margin-top: 40px;
     }
+
+    @media (max-width: 768px) {
+      .navbar a {
+        font-size: 12px;
+        padding: 10px;
+      }
+
+      .login-box {
+        width: 90%;
+      }
+
+      .topic img {
+        width: 180px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -192,7 +235,7 @@ if (isset($_SESSION['username'])) {
 <div class="navbar">
   <img src="images/whiteLogo.png" alt="Logo" class="logo">
   <ul>
-    <li><a href="loginPage.php">Login</a></li>
+    <li><a href="loginPage.php" class="active">Login</a></li>
     <li><a href="signupPage.php">Sign Up</a></li>
   </ul>
 </div>
@@ -204,7 +247,6 @@ if (isset($_SESSION['username'])) {
 </div>
 
 <a class="back-btn" href="index.php">← Back</a>
-
 
 <!-- Login Form -->
 <div class="container">
