@@ -1,3 +1,4 @@
+//uploadPage.php
 <?php
 session_start();
 include("connect.php");
@@ -64,7 +65,6 @@ include("connect.php");
     button[type="submit"],
     button[type="reset"] {
       padding: 10px 25px;
-      background-color: #a94eb5;
       color: white;
       border: none;
       border-radius: 8px;
@@ -73,7 +73,20 @@ include("connect.php");
     }
 
     button[type="reset"] {
-      background-color: rgb(183, 41, 86);
+      background-color: #dc3545;
+    }
+
+    button[type="submit"] {
+      background-color: #4b004b;
+    }
+
+    /* HOVER STYLES */
+    button[type="reset"]:hover {
+      background-color: #b02a37;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #330033;
     }
 
     .success-message {
@@ -119,7 +132,7 @@ include("connect.php");
     <!-- Note Title -->
     <div class="form-group">
       <label>Note Title</label>
-      <input type="text" value="Enter notes title here..." name="note_name" required>
+      <input type="text" placeholder="Enter notes title here..." name="note_name" required>
     </div>
 
     <!-- File Upload -->
@@ -145,7 +158,6 @@ include("connect.php");
       <input type="text" name="new_uni" id="new_university" placeholder="Enter new university">
     </div>
 
-  
     <!-- Faculty -->
     <div class="form-group">
       <label>Faculty</label>

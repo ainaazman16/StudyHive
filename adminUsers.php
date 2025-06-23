@@ -9,7 +9,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 }
 
 // Fetch users
-$query = "SELECT * FROM user WHERE role != 'deactivated'";
+$query = "SELECT * FROM user";
 $result = $conn->query($query);
 ?>
 
@@ -171,6 +171,14 @@ $result = $conn->query($query);
 
 <div class="container">
     <h2>Manage Users</h2>
+
+    <?php if (isset($_GET['success'])): ?>
+    <p style="color: green; font-weight: bold;">
+        <?= htmlspecialchars($_GET['success']) ?></p>
+<?php elseif (isset($_GET['error'])): ?>
+    <p style="color: red; font-weight: bold;">
+        <?= htmlspecialchars($_GET['error']) ?></p>
+<?php endif; ?>
 
     <table>
         <tr>
