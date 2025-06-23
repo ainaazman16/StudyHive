@@ -9,7 +9,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 }
 
 // Fetch users
-$query = "SELECT * FROM user";
+$query = "SELECT * FROM user WHERE role != 'deactivated'";
 $result = $conn->query($query);
 ?>
 

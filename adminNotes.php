@@ -167,6 +167,12 @@ $result = $conn->query($query);
 <div class="container">
     <h2>Manage Notes</h2>
 
+    <?php if (isset($_GET['success'])): ?>
+    <p style="color: green; font-weight: bold;"><?= htmlspecialchars($_GET['success']) ?></p>
+    <?php elseif (isset($_GET['error'])): ?>
+    <p style="color: red; font-weight: bold;"><?= htmlspecialchars($_GET['error']) ?></p>
+    <?php endif; ?>
+
     <table>
         <tr>
             <th>Note ID</th>
@@ -175,6 +181,7 @@ $result = $conn->query($query);
             <th>File</th>
             <th>Actions</th>
         </tr>
+        
         <?php 
         while ($row = $result->fetch_assoc()): ?>
             <tr>
@@ -191,11 +198,13 @@ $result = $conn->query($query);
                     <?php endif; ?>
                 </td>
 
-                <td>
-                    <form method="POST" action="adminDeleteNote.php" onsubmit="return confirm('Delete this note?');">
+                <<td>
+                    <form method="POST" action="adminDeleteNote.php" onsubmit="return confirm('Are you sure you want to delete this note?');">
                         <input type="hidden" name="note_ID" value="<?= $row['note_ID'] ?>">
                         <button type="submit" class="btn btn-delete">Delete</button>
                     </form>
+                </td>
+
                 </td>
             </tr>
         <?php endwhile; ?>

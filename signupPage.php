@@ -56,12 +56,10 @@
       background-color: #ec97ec;
       font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
       font-size: 230%;
-      text-decoration: none;
       color: #5e1b5e;
       text-align: center;
       height: 400px;
       padding-top: 5px;
-      padding-bottom: 5px;
     }
 
     .topic img {
@@ -109,7 +107,6 @@
 
     input[type="text"],
     input[type="email"],
-    input[type="number"],
     input[type="password"],
     input[type="file"] {
       width: 100%;
@@ -173,6 +170,20 @@
       padding: 10px;
       margin-top: 40px;
     }
+
+    .match-status {
+      font-size: 13px;
+      margin-top: 5px;
+      font-weight: bold;
+    }
+
+    .match-status.good {
+      color: green;
+    }
+
+    .match-status.bad {
+      color: red;
+    }
   </style>
 </head>
 <body>
@@ -195,7 +206,7 @@
 
 <!-- register form -->
 <div class="container">
-  <form action="user.php" method="post" enctype="multipart/form-data" class="signup-box">
+  <form action="user.php" method="post" enctype="multipart/form-data" class="signup-box" id="signupForm">
     <h2>Create Your Account</h2>
 
     <label for="user_Fname">Full Name:</label>
@@ -205,7 +216,7 @@
     <input type="email" name="email" id="email" placeholder="Enter your email address" required>
 
     <label for="phone">Phone Number:</label>
-    <input type="number" name="phone" id="phone" placeholder="Enter your phone number" required>
+    <input type="text" name="phone" id="phone" placeholder="e.g. 0123456789 or 441234567890" required>
 
     <label>Gender:</label>
     <div class="gender-options">
@@ -217,7 +228,12 @@
     <input type="text" name="user_Name" id="user_Name" placeholder="Enter your username" required>
 
     <label for="password">Password:</label>
-    <input type="password" name="password" id="password" placeholder="Enter your password" required minlength="8" pattern=".{8,}" title="Password must be at least 8 characters long">
+    <input type="password" name="password" id="password" placeholder="Enter your password" required
+           minlength="8" pattern=".{8,}" title="Password must be at least 8 characters long">
+
+    <label for="confirm_password">Confirm Password:</label>
+    <input type="password" id="confirm_password" placeholder="Re-enter your password" required>
+    <div id="matchStatus" class="match-status"></div>
 
     <label for="profile_picture">Profile Picture:</label>
     <input type="file" name="profile_picture" id="profile_picture" required>
@@ -235,12 +251,65 @@
 
 <!-- footer -->
 <?php include("footer.php"); ?>
-  <script>
+
+<script>
+  // Password strength check
   document.getElementById('password').addEventListener('input', function () {
-    const pwd = this.value;
-    this.setCustomValidity(pwd.length < 8 ? 'Password must be at least 8 characters long.' : '');
+    this.setCustomValidity(this.value.length < 8 ? 'Password must be at least 8 characters long.' : '');
   });
-  </script>
+
+  // Phone number validation
+  const phoneInput = document.getElementById('phone');
+  phoneInput.addEventListener('input', function () {
+    const phone = this.value.trim();
+    if (!/^\d+$/.test(phone)) {
+      this.setCustomValidity('Phone number must contain digits only.');
+    } else if (phone.length < 10 || phone.length > 15) {
+      this.setCustomValidity('Phone number must be between 10 to 15 digits.');
+    } else {
+      this.setCustomValidity('');
+    }
+  });
+
+  // Confirm password live check
+  const password = document.getElementById('password');
+  const confirm = document.getElementById('confirm_password');
+  const matchStatus = document.getElementById('matchStatus');
+
+  function checkMatch() {
+    if (confirm.value === "") {
+      matchStatus.textContent = "";
+      matchStatus.className = "match-status";
+    } else if (confirm.value === password.value) {
+      matchStatus.textContent = "✅ Password match";
+      matchStatus.className = "match-status good";
+    } else {
+      matchStatus.textContent = "❌ Password do not match";
+      matchStatus.className = "match-status bad";
+    }
+  }
+
+  confirm.addEventListener('input', checkMatch);
+  password.addEventListener('input', checkMatch);
+
+  // Final form check before submit
+  document.getElementById('signupForm').addEventListener('submit', function (e) {
+    const phone = phoneInput.value.trim();
+    if (!/^\d+$/.test(phone)) {
+      e.preventDefault();
+      alert("❌ Phone number must contain digits only.");
+      phoneInput.focus();
+    } else if (phone.length < 10 || phone.length > 15) {
+      e.preventDefault();
+      alert("❌ Phone number must be between 10 to 15 digits.");
+      phoneInput.focus();
+    } else if (password.value !== confirm.value) {
+      e.preventDefault();
+      alert("❌ Password and Confirm Password must match.");
+      confirm.focus();
+    }
+  });
+</script>
 
 </body>
 </html>

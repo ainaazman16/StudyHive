@@ -2,33 +2,27 @@
 session_start();
 include("connect.php");
 
-// Check if admin
+// Only allow admin
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header("Location: homePage.php");
     exit();
 }
 
-// Fetch report details (without the 'reason' field)
+// Fetch all reviews with note title
 $query = "
-    SELECT r.report_ID, r.reported_at, n.note_Name, u.user_Name, r.note_ID
-    FROM report_note r
-    JOIN notes n ON r.note_ID = n.note_ID
-    JOIN user u ON n.user_ID = u.user_ID
-    ORDER BY r.reported_at DESC
+    SELECT review.review_ID, review.rating, review.is_helpful, review.note_ID, notes.note_Name
+    FROM review
+    LEFT JOIN notes ON review.note_ID = notes.note_ID
+    ORDER BY review.review_ID DESC
 ";
-
-$result = mysqli_query($conn, $query);
-
-if (!$result) {
-    die("Query failed: " . mysqli_error($conn));
-}
+$result = $conn->query($query);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin - Reported Notes</title>
+    <title>Admin - Manage Feedback</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -105,7 +99,7 @@ if (!$result) {
             background: white;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            box-shadow: 0px 0px 8px rgba(0,0,0,0.1);
         }
 
         table {
@@ -115,24 +109,14 @@ if (!$result) {
         }
 
         th, td {
-            border: 1px solid #ccc;
             padding: 12px;
+            border: 1px solid #ccc;
             text-align: center;
         }
 
         th {
             background-color: #ec97ec;
             color: #5e1b5e;
-        }
-
-        .btn-delete {
-            background-color: #e11d48;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 4px;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
         }
     </style>
 </head>
@@ -154,27 +138,20 @@ if (!$result) {
 </div>
 
 <div class="container">
-    <h2>Reported Notes</h2>
+    <h2>Feedback</h2>
     <table>
         <tr>
-            <th>Report ID</th>
+            <th>Review ID</th>
             <th>Note Title</th>
-            <th>Uploader</th>
-            <th>Reported At</th>
-            <th>Actions</th>
+            <th>Rating</th>
+            <th>Feedback</th>
         </tr>
-        <?php while ($row = mysqli_fetch_assoc($result)): ?>
+        <?php while ($row = $result->fetch_assoc()): ?>
             <tr>
-                <td><?= $row['report_ID'] ?></td>
-                <td><?= htmlspecialchars($row['note_Name']) ?></td>
-                <td><?= htmlspecialchars($row['user_Name']) ?></td>
-                <td><?= $row['reported_at'] ?></td>
-                <td>
-                    <form method="POST" action="adminDeleteNote.php" onsubmit="return confirm('Delete this note?');">
-                        <input type="hidden" name="note_ID" value="<?= $row['note_ID'] ?>">
-                        <button type="submit" class="btn-delete">Delete Note</button>
-                    </form>
-                </td>
+                <td><?= $row['review_ID'] ?></td>
+                <td><?= htmlspecialchars($row['note_Name']) ?: 'Unknown' ?></td>
+                <td><?= $row['rating'] ?>/5</td>
+                <td><?= $row['is_helpful'] ? 'Yes' : 'No' ?></td>
             </tr>
         <?php endwhile; ?>
     </table>
