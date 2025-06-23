@@ -150,6 +150,22 @@
       background-color: #b94cb9;
     }
 
+    .login-text {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .login-text a {
+      color: #660066;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .login-text a:hover {
+      text-decoration: underline;
+    }
+
     .footer {
       background-color: #660066;
       color: white;
@@ -209,11 +225,15 @@
     <div class="form-actions">
       <input type="reset" value="CLEAR FORM">
       <input type="submit" name="submit" value="REGISTER">
+
+      <p class="login-text">
+        Already have an account? <a href="loginPage.php">Login</a>.
+      </p>
     </div>
   </form>
 </div>
 
-<!-- footer studyhive -->
+<!-- footer -->
 <?php include("footer.php"); ?>
 
 </body>
