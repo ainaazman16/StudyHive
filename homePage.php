@@ -9,14 +9,14 @@ if (!isset($_SESSION['user_ID'])) {
 
 $userID = $_SESSION['user_ID'];
 
-// === FETCH USER DETAILS ===
-$userQuery = $conn->prepare("SELECT user_Fname, profile_picture FROM user WHERE user_ID = ?");
+// Fetch user name
+$userQuery = $conn->prepare("SELECT user_Fname FROM user WHERE user_ID = ?");
 $userQuery->bind_param("i", $userID);
 $userQuery->execute();
 $userResult = $userQuery->get_result();
 $userData = $userResult->fetch_assoc();
 
-// === MY NOTES ===
+// My Notes
 $myNotes = $conn->prepare("SELECT note_ID, note_Name, upload_date, download_count, file_type 
                            FROM notes 
                            WHERE user_ID = ? 
@@ -26,7 +26,7 @@ $myNotes->bind_param("i", $userID);
 $myNotes->execute();
 $myNotesResult = $myNotes->get_result();
 
-// === RECOMMENDATIONS ===
+// Recommendations
 $subjectSQL = "
   SELECT DISTINCT s.subject_ID
   FROM notes n
@@ -59,28 +59,24 @@ if (count($subjectIDs) > 0) {
 $recStmt->execute();
 $recommendations = $recStmt->get_result();
 
-// === FRIENDS ===
-$friendQuery = $conn->prepare("
-  SELECT u.user_Fname, u.user_Name 
-  FROM user_friends f
-  JOIN user u ON u.user_ID = f.friend_ID
-  WHERE f.user_ID = ? AND f.status = 'accepted'
-  ORDER BY f.friend_date DESC LIMIT 3
-");
+// Friends
+$friendQuery = $conn->prepare("SELECT u.user_Fname, u.user_Name 
+                               FROM user_friends f
+                               JOIN user u ON u.user_ID = f.friend_ID
+                               WHERE f.user_ID = ? AND f.status = 'accepted'
+                               ORDER BY f.friend_date DESC LIMIT 3");
 $friendQuery->bind_param("i", $userID);
 $friendQuery->execute();
 $friendsResult = $friendQuery->get_result();
 
-// === RECENTLY VIEWED ===
-$viewQuery = $conn->prepare("
-  SELECT n.note_Name, n.note_ID, MAX(v.view_date) as last_view
-  FROM note_views v
-  JOIN notes n ON v.note_ID = n.note_ID
-  WHERE v.user_ID = ?
-  GROUP BY n.note_ID
-  ORDER BY last_view DESC
-  LIMIT 3
-");
+// Recently Viewed
+$viewQuery = $conn->prepare("SELECT n.note_Name, n.note_ID, MAX(v.view_date) as last_view
+                             FROM note_views v
+                             JOIN notes n ON v.note_ID = n.note_ID
+                             WHERE v.user_ID = ?
+                             GROUP BY n.note_ID
+                             ORDER BY last_view DESC
+                             LIMIT 3");
 $viewQuery->bind_param("i", $userID);
 $viewQuery->execute();
 $viewedResult = $viewQuery->get_result();
@@ -98,29 +94,6 @@ $viewedResult = $viewQuery->get_result();
       background-color: #ffffff;
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .profile-card {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      margin-top: 30px;
-    }
-
-    .profile-card .profile-pic {
-      width: 120px;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 3px solid #660066;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      margin-bottom: 10px;
-    }
-
-    .profile-card h2 {
-      margin: 0;
-      color: #4b004b;
     }
 
     h1 {
@@ -148,6 +121,7 @@ $viewedResult = $viewQuery->get_result();
       background-color: #fff;
       height: 250px;
       padding: 15px;
+      transition: transform 0.2s ease;
     }
 
     .card h3 {
@@ -166,11 +140,14 @@ $viewedResult = $viewQuery->get_result();
       margin-bottom: 5px;
     }
 
-    .card a {
-      color: #660066;
-      text-decoration: underline;
-      font-weight: bold;
-      font-size: 13px;
+    .card-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .card-link:hover .card {
+      transform: scale(1.02);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
     }
 
     .card.recently-viewed {
@@ -209,36 +186,29 @@ $viewedResult = $viewQuery->get_result();
 <h1>User's Dashboard</h1>
 
 <div class="cards-container">
-  <!-- My Notes -->
-  <div class="card">
-    <h3>My Notes</h3>
-    <?php if ($myNotesResult->num_rows > 0): ?>
+  <!-- My Notes (Clickable) -->
+  <a href="mynotesPage.php" class="card-link">
+    <div class="card">
+      <h3>My Notes</h3>
       <ul>
-        <?php while ($note = $myNotesResult->fetch_assoc()): ?>
-          <li>
-            <?= htmlspecialchars($note['note_Name']) ?> 
-            (<?= strtoupper($note['file_type']) ?>, <?= $note['download_count'] ?> downloads)<br>
-            <small style="color:#555;">Uploaded: <?= $note['upload_date'] ?></small>
-          </li>
-        <?php endwhile; ?>
+        <?php if ($myNotesResult->num_rows > 0): ?>
+          <?php while ($note = $myNotesResult->fetch_assoc()): ?>
+            <li><?= htmlspecialchars($note['note_Name']) ?> (<?= strtoupper($note['file_type']) ?>, <?= $note['download_count'] ?> downloads)</li>
+          <?php endwhile; ?>
+        <?php else: ?>
+          <li>You haven’t uploaded any notes yet.</li>
+        <?php endif; ?>
       </ul>
-      <a href="mynotesPage.php">View All →</a>
-    <?php else: ?>
-      <p>You haven’t uploaded any notes yet.</p>
-      <a href="uploadPage.php">Upload Now →</a>
-    <?php endif; ?>
-  </div>
+    </div>
+  </a>
 
-  <!-- Recommendations -->
+  <!-- Recommendations (Not Clickable) -->
   <div class="card">
     <h3>Recommendations</h3>
     <ul>
       <?php if ($recommendations->num_rows > 0): ?>
         <?php while ($rec = $recommendations->fetch_assoc()): ?>
-          <li>
-            <?= htmlspecialchars($rec['note_Name']) ?>
-            <a href="download.php?note_ID=<?= $rec['note_ID'] ?>">[Download]</a>
-          </li>
+          <li><?= htmlspecialchars($rec['note_Name']) ?></li>
         <?php endwhile; ?>
       <?php else: ?>
         <li>No recommendations available.</li>
@@ -246,34 +216,29 @@ $viewedResult = $viewQuery->get_result();
     </ul>
   </div>
 
-  <!-- Connections -->
-  <div class="card">
-    <h3>Connections</h3>
-    <ul>
-      <?php if ($friendsResult->num_rows > 0): ?>
-        <?php while ($friend = $friendsResult->fetch_assoc()): ?>
-          <li>
-            <?= htmlspecialchars($friend['user_Fname']) ?> <br>
-            <small>@<?= htmlspecialchars($friend['user_Name']) ?></small>
-          </li>
-        <?php endwhile; ?>
-      <?php else: ?>
-        <li>No friends yet.</li>
-      <?php endif; ?>
-    </ul>
-    <a href="connectionPage.php">Manage</a>
-  </div>
+  <!-- Connections (Clickable) -->
+  <a href="connectionPage.php" class="card-link">
+    <div class="card">
+      <h3>Connections</h3>
+      <ul>
+        <?php if ($friendsResult->num_rows > 0): ?>
+          <?php while ($friend = $friendsResult->fetch_assoc()): ?>
+            <li><?= htmlspecialchars($friend['user_Fname']) ?><br><small>@<?= htmlspecialchars($friend['user_Name']) ?></small></li>
+          <?php endwhile; ?>
+        <?php else: ?>
+          <li>No friends yet.</li>
+        <?php endif; ?>
+      </ul>
+    </div>
+  </a>
 
-  <!-- Recently Viewed -->
+  <!-- Recently Viewed (Not Clickable) -->
   <div class="card recently-viewed">
     <h3>Recently Viewed</h3>
     <ul>
       <?php if ($viewedResult->num_rows > 0): ?>
         <?php while ($view = $viewedResult->fetch_assoc()): ?>
-          <li>
-            <?= htmlspecialchars($view['note_Name']) ?>
-            <a href="download.php?note_ID=<?= $view['note_ID'] ?>">[Open]</a>
-          </li>
+          <li><?= htmlspecialchars($view['note_Name']) ?></li>
         <?php endwhile; ?>
       <?php else: ?>
         <li>You haven't viewed any notes yet.</li>
