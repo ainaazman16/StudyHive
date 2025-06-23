@@ -43,6 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             INSERT INTO review (rating, is_helpful, note_ID, review_text, user_ID, review_date)
             VALUES (?, ?, ?, ?, ?, NOW())
         ");
+        
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
         $stmt->bind_param("iiisi", $rating, $isHelpful, $noteID, $reviewText, $userID);
 
         if ($stmt->execute()) {

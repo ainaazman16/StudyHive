@@ -11,6 +11,8 @@ if (!isset($_SESSION['user_ID'])) {
     exit();
 }
 
+$userID = $_SESSION['user_ID'];
+
 $search = $_GET['search'] ?? '';
 $uni_ID = $_GET['uni_ID'] ?? '';
 $faculty_ID = $_GET['faculty_ID'] ?? '';
@@ -74,24 +76,19 @@ if ($conditions) {
 
 $sql .= " ORDER BY n.upload_date DESC";
 
-// 🔍 Prepare and check query
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
     die("❌ SQL Prepare Failed: " . $conn->error);
 }
 
-// 🔗 Bind if necessary
 if ($params) {
     $stmt->bind_param($types, ...$params);
 }
 
 $stmt->execute();
-
-// 🔎 Check if get_result is available
 if (!method_exists($stmt, 'get_result')) {
     die("❌ get_result() not supported. Make sure PHP has mysqlnd enabled.");
 }
-
 $result = $stmt->get_result();
 ?>
 
@@ -128,6 +125,20 @@ $result = $stmt->get_result();
       color: white; text-decoration: none;
       border-radius: 6px; margin-top: 10px;
     }
+    .btn-helpful {
+      display: inline-block;
+      padding: 6px 10px;
+      background-color: #008000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn-helpful[disabled] {
+      background-color: #cccccc;
+      cursor: default;
+    }
     .btn:hover { background-color: #990099; }
   </style>
 </head>
@@ -138,18 +149,43 @@ $result = $stmt->get_result();
 
 <?php if ($result && $result->num_rows > 0): ?>
   <?php while($row = $result->fetch_assoc()): ?>
+    <?php
+      // Check if current user marked this note as helpful
+      $helpfulCheck = $conn->prepare("SELECT 1 FROM note_helpful WHERE user_ID = ? AND note_ID = ?");
+      $helpfulCheck->bind_param("ii", $userID, $row['note_ID']);
+      $helpfulCheck->execute();
+      $helpfulCheck->store_result();
+      $alreadyHelpful = $helpfulCheck->num_rows > 0;
+      $helpfulCheck->close();
+
+      // Count total helpful
+      $countResult = $conn->query("SELECT COUNT(*) FROM note_helpful WHERE note_ID = {$row['note_ID']}");
+      $helpfulTotal = $countResult ? $countResult->fetch_row()[0] : 0;
+    ?>
+
     <div class="note-card">
       <h3><?= htmlspecialchars($row['note_Name']) ?></h3>
       <p><strong>Type:</strong> <?= strtoupper($row['file_type']) ?></p>
       <p><strong>Author:</strong> <?= htmlspecialchars($row['user_Fname']) ?></p>
       <p><strong>Uploaded:</strong> <?= $row['upload_date'] ?></p>
+      <p><strong>Helpful:</strong> <?= $helpfulTotal ?></p>
+
       <a class="btn" href="download.php?note_ID=<?= $row['note_ID'] ?>">Download</a>
-      <a class="btn" href="rateNotes.php?note_ID=<?= $row['note_ID'] ?>">Rate Notes</a>
+      <a class="btn-rate" href="rateNotes.php?note_ID=<?= $row['note_ID'] ?>">Rate Notes</a>
       <a class="btn-report" href="reportNotes.php?note_ID=<?= $row['note_ID'] ?>&<?= $queryString ?>">Report</a>
+
+      <?php if (!$alreadyHelpful): ?>
+        <form method="post" action="markHelpful.php" style="display:inline;">
+          <input type="hidden" name="note_ID" value="<?= $row['note_ID'] ?>">
+          <button class="btn-helpful" type="submit">👍 Helpful</button>
+        </form>
+      <?php else: ?>
+        <button class="btn-helpful" disabled>✅ Marked Helpful</button>
+      <?php endif; ?>
+
       <?php if ($_SESSION['role'] === 'admin'): ?>
         <a class="btn" style="background-color: #aa0033;" href="adminDeleteNote.php?note_ID=<?= $row['note_ID'] ?>">Delete</a>
       <?php endif; ?>
-
     </div>
   <?php endwhile; ?>
 <?php else: ?>
