@@ -222,6 +222,15 @@ $viewedResult = $viewQuery->get_result();
         grid-column: auto;
       }
     }
+
+    .footer {
+      background-color: #660066;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      margin-top: 40px;
+      
+    }
   </style>
 </head>
 <body>
@@ -315,7 +324,7 @@ $viewedResult = $viewQuery->get_result();
     </div>
   </div>
 </div>
-
+</div>
 <?php include('footer.php'); ?>
 </body>
 </html>
