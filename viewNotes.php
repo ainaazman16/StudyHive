@@ -124,6 +124,7 @@ $result = $stmt->get_result();
       <p><strong>Author:</strong> <?= htmlspecialchars($row['user_Fname']) ?></p>
       <p><strong>Uploaded:</strong> <?= $row['upload_date'] ?></p>
       <a class="btn" href="download.php?note_ID=<?= $row['note_ID'] ?>">Download</a>
+      <a class="btn" href="reportNotes.php?note_ID=<?= $row['note_ID'] ?>">Report</a>
       <a class="btn" href="rateNotes.php?note_ID=<?= $row['note_ID'] ?>">Rate Notes</a>
       <?php if ($_SESSION['role'] === 'admin'): ?>
         <a class="btn" style="background-color: #aa0033;" href="adminDeleteNote.php?note_ID=<?= $row['note_ID'] ?>">Delete</a>

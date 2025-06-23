@@ -1,6 +1,11 @@
 <?php
-  session_start();
+session_start();
+$noteID = $_GET['note_ID'] ?? null;
+if (!$noteID) {
+  die("Note ID missing.");
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -73,10 +78,11 @@
   <h1>Report Notes</h1>
   <h3 class="title-reason">Select a reason</h3>
   <ul class="list-report">
-    <li><a href="reportDetails.php?report_type=Inappropriate Language">1. Inappropriate Language</a></li>
-    <li><a href="reportDetails.php?report_type=Harassment or Bullying">2. Harassment or Bullying</a></li>
-    <li><a href="reportDetails.php?report_type=Irrelevant or Spam Content">3. Irrelevant or Spam Content</a></li>
-    <li><a href="reportDetails.php?report_type=Plagiarized or Copyrighted Material">4. Plagiarized or Copyrighted Material</a></li>
+    <li><a href="reportDetails.php?report_type=Inappropriate Language&note_ID=<?= $noteID ?>">1. Inappropriate Language</a></li>
+    <li><a href="reportDetails.php?report_type=Harassment or Bullying&note_ID=<?= $noteID ?>">2. Harassment or Bullying</a></li>
+    <li><a href="reportDetails.php?report_type=Irrelevant or Spam Content&note_ID=<?= $noteID ?>">3. Irrelevant or Spam Content</a></li>
+    <li><a href="reportDetails.php?report_type=Plagiarized or Copyrighted Material&note_ID=<?= $noteID ?>">4. Plagiarized or Copyrighted Material</a></li>
+
   </ul>
 </body>
 </html>
