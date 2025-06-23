@@ -2,25 +2,39 @@
 include("connect.php");
 
 if (!isset($_GET['note_ID'])) {
-    echo "Note not found.";
-    exit();
+  echo "Note not found.";
+  exit();
+}
+$checkHelpful = $conn->prepare("SELECT * FROM note_helpful WHERE note_ID = ? AND user_ID = ?");
+$checkHelpful->bind_param("ii", $noteID, $userID);
+$checkHelpful->execute();
+$alreadyHelpful = $checkHelpful->get_result()->num_rows > 0;
+$noteID = $_GET['note_ID'];
+$query = $conn->prepare("
+  SELECT n.*, u.user_Fname, uni.uni_Name 
+  FROM notes n
+  LEFT JOIN user u ON n.user_ID = u.user_ID
+  LEFT JOIN university uni ON n.uni_ID = uni.uni_ID
+  WHERE n.note_ID = ?
+");
+if (!$query) {
+  die("SQL Error: " . $conn->error);
 }
 
-$noteID = $_GET['note_ID'];
-$query = $conn->prepare("SELECT * FROM notes WHERE note_ID = ?");
 $query->bind_param("i", $noteID);
 $query->execute();
 $result = $query->get_result();
 $note = $result->fetch_assoc();
 
 if (!$note) {
-    echo "Note not found.";
-    exit();
+  echo "Note not found.";
+  exit();
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title><?= htmlspecialchars($note['note_Name']) ?> - StudyHive</title>
@@ -59,7 +73,7 @@ if (!$note) {
       background-color: #fff0ff;
       padding: 30px;
       border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
     h1 {
@@ -105,7 +119,67 @@ if (!$note) {
       text-decoration: none;
       font-weight: bold;
     }
-    
+
+    .btn-rate {
+      display: inline-block;
+      background-color: #cc66cc;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .btn-report {
+      display: inline-block;
+      background-color: #ed3232;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .btn-rate:hover {
+      background-color: #b94cb9;
+    }
+
+    .btn-report:hover {
+      background-color: maroon;
+    }
+
+    .btn-helpful {
+      background-color: #008000;
+      display: inline-block;
+
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .btn-helpful:hover {
+      background-color: #006400;
+    }
+
+    .btn-unhelpful {
+      background-color: #cc3300;
+    }
+
+    .btn-unhelpful:hover {
+      background-color: #a52800;
+    }
+
     .footer {
       margin-top: 60px;
       background-color: #660066;
@@ -115,24 +189,56 @@ if (!$note) {
     }
   </style>
 </head>
+
 <body>
-<?php include('head.php'); ?>
+  <?php include('head.php'); ?>
 
-<a class="back-btn" href="homePage.php">← Back to Dashboard</a>
+  <a class="back-btn" href="homePage.php">← Back to Dashboard</a>
 
-<!-- "Note Details" outside the pink box -->
-<div class="page-title">Note Details</div>
+  <!-- "Note Details" outside the pink box -->
+  <div class="page-title">Note Details</div>
 
-<div class="container">
-  <h1><?= htmlspecialchars($note['note_Name']) ?></h1>
+  <div class="container">
+    <h1><?= htmlspecialchars($note['note_Name']) ?></h1>
+    <div class="note-detail"><strong>Author:</strong> <?= $note['user_Fname'] ?></div>
+    <div class="note-detail"><strong>University:</strong> <?= $note['uni_Name'] ?></div>
+    <div class="note-detail"><strong>Uploaded On:</strong> <?= $note['upload_date'] ?></div>
+    <div class="note-detail"><strong>Downloads:</strong> <?= $note['download_count'] ?></div>
+    <div class="note-detail"><strong>File Type:</strong> <?= strtoupper($note['file_type']) ?></div>
+    <?php
+    $helpfulCount = $conn->query("SELECT COUNT(*) FROM note_helpful WHERE note_ID = $noteID")->fetch_row()[0];
+    ?>
+    <div class="note-detail"><strong>Helpful Count:</strong> <?= $helpfulCount ?></div>
 
-  <div class="note-detail"><strong>Uploaded On:</strong> <?= $note['upload_date'] ?></div>
-  <div class="note-detail"><strong>Downloads:</strong> <?= $note['download_count'] ?></div>
-  <div class="note-detail"><strong>File Type:</strong> <?= strtoupper($note['file_type']) ?></div>
 
-  <a href="download.php?note_ID=<?= $note['note_ID'] ?>" class="download-btn">Download This Note</a>
-</div>
+    <a href="download.php?note_ID=<?= $note['note_ID'] ?>" class="download-btn">Download This Note</a>
+    <!-- Rate Note Button -->
+    <form method="get" action="rateNotes.php" style="display:inline;">
+      <input type="hidden" name="note_ID" value="<?= $note['note_ID'] ?>">
+      <button type="submit" class="download-btn" style="background-color: #e38bce;">Rate Note</button>
+    </form>
+    <!-- Report Note Button -->
+    <form method="get" action="reportNotes.php" style="display:inline;">
+      <input type="hidden" name="note_ID" value="<?= $note['note_ID'] ?>">
+      <button type="submit" class="download-btn" style="background-color: #ed3232;">Report</button>
+    </form>
+    <!-- Helpful / Unmark Helpful -->
+    <?php if (!$alreadyHelpful): ?>
+      <form method="post" action="markHelpful.php" style="display:inline;">
+        <input type="hidden" name="note_ID" value="<?= $note['note_ID'] ?>">
+        <button type="submit" class="action-btn btn-helpful">Helpful</button>
+      </form>
+    <?php else: ?>
+      <form method="post" action="unmarkHelpful.php" style="display:inline;">
+        <input type="hidden" name="note_ID" value="<?= $note['note_ID'] ?>">
+        <button type="submit" class="action-btn btn-unhelpful">Unmark Helpful</button>
+      </form>
+    <?php endif; ?>
 
-<?php include("footer.php"); ?>
+
+  </div>
+
+  <?php include("footer.php"); ?>
 </body>
+
 </html>

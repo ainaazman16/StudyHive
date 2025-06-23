@@ -18,6 +18,16 @@ $faculty_ID = $_GET['faculty_ID'] ?? '';
 $course_ID = $_GET['course_ID'] ?? '';
 $subject_ID = $_GET['subject_ID'] ?? '';
 
+$checkHelpful = $conn->prepare("SELECT * FROM note_helpful WHERE note_ID = ? AND user_ID = ?");
+$checkHelpful->bind_param("ii", $noteID, $userID);
+$checkHelpful->execute();
+$alreadyHelpful = $checkHelpful->get_result()->num_rows > 0;
+$query = $conn->prepare("SELECT * FROM notes WHERE note_ID = ?");
+$query->bind_param("i", $noteID);
+$query->execute();
+$result = $query->get_result();
+$note = $result->fetch_assoc();
+
 if (!isset($_SESSION['role'])) {
     $_SESSION['role'] = '';
 }
@@ -26,7 +36,7 @@ $conditions = [];
 $params = [];
 $types = '';
 
-$sql = "SELECT n.note_ID, n.note_Name, n.file_type, n.upload_date, n.user_ID, u.user_Fname
+$sql = "SELECT n.note_ID, n.note_Name, n.user_ID, u.user_Fname, uni.uni_name
         FROM notes n
         LEFT JOIN user u ON n.user_ID = u.user_ID
         LEFT JOIN subject s ON n.subject_ID = s.subject_ID
@@ -162,33 +172,18 @@ $result = $stmt->get_result();
 
     <div class="note-card" style="background-color:<?= $isOwner ? '#f7f7ff' : '#ffffff' ?>">
       <h3><?= htmlspecialchars($row['note_Name']) ?></h3>
-      <p><strong>Type:</strong> <?= strtoupper($row['file_type']) ?></p>
-      <p><strong>Author:</strong> <?= htmlspecialchars($row['user_Fname']) ?></p>
-      <p><strong>Uploaded:</strong> <?= $row['upload_date'] ?></p>
+  <p><strong>Author:</strong> <?= htmlspecialchars($row['user_Fname']) ?></p>
+  <p><strong>University:</strong> <?= htmlspecialchars($row['uni_name']) ?></p>
+    <?php
+$noteID = $row['note_ID'];
+$helpfulQuery = $conn->query("SELECT COUNT(*) FROM note_helpful WHERE note_ID = $noteID");
+$helpfulCount = $helpfulQuery ? $helpfulQuery->fetch_row()[0] : 0;
+?>
+  <div class="note-detail"><strong>Helpful Count:</strong> <?= $helpfulCount ?></div>
 
-      <?php if ($isOwner): ?>
-        <a class="btn" href="download.php?note_ID=<?= $row['note_ID'] ?>">Download</a>
-        <a class="btn btn-edit" href="editNote.php?note_ID=<?= $row['note_ID'] ?>">Edit</a>
-        <a class="btn btn-delete" href="deleteNote.php?note_ID=<?= $row['note_ID'] ?>" onclick="return confirm('Are you sure you want to delete this note?');">Delete</a>
-      <?php else: ?>
-        <p><strong>Helpful:</strong> <?= $helpfulTotal ?></p>
-        <a class="btn" href="download.php?note_ID=<?= $row['note_ID'] ?>">Download</a>
-        <a class="btn btn-rate" href="rateNotes.php?note_ID=<?= $row['note_ID'] ?>&<?= $queryString ?>">Rate Notes</a>
-        <a class="btn btn-report" href="reportNotes.php?note_ID=<?= $row['note_ID'] ?>&<?= $queryString ?>">Report</a>
-
-        <?php if (!$alreadyHelpful): ?>
-          <form method="post" action="markHelpful.php" style="display:inline;">
-            <input type="hidden" name="note_ID" value="<?= $row['note_ID'] ?>">
-            <button class="btn-helpful" type="submit">👍 Helpful</button>
-          </form>
-        <?php else: ?>
-          <form method="post" action="unmarkHelpful.php" style="display:inline;">
-            <input type="hidden" name="note_ID" value="<?= $row['note_ID'] ?>">
-            <button class="btn-helpful" type="submit" style="background-color:#cc3300;">❌ Unmark Helpful</button>
-          </form>
-        <?php endif; ?>
-      <?php endif; ?>
-
+  <a href="noteDetails.php?note_ID=<?= $row['note_ID'] ?>" class="btn">View Note</a>
+</a>
+      
       <?php if ($_SESSION['role'] === 'admin'): ?>
         <a class="btn btn-delete" href="adminDeleteNote.php?note_ID=<?= $row['note_ID'] ?>">Admin Delete</a>
       <?php endif; ?>
