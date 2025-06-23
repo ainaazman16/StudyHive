@@ -35,15 +35,6 @@ $result = $stmt->get_result();
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    .welcome-message {
-        text-align: center;
-        font-size: 230%;
-        color: #4b004b;
-        margin-top: 30px;
-        font-weight: 600;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
     table {
         border-collapse: collapse;
         width: 60%;
@@ -90,7 +81,7 @@ $result = $stmt->get_result();
 <body>
 
 <?php include("head.php"); ?>
-<div class="welcome-message">YOUR PROFILE</div>
+<h1>Your Profile</h1>
 
 <section>
 <?php
