@@ -6,7 +6,6 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Initialize variables
 $subjectList = null;
 $courseList = null;
 $uniList = null;
@@ -14,21 +13,18 @@ $userData = null;
 $currentPage = basename($_SERVER['PHP_SELF']);
 
 try {
-    // Fetch dropdown options
     $subjectList = $conn->query("SELECT subject_ID, subject_Name FROM subject");
     $courseList = $conn->query("SELECT course_ID, course_Name FROM course");
-    $uniList = $conn->query("SELECT uni_ID, uni_Name FROM university");
+    $uniList    = $conn->query("SELECT uni_ID, uni_Name FROM university");
 
-    // Fetch user's profile picture if logged in
     if (isset($_SESSION['user_ID'])) {
-        $stmt = $conn->prepare("SELECT profile_picture, user_Fname FROM user WHERE user_ID = ?");
+        $stmt = $conn->prepare("SELECT user_Fname FROM user WHERE user_ID = ?");
         $stmt->bind_param("i", $_SESSION['user_ID']);
         $stmt->execute();
         $userData = $stmt->get_result()->fetch_assoc();
         $stmt->close();
     }
 } catch (Exception $e) {
-    // Log error instead of displaying to users
     error_log("Database error in head.php: " . $e->getMessage());
 }
 ?>
@@ -40,7 +36,6 @@ try {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>StudyHive</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
   <style>
     body {
       margin: 0;
@@ -61,17 +56,10 @@ try {
       max-width: 100%;
     }
 
-    .search-profile-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      padding: 0 30px;
-    }
-
     .search-wrapper {
-      width: 100%;
       display: flex;
       justify-content: center;
+      width: 100%;
     }
 
     .search-bar {
@@ -140,19 +128,6 @@ try {
       border: none;
       cursor: pointer;
       margin-top: 10px;
-    }
-
-    .profile-container {
-      margin-top: 10px;
-    }
-
-    .profile-pic-below {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #fff;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     }
 
     .bottom-nav {
@@ -234,55 +209,44 @@ try {
   <div class="topic">
     <img src="images/whiteLogo.png" alt="logo" class="logo" />
 
-    <!-- 🔍 Search Bar + Profile Pic -->
-    <div class="search-profile-wrapper">
-      <div class="search-wrapper">
-        <form action="viewNotes.php" method="get" class="search-bar">
-          <span class="search-icon"><i class="fa fa-search"></i></span>
-          <input type="text" name="search" placeholder="Search notes by title, tag or keyword..." />
-          <button type="button" class="filter-btn" onclick="toggleFilter()" title="Filter options">
-            <i class="fa fa-sliders-h"></i>
-          </button>
+    <!-- 🔍 Search Bar -->
+    <div class="search-wrapper">
+      <form action="viewNotes.php" method="get" class="search-bar">
+        <span class="search-icon"><i class="fa fa-search"></i></span>
+        <input type="text" name="search" placeholder="Search notes by title, tag or keyword..." />
+        <button type="button" class="filter-btn" onclick="toggleFilter()" title="Filter options">
+          <i class="fa fa-sliders-h"></i>
+        </button>
 
-          <div class="filter-options" id="filterOptions">
-            <select name="subject">
-              <option value="">All Subjects</option>
-              <?php if ($subjectList): while ($s = $subjectList->fetch_assoc()): ?>
-                <option value="<?= htmlspecialchars($s['subject_ID']) ?>"><?= htmlspecialchars($s['subject_Name']) ?></option>
-              <?php endwhile; endif; ?>
-            </select>
+        <div class="filter-options" id="filterOptions">
+          <select name="subject">
+            <option value="">All Subjects</option>
+            <?php if ($subjectList): while ($s = $subjectList->fetch_assoc()): ?>
+              <option value="<?= htmlspecialchars($s['subject_ID']) ?>"><?= htmlspecialchars($s['subject_Name']) ?></option>
+            <?php endwhile; endif; ?>
+          </select>
 
-            <select name="course">
-              <option value="">All Courses</option>
-              <?php if ($courseList): while ($c = $courseList->fetch_assoc()): ?>
-                <option value="<?= htmlspecialchars($c['course_ID']) ?>"><?= htmlspecialchars($c['course_Name']) ?></option>
-              <?php endwhile; endif; ?>
-            </select>
+          <select name="course">
+            <option value="">All Courses</option>
+            <?php if ($courseList): while ($c = $courseList->fetch_assoc()): ?>
+              <option value="<?= htmlspecialchars($c['course_ID']) ?>"><?= htmlspecialchars($c['course_Name']) ?></option>
+            <?php endwhile; endif; ?>
+          </select>
 
-            <select name="university">
-              <option value="">All Universities</option>
-              <?php if ($uniList): while ($u = $uniList->fetch_assoc()): ?>
-                <option value="<?= htmlspecialchars($u['uni_ID']) ?>"><?= htmlspecialchars($u['uni_Name']) ?></option>
-              <?php endwhile; endif; ?>
-            </select>
+          <select name="university">
+            <option value="">All Universities</option>
+            <?php if ($uniList): while ($u = $uniList->fetch_assoc()): ?>
+              <option value="<?= htmlspecialchars($u['uni_ID']) ?>"><?= htmlspecialchars($u['uni_Name']) ?></option>
+            <?php endwhile; endif; ?>
+          </select>
 
-            <button type="submit" class="apply-filter">Apply</button>
-          </div>
-        </form>
-      </div>
-
-      <!-- 👤 Profile Picture -->
-      <?php if (isset($userData) && !empty($userData['profile_picture'])): ?>
-        <div class="profile-container">
-          <a href="profilePage.php">
-            <img src="uploads/<?= htmlspecialchars($userData['profile_picture']) ?>" alt="Profile Picture" class="profile-pic-below" />
-          </a>
+          <button type="submit" class="apply-filter">Apply</button>
         </div>
-      <?php endif; ?>
+      </form>
     </div>
 
     <!-- 👋 Welcome Message -->
-    <?php if (isset($userData['user_Fname'])): ?>
+    <?php if (!empty($userData['user_Fname'])): ?>
       <div class="welcome-message">
         <h1>Welcome back, <strong><?= htmlspecialchars($userData['user_Fname']) ?>!</strong></h1>
       </div>
@@ -308,7 +272,6 @@ try {
       filters.style.display = filters.style.display === 'none' || filters.style.display === '' ? 'flex' : 'none';
     }
 
-    // Auto close filter dropdown
     document.addEventListener('click', function (e) {
       const filter = document.getElementById('filterOptions');
       const btn = document.querySelector('.filter-btn');
