@@ -20,6 +20,7 @@ if (!$noteID || !is_numeric($noteID)) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Report Details</title>
+  <link rel="stylesheet" href="style.css">
   <style>
     body { background-color: #ffffff; margin: 0; font-family: Arial, Helvetica, sans-serif; }
     h1 { font-size: 60px; text-align: center; color: #4b004b; }
@@ -29,6 +30,8 @@ if (!$noteID || !is_numeric($noteID)) {
     .list-report li:hover { background: #e0d4f5; }
     .list-report li a { text-decoration: none; color: #333; display: block; }
     .title-reason { text-align: center; margin-top: 40px; font-size: 1.2em; color: #222; }
+    .note-card { max-width: 600px;
+      margin: 20px auto; background-color: #f7f0f7; border: 1px solid #ccc; border-radius: 10px; padding: 20px; color: #333;}
   </style>
 </head>
 <body>
@@ -40,6 +43,9 @@ if (!$noteID || !is_numeric($noteID)) {
 <h1>Report Notes</h1>
 <h3 class="title-reason"><?= htmlspecialchars($reportType) ?></h3>
 
+<div class="note-card">
+  <h3>Note ID: <?= htmlspecialchars($noteID) ?></h3>
+  <p><strong>Report Type:</strong> <?= htmlspecialchars($reportType) ?></p>
 <ul class="list-report">
 <?php
 $reasons = [];
@@ -88,6 +94,7 @@ foreach ($reasons as $detail) {
 }
 ?>
 </ul>
+</div>
 
 </body>
 </html>
