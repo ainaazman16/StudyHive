@@ -46,10 +46,37 @@
       font-size: 14px;
       font-weight: bold;
       text-transform: uppercase;
+      position: relative;
+      transition: all 0.3s ease;
+      background-color: transparent;
     }
 
     .navbar a:hover {
-      background-color: #990099;
+      transform: translateY(-5px);
+      background-color: transparent;
+    }
+
+    .navbar a::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%) scaleX(0);
+      transform-origin: center;
+      width: 70%;
+      height: 3px;
+      background-color: white;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar a:hover::after,
+    .navbar a.active::after {
+      transform: translateX(-50%) scaleX(1);
+    }
+
+    .navbar a.active {
+      transform: translateY(-5px);
+      background-color: transparent;
     }
 
     .topic {
@@ -140,6 +167,7 @@
       font-weight: bold;
       cursor: pointer;
       margin: 5px;
+      transition: background-color 0.3s;
     }
 
     input[type="submit"]:hover,
@@ -193,7 +221,7 @@
   <img src="images/whiteLogo.png" alt="Logo" class="logo">
   <ul>
     <li><a href="loginPage.php">Login</a></li>
-    <li><a href="signupPage.php">Sign Up</a></li>
+    <li><a href="signupPage.php" class="active">Sign Up</a></li>
   </ul>
 </div>
 
