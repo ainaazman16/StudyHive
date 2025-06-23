@@ -11,6 +11,7 @@ if (isset($_SESSION['username'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login - Study Hive</title>
+  <link rel="icon" type="image/png" href="images/logo.png">
   <style>
     body {
       margin: 0;

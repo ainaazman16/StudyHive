@@ -82,6 +82,7 @@ $result = $stmt->get_result();
   <meta charset="UTF-8">
   <title>Browse Notes - StudyHive</title>
   <link rel="stylesheet" href="style.css">
+      <link rel="icon" type="image/png" href="images/logo.png">
   <style>
     h1 { text-align: center; color: #4b004b; }
     .note-card {

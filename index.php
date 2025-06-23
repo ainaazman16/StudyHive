@@ -14,6 +14,7 @@ if (isset($_SESSION['user_Name'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Welcome to StudyHive</title>
+  <link rel="icon" type="image/png" href="images/logo.png">
   <style>
     body {
       background-color: #660066;

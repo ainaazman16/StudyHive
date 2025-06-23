@@ -69,6 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
   <meta charset="UTF-8">
   <title>Edit Note</title>
+  <link rel="icon" type="image/png" href="images/logo.png">
   <style>
 
     /* Copy all search bar styles from head.php */
