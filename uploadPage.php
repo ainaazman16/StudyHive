@@ -94,6 +94,13 @@ include("connect.php");
       margin-top: 5px;
       display: none;
     }
+
+    #other-details-group {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #ffeaff;
+      border-radius: 10px;
+    }
   </style>
 </head>
 <body>
@@ -112,7 +119,7 @@ include("connect.php");
     <!-- Note Title -->
     <div class="form-group">
       <label>Note Title</label>
-      <input type="text" value= "Enter notes title here..." name="note_name" required>
+      <input type="text" value="Enter notes title here..." name="note_name" required>
     </div>
 
     <!-- File Upload -->
@@ -138,6 +145,7 @@ include("connect.php");
       <input type="text" name="new_uni" id="new_university" placeholder="Enter new university">
     </div>
 
+  
     <!-- Faculty -->
     <div class="form-group">
       <label>Faculty</label>
@@ -194,7 +202,6 @@ include("connect.php");
 </div>
 
 <script>
-  // Show/hide 'Other' input
   function toggleOther(selectId, inputId) {
     const select = document.getElementById(selectId);
     const input = document.getElementById(inputId);
@@ -207,7 +214,11 @@ include("connect.php");
     }
   }
 
-  document.getElementById('university').addEventListener('change', () => toggleOther('university', 'new_university'));
+  document.getElementById('university').addEventListener('change', function () {
+    toggleOther('university', 'new_university');
+    document.getElementById('other-details-group').style.display = (this.value === 'other') ? 'block' : 'none';
+  });
+
   document.getElementById('faculty').addEventListener('change', () => toggleOther('faculty', 'new_faculty'));
   document.getElementById('course').addEventListener('change', () => toggleOther('course', 'new_course'));
   document.getElementById('subject').addEventListener('change', () => toggleOther('subject', 'new_subject'));
