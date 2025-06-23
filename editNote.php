@@ -92,7 +92,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
               if (selected && selected == row.id) opt.selected = true;
               target.appendChild(opt);
             });
-          });
+            // Append the "Other..." option manually
+            const otherOpt = document.createElement('option');
+            otherOpt.value = 'other';
+            otherOpt.textContent = 'Other...';
+            target.appendChild(otherOpt);
+
+          });         
       }
 
       uni.addEventListener('change', () => {
