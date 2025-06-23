@@ -11,6 +11,17 @@ $uniList    = $conn->query("SELECT uni_ID, uni_Name FROM university");
 
 // Get current page name
 $currentPage = basename($_SERVER['PHP_SELF']);
+
+// Fetch user's profile picture
+$userID = $_SESSION['user_ID'] ?? null;
+$userData = null;
+
+if ($userID) {
+    $stmt = $conn->prepare("SELECT profile_picture FROM user WHERE user_ID = ?");
+    $stmt->bind_param("i", $userID);
+    $stmt->execute();
+    $userData = $stmt->get_result()->fetch_assoc();
+}
 ?>
 
 <!DOCTYPE html>
@@ -113,6 +124,22 @@ $currentPage = basename($_SERVER['PHP_SELF']);
       margin-top: 10px;
     }
 
+    .profile-container {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 30px;
+      margin-top: 10px;
+    }
+
+    .profile-pic-below {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
     .bottom-nav {
       display: flex;
       align-items: center;
@@ -209,7 +236,16 @@ $currentPage = basename($_SERVER['PHP_SELF']);
       </form>
     </div>
 
-    <!-- 👋 Welcome Message -->
+    <!-- ✅ Profile Picture Below Search Bar (Right-Aligned) -->
+    <?php if ($userData && !empty($userData['profile_picture'])): ?>
+      <div class="profile-container">
+        <a href="profilePage.php">
+          <img src="uploads/<?= htmlspecialchars($userData['profile_picture']) ?>" alt="Profile Picture" class="profile-pic-below" />
+        </a>
+      </div>
+    <?php endif; ?>
+
+    <!-- ✅ Original Welcome Message -->
     <?php if (isset($_SESSION['user_Fname'])): ?>
       <div class="welcome-message">
         <h1>Welcome back, <strong><?= htmlspecialchars($_SESSION['user_Fname']) ?>!</strong> </h1>
