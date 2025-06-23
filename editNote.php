@@ -128,28 +128,101 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <label for="note_Name">File Name</label>
     <input type="text" name="note_Name" id="note_Name" value="<?= htmlspecialchars($note['note_Name']) ?>" required>
 
-    <label for="university">University</label>
-    <select name="university" id="university" required>
-      <option value="">-- Select --</option>
-      <?php while($u = $universities->fetch_assoc()): ?>
-        <option value="<?= $u['uni_ID'] ?>" <?= ($current && $current['uni_ID'] == $u['uni_ID']) ? 'selected' : '' ?>>
-          <?= htmlspecialchars($u['uni_Name']) ?>
-        </option>
-      <?php endwhile; ?>
-    </select>
+    <label>University</label>
+      <select name="uni_ID" id="university" required>
+        <option value="">Select University</option>
+        <?php
+        $unis = $conn->query("SELECT * FROM university");
+        while ($u = $unis->fetch_assoc()) {
+          echo "<option value='{$u['uni_ID']}'>{$u['uni_Name']}</option>";
+        }
+        ?>
+        <option value="other">Other...</option>
+      </select>
+      <input type="text" name="new_uni" id="new_uni" placeholder="Enter new university" style="display:none;">
 
-    <label for="faculty">Faculty</label>
-    <select name="faculty_ID" id="faculty" required><option value="">-- Select --</option></select>
 
-    <label for="course">Course</label>
-    <select name="course_ID" id="course" required><option value="">-- Select --</option></select>
+     <label>Faculty</label>
+      <select name="faculty_ID" id="faculty" required>
+        <option value="">Select Faculty</option>
+        <?php
+        $faculties = $conn->query("SELECT * FROM faculty");
+        while ($f = $faculties->fetch_assoc()) {
+          echo "<option value='{$f['faculty_ID']}'>{$f['faculty_Name']}</option>";
+        }
+        ?>
+        <option value="other">Other...</option>
+      </select>
+      <input type="text" name="new_faculty" id="new_faculty" placeholder="Enter new faculty" style="display:none;">
 
-    <label for="subject_ID">Subject</label>
-    <select name="subject_ID" id="subject_ID" required><option value="">-- Select --</option></select>
+    <label>Course</label>
+      <select name="course_ID" id="course" required>
+        <option value="">Select Course</option>
+        <?php
+        $courses = $conn->query("SELECT * FROM course");
+        while ($c = $courses->fetch_assoc()) {
+          echo "<option value='{$c['course_ID']}'>{$c['course_Name']}</option>";
+        }
+        ?>
+        <option value="other">Other...</option>
+      </select>
+      <input type="text" name="new_course" id="new_course" placeholder="Enter new course" style="display:none;">
+
+
+    <label>Subject</label>
+      <select name="subject_ID" id="subject" required>
+        <option value="">Select Subject</option>
+        <?php
+        $subjects = $conn->query("SELECT * FROM subject");
+        while ($s = $subjects->fetch_assoc()) {
+          echo "<option value='{$s['subject_ID']}'>{$s['subject_Name']}</option>";
+        }
+        ?>
+        <option value="other">Other...</option>
+      </select>
+      <input type="text" name="new_subject" id="new_subject" placeholder="Enter new subject" style="display:none;">
+
 
     <button type="submit">Save Changes</button>
   </form>
 </div>
+
+<script>
+  // Toggle "Other" input fields
+  function toggleInput(selectId, inputId) {
+    const select = document.getElementById(selectId);
+    const input = document.getElementById(inputId);
+    input.style.display = (select.value === 'other') ? 'block' : 'none';
+  }
+
+  ['university', 'faculty', 'course', 'subject'].forEach(type => {
+    document.getElementById(type).addEventListener('change', () => {
+      toggleInput(type, 'new_' + type);
+    });
+  });
+
+  // Drag-and-Drop File Upload
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+
+  dropZone.addEventListener('dragover', function (e) {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
+
+  dropZone.addEventListener('dragleave', function () {
+    dropZone.classList.remove('dragover');
+  });
+
+  dropZone.addEventListener('drop', function (e) {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    if (e.dataTransfer.files.length > 0) {
+      fileInput.files = e.dataTransfer.files;
+    }
+  });
+</script>
+
 <?php include("footer.php"); ?>
 </body>
 </html>
