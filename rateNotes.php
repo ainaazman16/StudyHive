@@ -167,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                 <option value="5">5 - Excellent</option>
             </select>
 
-            <h2>Your Review:</h2>
+            <h2>Your Feedback:</h2>
             <textarea name="review" id="review" rows="4" required></textarea>
 
             <div class="submit-btn">

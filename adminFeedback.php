@@ -10,7 +10,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 
 // Fetch all reviews with note title
 $query = "
-    SELECT review.review_ID, review.rating, review.is_helpful, review.note_ID, notes.note_Name
+    SELECT review.review_ID, review.rating, review.is_helpful, review.review_text, review.note_ID, notes.note_Name
     FROM review
     LEFT JOIN notes ON review.note_ID = notes.note_ID
     ORDER BY review.review_ID DESC
@@ -170,7 +170,7 @@ $result = $conn->query($query);
                 <td><?= $row['review_ID'] ?></td>
                 <td><?= htmlspecialchars($row['note_Name']) ?: 'Unknown' ?></td>
                 <td><?= $row['rating'] ?>/5</td>
-                <td><?= $row['is_helpful'] ? 'Yes' : 'No' ?></td>
+                <td><?= $row['review_text'] ?></td>
             </tr>
         <?php endwhile; ?>
     </table>
