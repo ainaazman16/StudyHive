@@ -183,13 +183,13 @@
     <h2>Create Your Account</h2>
 
     <label for="user_Fname">Full Name:</label>
-    <input type="text" name="user_Fname" id="user_Fname" placeholder="Insert your full name" required>
+    <input type="text" name="user_Fname" id="user_Fname" placeholder="Enter your full name" required>
 
     <label for="email">Email Address:</label>
-    <input type="email" name="email" id="email" placeholder="Insert your email address" required>
+    <input type="email" name="email" id="email" placeholder="Enter your email address" required>
 
     <label for="phone">Phone Number:</label>
-    <input type="number" name="phone" id="phone" placeholder="Insert your phone number" required>
+    <input type="number" name="phone" id="phone" placeholder="Enter your phone number" required>
 
     <label>Gender:</label>
     <div class="gender-options">
@@ -198,10 +198,10 @@
     </div>
 
     <label for="user_Name">Username:</label>
-    <input type="text" name="user_Name" id="user_Name" placeholder="Insert your username" required>
+    <input type="text" name="user_Name" id="user_Name" placeholder="Enter your username" required>
 
     <label for="password">Password:</label>
-    <input type="password" name="password" id="password" placeholder="Insert your password" required>
+    <input type="password" name="password" id="password" placeholder="Enter your password" required>
 
     <label for="profile_picture">Profile Picture:</label>
     <input type="file" name="profile_picture" id="profile_picture" required>
