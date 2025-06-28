@@ -93,10 +93,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["file"])) {
     }
 
     // Final: Save note with subject and uni reference
-    $sql = "INSERT INTO notes (note_Name, file_path, file_type, user_ID, upload_date, download_count, subject_ID, uni_ID)
-            VALUES (?, ?, ?, ?, ?, 0, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssissi", $noteName, $storedFileName, $fileType, $userID, $uploadDate, $subject_ID, $uni_ID);
+    $sql = "INSERT INTO notes (
+    note_Name, file_path, file_type, user_ID, upload_date,
+    download_count, subject_ID, course_ID, faculty_ID, uni_ID
+) VALUES (?, ?, ?, ?, ?, 0, ?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("sssissiii", $noteName, $storedFileName, $fileType, $userID, $uploadDate, $subject_ID, $course_ID, $faculty_ID, $uni_ID);
 
     if ($stmt->execute()) {
         header("Location: uploadPage.php?success=1");
