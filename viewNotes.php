@@ -28,10 +28,10 @@ $types = '';
 $sql = "SELECT n.note_ID, n.note_Name, n.user_ID, u.user_Fname, uni.uni_Name
         FROM notes n
         LEFT JOIN user u ON n.user_ID = u.user_ID
+        LEFT JOIN university uni ON n.uni_ID = uni.uni_ID
         LEFT JOIN subject s ON n.subject_ID = s.subject_ID
         LEFT JOIN course c ON s.course_ID = c.course_ID
-        LEFT JOIN faculty f ON c.faculty_ID = f.faculty_ID
-        LEFT JOIN university uni ON f.uni_ID = uni.uni_ID";
+        LEFT JOIN faculty f ON c.faculty_ID = f.faculty_ID";
 
 $queryString = "search=$search&university=$uni_ID&course=$course_ID&subject=$subject_ID";
 
