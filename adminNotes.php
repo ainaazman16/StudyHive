@@ -238,7 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note_ID']) && is_nume
                     <?php endif; ?>
                 </td>
                 <td>
-                    <form method="POST" action="adminNotes.php" onsubmit="return confirm('Are you sure you want to delete this note?');">
+                    <form method="POST" action="adminDeleteNote.php" onsubmit="return confirm('Are you sure you want to delete this note?');">
                         <input type="hidden" name="note_ID" value="<?= $row['note_ID'] ?>">
                         <button type="submit" class="btn btn-delete">Delete</button>
                     </form>
